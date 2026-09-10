@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SENTINEL-AI | Secure Intelligence Platform</title>
+  <meta name="description" content="SENTINEL-AI — unified AI security platform: documents, emails, system, cameras, code & logs." />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="landing-page">
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <div class="brand-mark">🛡️</div>
+        <div>
+          <h1 class="brand-title">SENTINEL-AI</h1>
+          <p class="brand-tag" data-i18n="tagline">Secure Intelligence Platform</p>
+        </div>
+      </div>
+      <nav class="lang-switch">
+        <button type="button" class="btn btn-ghost" id="btn-en" aria-pressed="true">English</button>
+        <button type="button" class="btn btn-ghost" id="btn-ar" aria-pressed="false">العربية</button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <h2 data-i18n="hero_title">One AI platform. Every security surface.</h2>
+          <p data-i18n="hero_sub">
+            Scan PDFs for threats, classify emails, monitor servers, detect motion on cameras,
+            and audit code and logs — from a single unified dashboard.
+          </p>
+          <div class="hero-cta">
+            <a href="/dashboard" class="btn btn-primary" data-i18n="go_dashboard">Go to Dashboard</a>
+            <a href="#modules" class="btn btn-secondary" data-i18n="explore_modules">Explore Modules</a>
+          </div>
+          <div class="hero-stats">
+            <div><strong>6</strong><span data-i18n="modules">Modules</span></div>
+            <div><strong>JWT</strong><span data-i18n="auth">Auth</span></div>
+            <div><strong>SQLite</strong><span data-i18n="db">Database</span></div>
+          </div>
+        </div>
+        <div class="hero-card" aria-hidden="true">
+          <div class="hero-card-head">
+            <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+            <span class="hero-card-title">SENTINEL-AI / risk overview</span>
+          </div>
+          <div class="hero-card-body">
+            <div class="risk-chip risk-critical">CRITICAL</div>
+            <div class="hero-grid">
+              <div class="hero-g-cell"><label>DocGuard</label><div class="bar"><span style="width:62%"></span></div><span class="v">62</span></div>
+              <div class="hero-g-cell"><label>MailGuard</label><div class="bar"><span style="width:88%"></span></div><span class="v">88</span></div>
+              <div class="hero-g-cell"><label>SysGuard</label><div class="bar"><span style="width:45%"></span></div><span class="v">45</span></div>
+              <div class="hero-g-cell"><label>ScanGuard</label><div class="bar"><span style="width:73%"></span></div><span class="v">73</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="modules" class="modules">
+      <div class="container">
+        <h3 class="section-title" data-i18n="modules_title">Six integrated security modules</h3>
+        <p class="section-sub" data-i18n="modules_sub">Each module has a dedicated REST API, database logging, and dashboard visualization.</p>
+
+        <div class="modules-grid">
+          <article class="module-card">
+            <div class="module-icon doc">📄</div>
+            <h4 data-i18n="m_doc_title">DocGuard</h4>
+            <p data-i18n="m_doc_desc">PDF &amp; document scanner — suspicious URLs, credit cards (Luhn), dangerous keywords (AR/EN).</p>
+            <code>POST /api/docguard/scan</code>
+          </article>
+          <article class="module-card">
+            <div class="module-icon mail">✉️</div>
+            <h4 data-i18n="m_mail_title">MailGuard</h4>
+            <p data-i18n="m_mail_desc">Email classifier: Safe / Spam / Phishing / Urgent using keyword weighting + regex.</p>
+            <code>POST /api/mailguard/classify</code>
+          </article>
+          <article class="module-card">
+            <div class="module-icon sys">💻</div>
+            <h4 data-i18n="m_sys_title">SysGuard</h4>
+            <p data-i18n="m_sys_desc">Real-time CPU, RAM, Disk, Network monitoring with z-score anomaly detection.</p>
+            <code>GET /api/sysguard/status</code>
+          </article>
+          <article class="module-card">
+            <div class="module-icon cam">📹</div>
+            <h4 data-i18n="m_cam_title">CamGuard</h4>
+            <p data-i18n="m_cam_desc">Motion detection via OpenCV; pluggable YOLOv8 object detection (TODO: weights required).</p>
+            <code>POST /api/camguard/analyze</code>
+          </article>
+          <article class="module-card">
+            <div class="module-icon scan">🔍</div>
+            <h4 data-i18n="m_scan_title">ScanGuard</h4>
+            <p data-i18n="m_scan_desc">Static analysis for code &amp; logs — SQLi, XSS, hardcoded secrets, risky functions.</p>
+            <code>POST /api/scanguard/analyze</code>
+          </article>
+          <article class="module-card">
+            <div class="module-icon auth">🔐</div>
+            <h4 data-i18n="m_auth_title">Auth Module</h4>
+            <p data-i18n="m_auth_desc">JWT access tokens, bcrypt password hashing, registration, login, admin listing.</p>
+            <code>POST /api/auth/login</code>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta">
+      <div class="container cta-inner">
+        <div>
+          <h3 data-i18n="cta_title">Ready to secure everything?</h3>
+          <p data-i18n="cta_sub">Open the dashboard, create an account, and start scanning in under 60 seconds.</p>
+        </div>
+        <a href="/dashboard" class="btn btn-primary btn-lg" data-i18n="launch">Launch Dashboard →</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>
+        <strong>SENTINEL-AI</strong>
+        <span class="dot-sep">·</span>
+        <span data-i18n="copyright">© 2026 — Production-ready security platform</span>
+      </div>
+      <div>
+        <code>python backend/wsgi.py</code>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

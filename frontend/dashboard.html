@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SENTINEL-AI | Dashboard</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="dashboard-page">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <span class="brand-mark">🛡️</span>
+      <div>
+        <strong>SENTINEL-AI</strong>
+        <small data-i18n="control_center">Control Center</small>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="#overview" class="nav-link active" data-nav="overview" data-i18n="nav_overview">Overview</a>
+      <a href="#docguard" class="nav-link" data-nav="docguard" data-i18n="nav_doc">DocGuard</a>
+      <a href="#mailguard" class="nav-link" data-nav="mailguard" data-i18n="nav_mail">MailGuard</a>
+      <a href="#sysguard" class="nav-link" data-nav="sysguard" data-i18n="nav_sys">SysGuard</a>
+      <a href="#camguard" class="nav-link" data-nav="camguard" data-i18n="nav_cam">CamGuard</a>
+      <a href="#scanguard" class="nav-link" data-nav="scanguard" data-i18n="nav_scan">ScanGuard</a>
+      <a href="#alerts" class="nav-link" data-nav="alerts" data-i18n="nav_alerts">Alerts <span id="alertsBadge" class="badge badge-dot"></span></a>
+      <a href="#history" class="nav-link" data-nav="history" data-i18n="nav_history">History</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="auth-status" id="authStatus">
+        <span class="status-dot off" id="authDot"></span>
+        <span id="authLabel" data-i18n="signed_out">Signed out</span>
+      </div>
+      <div class="lang-switch">
+        <button type="button" class="btn btn-ghost btn-sm" id="btn-en" aria-pressed="true">EN</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="btn-ar" aria-pressed="false">AR</button>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main-area">
+    <header class="topbar">
+      <button type="button" class="btn btn-ghost mobile-only" id="toggleSidebar" aria-label="Menu">☰</button>
+      <h2 class="page-title" data-i18n="title_overview">Overview</h2>
+      <div class="topbar-actions">
+        <button type="button" class="btn btn-outline btn-sm" id="refreshBtn" data-i18n="refresh">↻ Refresh</button>
+        <button type="button" class="btn btn-primary btn-sm auth-only hidden" id="logoutBtn" data-i18n="logout">Sign out</button>
+      </div>
+    </header>
+
+    <div class="auth-gate" id="authGate">
+      <div class="auth-card">
+        <h3 data-i18n="auth_welcome">Welcome back</h3>
+        <p data-i18n="auth_sub">Sign in to enable scan history &amp; alerts. Continue as guest if you prefer.</p>
+        <div class="tabs" role="tablist">
+          <button type="button" class="tab active" role="tab" data-tab="login" data-i18n="tab_login">Sign in</button>
+          <button type="button" class="tab" role="tab" data-tab="register" data-i18n="tab_register">Register</button>
+        </div>
+        <form id="authForm">
+          <label data-i18n="f_username">Username or email</label>
+          <input type="text" name="identifier" autocomplete="username" required data-placeholder="username_placeholder" />
+          <label class="register-only hidden" data-i18n="f_email">Email</label>
+          <input type="email" name="email" class="register-only hidden" autocomplete="email" data-placeholder="email_placeholder" />
+          <label data-i18n="f_password">Password</label>
+          <input type="password" name="password" autocomplete="current-password" required minlength="8" data-placeholder="password_placeholder" />
+          <label class="register-only hidden" data-i18n="f_first">First name</label>
+          <input type="text" name="first_name" class="register-only hidden" data-placeholder="optional" />
+          <label class="register-only hidden" data-i18n="f_last">Last name</label>
+          <input type="text" name="last_name" class="register-only hidden" data-placeholder="optional" />
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" id="authSubmitBtn" data-i18n="btn_login">Sign in</button>
+            <button type="button" class="btn btn-secondary" id="guestBtn" data-i18n="btn_guest">Continue as guest</button>
+          </div>
+          <p class="form-error" id="authError" role="alert"></p>
+        </form>
+      </div>
+    </div>
+
+    <main class="dashboard-content" id="dashboardContent">
+
+      <!-- OVERVIEW -->
+      <section class="view" id="view-overview">
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-label" data-i18n="st_scans_24">Scans (24h)</div>
+            <div class="stat-value" id="st-scans-24">—</div>
+            <div class="stat-foot" data-i18n="st_today">Today</div>
+          </div>
+          <div class="stat-card danger">
+            <div class="stat-label" data-i18n="st_critical">Critical scans</div>
+            <div class="stat-value" id="st-critical">—</div>
+            <div class="stat-foot" data-i18n="st_risk">Risk ≥ 70</div>
+          </div>
+          <div class="stat-card warn">
+            <div class="stat-label" data-i18n="st_high">High-risk scans</div>
+            <div class="stat-value" id="st-high">—</div>
+            <div class="stat-foot" data-i18n="st_risk2">Risk ≥ 40</div>
+          </div>
+          <div class="stat-card info">
+            <div class="stat-label" data-i18n="st_unread">Unread alerts</div>
+            <div class="stat-value" id="st-unread">—</div>
+            <div class="stat-foot" data-i18n="st_action">Action needed</div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <div class="card-head">
+              <h3 data-i18n="h_per_module">Per-module performance</h3>
+            </div>
+            <div class="card-body" id="moduleBars">
+              <p class="empty" data-i18n="empty_click">Click ↻ Refresh to load dashboard summary.</p>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <h3 data-i18n="h_sys_mini">System snapshot</h3>
+              <button type="button" class="btn btn-ghost btn-sm" data-action="sysguard-quick" data-i18n="btn_check">Check now</button>
+            </div>
+            <div class="card-body" id="sysSnapshot">
+              <p class="empty" data-i18n="empty_sys">Run SysGuard to view live CPU / RAM / Disk / Network.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <div class="card-head"><h3 data-i18n="h_recent_scans">Recent scans</h3></div>
+            <div class="card-body overflow-x"><table class="data-table" id="recentScansTbl"></table></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><h3 data-i18n="h_recent_alerts">Recent alerts</h3></div>
+            <div class="card-body overflow-x"><table class="data-table" id="recentAlertsTbl"></table></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- DOCGUARD -->
+      <section class="view hidden" id="view-docguard">
+        <div class="card">
+          <div class="card-head"><h3 data-i18n="dg_title">DocGuard — Document Scanner</h3></div>
+          <div class="card-body">
+            <form id="docguardForm" class="form-grid">
+              <div>
+                <label data-i18n="dg_upload">Upload PDF / TXT</label>
+                <input type="file" name="file" accept=".pdf,.txt" />
+              </div>
+              <div class="col-span-2">
+                <label data-i18n="dg_text">…or paste raw text</label>
+                <textarea name="text" rows="4" data-placeholder="dg_text_ph"></textarea>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary" data-i18n="btn_scan">🔍 Scan Document</button>
+              </div>
+              <p class="form-error" id="dgError" role="alert"></p>
+            </form>
+          </div>
+        </div>
+        <div class="card" id="dgResultCard" style="display:none">
+          <div class="card-head">
+            <h3 data-i18n="dg_result">Scan Result</h3>
+            <span class="risk-chip" id="dgRiskChip">—</span>
+          </div>
+          <div class="card-body" id="dgResult"></div>
+        </div>
+      </section>
+
+      <!-- MAILGUARD -->
+      <section class="view hidden" id="view-mailguard">
+        <div class="card">
+          <div class="card-head"><h3 data-i18n="mg_title">MailGuard — Email Classifier</h3></div>
+          <div class="card-body">
+            <form id="mailguardForm" class="form-grid">
+              <div><label data-i18n="mg_from">From / Sender</label><input type="text" name="sender" data-placeholder="mg_from_ph"/></div>
+              <div><label data-i18n="mg_subject">Subject</label><input type="text" name="subject" data-placeholder="mg_subject_ph"/></div>
+              <div class="col-span-2"><label data-i18n="mg_body">Body</label><textarea name="body" rows="7" required data-placeholder="mg_body_ph"></textarea></div>
+              <div class="form-actions"><button type="submit" class="btn btn-primary" data-i18n="btn_classify">🎯 Classify Email</button></div>
+              <p class="form-error" id="mgError" role="alert"></p>
+            </form>
+          </div>
+        </div>
+        <div class="card" id="mgResultCard" style="display:none">
+          <div class="card-head"><h3 data-i18n="mg_result">Classification</h3><span class="risk-chip" id="mgRiskChip">—</span></div>
+          <div class="card-body" id="mgResult"></div>
+        </div>
+      </section>
+
+      <!-- SYSGUARD -->
+      <section class="view hidden" id="view-sysguard">
+        <div class="card">
+          <div class="card-head">
+            <h3 data-i18n="sg_title">SysGuard — Real-time System Monitor</h3>
+            <div>
+              <button type="button" class="btn btn-outline btn-sm" id="sgOnce" data-i18n="sg_once">⟳ Check once</button>
+              <button type="button" class="btn btn-primary btn-sm" id="sgStream" data-i18n="sg_start">▶ Auto (5s)</button>
+            </div>
+          </div>
+          <div class="card-body" id="sgBody">
+            <p class="empty" data-i18n="empty_click_sys">Click "Check once" to load current status.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3 data-i18n="sg_hist">History (last 60 samples)</h3></div>
+          <div class="card-body" id="sgHistory"><p class="empty">—</p></div>
+        </div>
+      </section>
+
+      <!-- CAMGUARD -->
+      <section class="view hidden" id="view-camguard">
+        <div class="card">
+          <div class="card-head"><h3 data-i18n="cg_title">CamGuard — Camera / Frame Analyzer</h3></div>
+          <div class="card-body">
+            <form id="camguardForm" class="form-grid">
+              <div>
+                <label data-i18n="cg_frame">Upload frame image</label>
+                <input type="file" name="frame" accept="image/*" />
+              </div>
+              <div>
+                <label data-i18n="cg_cam">Camera ID</label>
+                <input type="text" name="camera_id" value="default" />
+              </div>
+              <div class="col-span-2">
+                <label data-i18n="cg_base64">…or paste base64 (data URI ok)</label>
+                <textarea name="base64" rows="3" data-placeholder="cg_b64_ph"></textarea>
+              </div>
+              <div class="col-span-2">
+                <label class="inline">
+                  <input type="checkbox" name="yolo" checked />
+                  <span data-i18n="cg_yolo">Attempt YOLO (placeholder — install ultralytics + weights)</span>
+                </label>
+              </div>
+              <div class="form-actions"><button type="submit" class="btn btn-primary" data-i18n="btn_analyze">📷 Analyze Frame</button></div>
+              <p class="form-error" id="cgError" role="alert"></p>
+            </form>
+            <p class="note info-note" data-i18n="cg_todo">TODO YOLO: pip install ultralytics + drop yolov8*.pt in project root. Motion detection works out of the box.</p>
+          </div>
+        </div>
+        <div class="card" id="cgResultCard" style="display:none">
+          <div class="card-head"><h3 data-i18n="cg_result">Frame analysis</h3><span class="risk-chip" id="cgRiskChip">—</span></div>
+          <div class="card-body" id="cgResult"></div>
+        </div>
+      </section>
+
+      <!-- SCANGUARD -->
+      <section class="view hidden" id="view-scanguard">
+        <div class="card">
+          <div class="card-head"><h3 data-i18n="sg2_title">ScanGuard — Code / Log Scanner</h3></div>
+          <div class="card-body">
+            <form id="scanguardForm" class="form-grid">
+              <div>
+                <label data-i18n="sg2_upload">Upload file (code / log / txt)</label>
+                <input type="file" name="file" />
+              </div>
+              <div>
+                <label data-i18n="sg2_type">Hint type</label>
+                <select name="type">
+                  <option value="auto" data-i18n="sg2_auto">Auto detect</option>
+                  <option value="code" data-i18n="sg2_code">Code</option>
+                  <option value="log" data-i18n="sg2_log">Log file</option>
+                </select>
+              </div>
+              <div class="col-span-2">
+                <label data-i18n="sg2_text">…or paste code / log text</label>
+                <textarea name="code" rows="8" data-placeholder="sg2_text_ph"></textarea>
+              </div>
+              <div class="form-actions"><button type="submit" class="btn btn-primary" data-i18n="btn_audit">🛡️ Audit</button></div>
+              <p class="form-error" id="scanGError" role="alert"></p>
+            </form>
+          </div>
+        </div>
+        <div class="card" id="scanGResultCard" style="display:none">
+          <div class="card-head"><h3 data-i18n="sg2_result">Audit report</h3><span class="risk-chip" id="scanGRiskChip">—</span></div>
+          <div class="card-body" id="scanGResult"></div>
+        </div>
+      </section>
+
+      <!-- ALERTS -->
+      <section class="view hidden" id="view-alerts">
+        <div class="card">
+          <div class="card-head">
+            <h3 data-i18n="al_title">Alerts</h3>
+            <div class="filter-row">
+              <select id="alertSeverityFilter">
+                <option value="" data-i18n="al_all">All severities</option>
+                <option value="critical">Critical</option>
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="info">Info</option>
+              </select>
+              <label class="inline">
+                <input type="checkbox" id="alertUnreadOnly" /> <span data-i18n="al_unread">Unread only</span>
+              </label>
+            </div>
+          </div>
+          <div class="card-body overflow-x"><table class="data-table" id="alertsTable"></table></div>
+        </div>
+      </section>
+
+      <!-- HISTORY -->
+      <section class="view hidden" id="view-history">
+        <div class="card">
+          <div class="card-head">
+            <h3 data-i18n="hist_title">Scan history</h3>
+            <div class="filter-row">
+              <select id="scanModuleFilter">
+                <option value="" data-i18n="hist_all">All modules</option>
+                <option value="docguard">DocGuard</option>
+                <option value="mailguard">MailGuard</option>
+                <option value="sysguard">SysGuard</option>
+                <option value="camguard">CamGuard</option>
+                <option value="scanguard">ScanGuard</option>
+              </select>
+              <input type="number" id="scanMinRisk" min="0" max="100" placeholder="Min risk 0-100" />
+            </div>
+          </div>
+          <div class="card-body overflow-x"><table class="data-table" id="historyTable"></table></div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <div id="toastArea" class="toast-area" aria-live="polite"></div>
+  <script src="js/app.js"></script>
+</body>
+</html>
