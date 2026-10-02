@@ -3,6 +3,8 @@ import sys
 import re
 import logging
 import datetime
+import requests
+import json
 from collections import Counter
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -236,10 +238,92 @@ def _analyze_links(text):
     return score, link_issues
 
 
+def classify_email_ai(sender=None, subject=None, body=None):
+    api_key = os.getenv('OPENAI_API_KEY') or os.getenv('GROQ_API_KEY')
+    if not api_key:
+        return None
+    
+    is_groq = bool(os.getenv('GROQ_API_KEY')) and not os.getenv('OPENAI_API_KEY')
+    url = "https://api.groq.com/openai/v1/chat/completions" if is_groq else "https://api.openai.com/v1/chat/completions"
+    model = "llama-3.3-70b-versatile" if is_groq else "gpt-4o-mini"
+    
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json"
+    }
+    
+    system_prompt = (
+        "You are an advanced cybersecurity email classification assistant. "
+        "Analyze the provided email subject, sender, and body. "
+        "Classify the email strictly into one of these four categories: 'Safe', 'Spam', 'Phishing', or 'Urgent'. "
+        "Return a valid JSON object with keys: 'classification' (string), 'confidence_score' (float between 0 and 100), "
+        "'risk_score' (float between 0 and 100), and 'reasoning' (string)."
+    )
+    
+    user_content = f"Sender: {sender}\nSubject: {subject}\nBody: {body}"
+    
+    payload = {
+        "model": model,
+        "messages": [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_content}
+        ],
+        "response_format": {"type": "json_object"},
+        "temperature": 0.1
+    }
+    
+    try:
+        response = requests.post(url, headers=headers, json=payload, timeout=10)
+        if response.status_code == 200:
+            res_json = response.json()
+            content = res_json['choices'][0]['message']['content']
+            return json.loads(content)
+    except Exception as e:
+        logger.error(f"AI Email Classification error: {str(e)}")
+    return None
+
+
 def classify_email(sender=None, subject=None, body=None, content_type='text/plain'):
     body = body or ''
     subject = subject or ''
     sender = sender or ''
+    
+    # Try AI classification first
+    ai_result = classify_email_ai(sender=sender, subject=subject, body=body)
+    if ai_result and 'classification' in ai_result:
+        label = ai_result.get('classification', 'Safe')
+        if label not in ['Safe', 'Spam', 'Phishing', 'Urgent']:
+            label = 'Safe'
+        risk_score = float(ai_result.get('risk_score', ai_result.get('confidence_score', 10.0)))
+        if risk_score >= 70:
+            level = 'critical'
+        elif risk_score >= 40:
+            level = 'high'
+        elif risk_score >= 15:
+            level = 'medium'
+        else:
+            level = 'low'
+            
+        return {
+            'classification': label,
+            'risk_score': risk_score,
+            'risk_level': level,
+            'ai_reasoning': ai_result.get('reasoning', ''),
+            'category_scores': {
+                'spam_score': risk_score if label == 'Spam' else 0.0,
+                'phishing_score': risk_score if label == 'Phishing' else 0.0,
+                'urgent_score': risk_score if label == 'Urgent' else 0.0,
+                'safe_score': 100 - risk_score if label == 'Safe' else 0.0
+            },
+            'hits': {'spam_hits': [], 'phishing_hits': [], 'urgent_hits': [], 'safe_hits': []},
+            'header_notes': [],
+            'link_issues': [],
+            'attachments_detected': 0,
+            'text_length': len(body),
+            'timestamp': datetime.datetime.utcnow().isoformat()
+        }
+
+    # Fallback to original regex and keyword logic if AI is unavailable
     full_text = f"{subject}\n{body}"
     scores = {
         'spam_score': 0.0,

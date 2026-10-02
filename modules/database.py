@@ -9,6 +9,16 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Integer, String, Float, DateTime, Text, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
 
+# NOTE on PostgreSQL compatibility (no schema changes made):
+# All models below use `db.Model` as their base (correct for Flask-SQLAlchemy)
+# and only column types that map identically across SQLite and PostgreSQL:
+# Integer, String, Float, DateTime, Text, Boolean, ForeignKey. None of the
+# tables use a native JSON or ENUM column type — `details` (Scan) and
+# `alert_metadata` (Alert) store JSON as serialized text via json.dumps/
+# json.loads in Python, which is dialect-agnostic and requires no change to
+# run against PostgreSQL. If a native JSON column is introduced later, use
+# `from sqlalchemy.dialects.postgresql import JSONB` for it; that would be a
+# schema change and is intentionally not applied here.
 db = SQLAlchemy()
 
 logging.basicConfig(level=logging.INFO)

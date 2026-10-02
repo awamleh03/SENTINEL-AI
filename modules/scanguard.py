@@ -3,6 +3,8 @@ import sys
 import re
 import logging
 import datetime
+import requests
+import json
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
@@ -152,7 +154,7 @@ def _code_stats(text):
     lines = text.split('\n')
     line_count = len(lines)
     blank = sum(1 for l in lines if not l.strip())
-    comments = sum(1 for l in lines if re.match(r'^\s*(#|//|/\*|\*|\--)\\b', l))
+    comments = sum(1 for l in lines if re.match(r'^\s*(#|//|/\*|\*|\--)\b', l))
     long_lines = sum(1 for l in lines if len(l) > 200)
     return {
         'total_lines': line_count,
@@ -164,7 +166,85 @@ def _code_stats(text):
     }
 
 
+def analyze_code_ai(code_snippet=None, log_content=None):
+    api_key = os.getenv('OPENAI_API_KEY') or os.getenv('GROQ_API_KEY')
+    if not api_key:
+        return None
+    
+    is_groq = bool(os.getenv('GROQ_API_KEY')) and not os.getenv('OPENAI_API_KEY')
+    url = "https://api.groq.com/openai/v1/chat/completions" if is_groq else "https://api.openai.com/v1/chat/completions"
+    model = "llama-3.3-70b-versatile" if is_groq else "gpt-4o-mini"
+    
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json"
+    }
+    
+    system_prompt = (
+        "You are an expert application security engineer and static code analysis tool. "
+        "Analyze the provided code snippet or log content for security vulnerabilities such as SQLi, XSS, "
+        "hardcoded secrets, insecure deserialization, remote code execution, or dangerous functions. "
+        "Return a valid JSON object with keys: "
+        "'vulnerabilities' (list of objects containing 'type', 'severity' (low/medium/high/critical), 'description', 'line_or_context', 'remediation'), "
+        "'risk_score' (float between 0 and 100), "
+        "'risk_level' (low/medium/high/critical), "
+        "'summary' (string)."
+    )
+    
+    target_content = f"Code Snippet:\n{code_snippet or ''}\n\nLog Content:\n{log_content or ''}"
+    
+    payload = {
+        "model": model,
+        "messages": [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": target_content}
+        ],
+        "response_format": {"type": "json_object"},
+        "temperature": 0.1
+    }
+    
+    try:
+        response = requests.post(url, headers=headers, json=payload, timeout=15)
+        if response.status_code == 200:
+            res_json = response.json()
+            content = res_json['choices'][0]['message']['content']
+            return json.loads(content)
+    except Exception as e:
+        logger.error(f"AI Code Analysis error: {str(e)}")
+    return None
+
+
 def analyze_code_or_log(text, input_type='auto', filename=None):
+    # Try AI-powered analysis first if available
+    ai_result = analyze_code_ai(
+        code_snippet=text if input_type != 'log' else None,
+        log_content=text if input_type == 'log' else None
+    )
+    if ai_result and 'risk_score' in ai_result:
+        risk_score = float(ai_result.get('risk_score', 0.0))
+        level = ai_result.get('risk_level', 'low')
+        if not level:
+            if risk_score >= 70:
+                level = 'critical'
+            elif risk_score >= 40:
+                level = 'high'
+            elif risk_score >= 15:
+                level = 'medium'
+            else:
+                level = 'low'
+                
+        return {
+            'filename': filename,
+            'detected_input_type': input_type,
+            'risk_score': risk_score,
+            'risk_level': level,
+            'total_issues_found': len(ai_result.get('vulnerabilities', [])),
+            'ai_summary': ai_result.get('summary', ''),
+            'vulnerabilities': ai_result.get('vulnerabilities', []),
+            'stats': _code_stats(text),
+            'timestamp': datetime.datetime.utcnow().isoformat()
+        }
+
     results_by_category = {
         'sqli': [],
         'xss': [],
@@ -296,7 +376,7 @@ def analyze():
             risk_score=result['risk_score'],
             details={
                 'risk_level': result['risk_level'],
-                'category_summary': result['category_summary'],
+                'category_summary': result.get('category_summary', {}),
                 'total_issues': result['total_issues_found']
             },
             raw_input_size=len(text)
@@ -309,8 +389,7 @@ def analyze():
                 source='scanguard',
                 severity='high' if result['risk_score'] >= 70 else 'medium',
                 title=f'ScanGuard: {result["risk_level"].capitalize()} risk detected',
-                message=(f'{result["total_issues_found"]} issues found in {filename or "input"}. '
-                         f'Top categories: {", ".join(k for k,v in result["category_summary"].items() if v["count"]>0)[:200]}'),
+                message=(f'{result["total_issues_found"]} issues found in {filename or "input"}.'),
                 alert_metadata={'scan_id': scan_id}
             )
         logger.info(f"ScanGuard analyze: {result['total_issues_found']} issues, risk={result['risk_score']}")

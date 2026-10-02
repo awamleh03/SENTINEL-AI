@@ -17,7 +17,12 @@ from modules.mailguard import mailguard_bp
 from modules.sysguard import sysguard_bp
 from modules.camguard import camguard_bp
 from modules.scanguard import scanguard_bp
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
+# تحميل متغيرات البيئة من ملف .env الموجود في الجذر
+load_dotenv()
 
 def _setup_logging(app):
     log_dir = app.config.get('LOG_DIR')

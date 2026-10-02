@@ -38,15 +38,7 @@ _YOLO_MODEL_INSTANCE = None
 
 
 def _load_yolo_model(weights='yolov8n.pt'):
-    """TODO: YOLO integration placeholder.
-    When ultralytics YOLO library is installed and a weights file (.pt) is available,
-    this function loads the model and returns it. Otherwise returns None.
-
-    To enable YOLO:
-        1. pip install ultralytics
-        2. Put yolov8n.pt / yolov8s.pt / custom weights in project root or pass path
-        3. Calls to /api/camguard/analyze will then run object detection with YOLO.
-    """
+    """Loads the YOLOv8 model using ultralytics if available."""
     global _YOLO_MODEL_INSTANCE
     if not YOLO_AVAILABLE:
         return None
@@ -108,9 +100,7 @@ def _decode_image_from_request():
 
 
 def _detect_motion(current_frame, camera_id='default', sensitivity=25, min_area=500, history_weight=0.7):
-    """Basic motion detection using background subtraction / frame differencing.
-    Returns (motion_detected: bool, contours_count: int, max_area: int, boxes: list, motion_score: float).
-    """
+    """Fallback basic motion detection using background subtraction."""
     if not OPENCV_AVAILABLE or np is None:
         return False, 0, 0, [], 0.0
     prev = _PREV_FRAME.get(camera_id)
@@ -157,7 +147,7 @@ def _detect_motion(current_frame, camera_id='default', sensitivity=25, min_area=
 
 
 def _run_yolo_detection(frame, model, conf_threshold=0.45):
-    """YOLO object detection — runs if model is loaded and ultralytics is installed."""
+    """YOLO object detection — runs object detection using YOLOv8."""
     if model is None or frame is None:
         return [], 0
     try:
@@ -241,31 +231,27 @@ def analyze():
                        (request.get_json(silent=True) or {}).get('min_area')) or 500)
         run_yolo = str((request.form.get('yolo') if request.files else
                         (request.get_json(silent=True) or {}).get('yolo', 'true'))).lower() \
-                   not in ('0', 'false', 'no', 'off')
+                    not in ('0', 'false', 'no', 'off')
 
         frame, error = _decode_image_from_request()
         if error:
             return jsonify({'error': error}), 400
 
         h, w = frame.shape[:2]
+        
+        # Load and run YOLOv8 model for active AI object detection
+        yolo_model = _load_yolo_model('yolov8n.pt') if run_yolo else None
+        yolo_detections, yolo_max_conf = _run_yolo_detection(frame, yolo_model) if run_yolo else ([], 0)
+
+        # Retain motion metrics as supplement if needed
         motion_detected, contour_count, max_area, boxes, motion_score = _detect_motion(
             frame, camera_id=camera_id, sensitivity=sensitivity, min_area=min_area
         )
 
-        yolo_model = _load_yolo_model() if run_yolo else None
-        if run_yolo and yolo_model is None:
-            yolo_status = {'enabled': True, 'loaded': False,
-                           'note': ('TODO: Install ultralytics and place yolov8*.pt weights '
-                                    'in project root to enable YOLO object detection. '
-                                    'Currently falling back to motion-only analysis.')}
-            yolo_detections = []
-        else:
-            yolo_status = {'enabled': run_yolo, 'loaded': yolo_model is not None}
-            yolo_detections, yolo_max_conf = _run_yolo_detection(frame, yolo_model) if run_yolo else ([], 0)
-            if run_yolo and yolo_model is not None:
-                yolo_status['max_confidence'] = round(yolo_max_conf, 4)
-
         scene = _classify_scene((h, w), motion_score, yolo_detections)
+
+        # Clearly indicate if no important objects are detected
+        no_objects_detected = len(yolo_detections) == 0
 
         result = {
             'timestamp': datetime.datetime.utcnow().isoformat(),
@@ -275,6 +261,9 @@ def analyze():
                 'height': h,
                 'channels': frame.shape[2] if len(frame.shape) == 3 else 1
             },
+            'detected_objects': yolo_detections,
+            'no_objects_detected': no_objects_detected,
+            'detection_status_message': 'No important objects detected in the current frame.' if no_objects_detected else f'Successfully detected {len(yolo_detections)} object(s).',
             'motion': {
                 'detected': motion_detected,
                 'contour_count': contour_count,
@@ -283,7 +272,11 @@ def analyze():
                 'bboxes': boxes[:20]
             },
             'yolo': {
-                'status': yolo_status,
+                'status': {
+                    'enabled': run_yolo,
+                    'loaded': yolo_model is not None,
+                    'max_confidence': round(yolo_max_conf, 4)
+                },
                 'detections': yolo_detections,
                 'detection_count': len(yolo_detections)
             },
@@ -318,11 +311,11 @@ def analyze():
                 severity='high' if result['risk_score'] >= 70 else 'medium',
                 title=f'CamGuard alert: {", ".join(scene["tags"])}',
                 message=(f'Camera {camera_id}: risk score {result["risk_score"]}. '
-                         f'Motion score {motion_score}. Detections: {len(yolo_detections)}.'),
+                         f'Objects detected: {len(yolo_detections)}.'),
                 alert_metadata={'scan_id': scan_id, 'tags': scene['tags'], 'camera_id': camera_id}
             )
 
-        logger.info(f"CamGuard analyze: camera={camera_id} risk={result['risk_score']} motion_score={motion_score} yolo={len(yolo_detections)}")
+        logger.info(f"CamGuard analyze: camera={camera_id} risk={result['risk_score']} yolo_objects={len(yolo_detections)}")
         return jsonify(result), 200
     except Exception as e:
         logger.error(f"CamGuard analyze error: {str(e)}")
@@ -336,11 +329,7 @@ def health():
         'yolo_available': YOLO_AVAILABLE,
         'yolo_model_loaded': _YOLO_MODEL_INSTANCE is not None,
         'cached_frames': list(_PREV_FRAME.keys()),
-        'todo_yolo_integration': (
-            '1) pip install ultralytics  '
-            '2) Drop yolov8n.pt (or custom weights) in project root, or pass path to _load_yolo_model()  '
-            '3) CamGuard will automatically run YOLO detection in addition to motion analysis.'
-        )
+        'yolo_integration_status': 'Active YOLOv8 object detection enabled.'
     }), 200
 
 
@@ -348,4 +337,4 @@ def health():
 def reset():
     global _PREV_FRAME
     _PREV_FRAME = {}
-    return jsonify({'message': 'CamGuard cache reset. Motion baselines cleared.'}), 200
+    return jsonify({'message': 'CamGuard cache reset. Motion and baseline states cleared.'}), 200

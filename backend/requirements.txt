@@ -13,3 +13,11 @@ python-dotenv>=1.0
 pytest>=8.3
 pytest-flask>=1.3
    gunicorn
+   psycopg2-binary>=2.9
+SQLAlchemy
+
+openai
+
+ultralytics
+
+python-dotenv
