@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign in | SENTINEL-AI</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    body.auth-page {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: #0B1426;
+      margin: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+    .auth-card {
+      width: 100%;
+      max-width: 420px;
+      background: #111C33;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 32px;
+      color: #fff;
+    }
+    .auth-card h3 { margin: 0 0 8px; font-size: 1.4rem; }
+    .auth-card p { margin: 0 0 24px; color: #94a3b8; font-size: 0.9rem; }
+    .auth-card label { display: block; margin-bottom: 6px; font-size: 0.85rem; color: #cbd5e1; }
+    .auth-card input {
+      width: 100%;
+      padding: 12px 14px;
+      margin-bottom: 16px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: #1A2744;
+      color: #fff;
+      font-size: 0.95rem;
+      box-sizing: border-box;
+    }
+    .auth-card input:focus { outline: none; border-color: #6366f1; }
+    .auth-forgot-row { margin-bottom: 20px; text-align: left; }
+    .auth-forgot-row a { font-size: 0.85rem; color: #818cf8; text-decoration: none; }
+    .auth-forgot-row a:hover { text-decoration: underline; }
+    .form-actions { display: flex; gap: 10px; margin-top: 8px; }
+    .btn {
+      padding: 12px 18px;
+      border-radius: 10px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .btn-primary { background: #6366f1; color: #fff; flex: 1; }
+    .btn-primary:hover { background: #818cf8; }
+    .btn-secondary { background: transparent; color: #94a3b8; border: 1px solid rgba(255,255,255,0.12); }
+    .btn-secondary:hover { background: rgba(255,255,255,0.05); }
+    .form-error { color: #f87171; font-size: 0.85rem; margin-top: 12px; min-height: 20px; }
+    .auth-footer { margin-top: 24px; text-align: center; font-size: 0.85rem; color: #64748b; }
+    .auth-footer a { color: #818cf8; text-decoration: none; }
+    .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; justify-content: center; }
+    .brand-mark { font-size: 1.6rem; }
+    .brand strong { display: block; font-size: 0.95rem; }
+    .brand small { color: #64748b; font-size: 0.7rem; }
+  </style>
+</head>
+<body class="auth-page">
+  <div class="auth-card">
+    <div class="brand">
+      <span class="brand-mark">🛡️</span>
+      <div>
+        <strong>SENTINEL-AI</strong>
+        <small>Control Center</small>
+      </div>
+    </div>
+
+    <h3>Welcome back</h3>
+    <p>Sign in to enable scan history & alerts.</p>
+
+    <form id="loginForm">
+      <label>Username or email</label>
+      <input type="text" name="identifier" autocomplete="username" required placeholder="you@example.com or username" />
+
+      <label>Password</label>
+      <input type="password" name="password" autocomplete="current-password" required minlength="8" placeholder="At least 8 chars, mixed case + digit" />
+
+      <!-- نسيت كلمة المرور فقط هنا -->
+      <div class="auth-forgot-row">
+        <a href="/forgot-password">Forgot password?</a>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Sign in</button>
+        <button type="button" class="btn btn-secondary" onclick="location.href='/dashboard'">Continue as guest</button>
+      </div>
+      <p class="form-error" id="loginError"></p>
+    </form>
+
+    <div class="auth-footer">
+      Don't have an account? <a href="/register">Create one</a>
+    </div>
+  </div>
+
+  <script>
+    // هنا تربط نفس منطق تسجيل الدخول الموجود عندك في app.js
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      // حط كود الـ login API تبعك هنا
+      console.log('Login submitted');
+    });
+  </script>
+</body>
+</html>

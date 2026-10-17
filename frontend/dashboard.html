@@ -3,145 +3,735 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SENTINEL-AI | Dashboard</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <title>SENTINEL-AI | Control Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #070B14;
+      --bg-elevated: #0C1220;
+      --sidebar: #0A0F1A;
+      --card: #0F1629;
+      --card-hover: #131C31;
+      --border: rgba(255,255,255,0.06);
+      --border-strong: rgba(255,255,255,0.1);
+      --primary: #6366F1;
+      --primary-soft: rgba(99,102,241,0.12);
+      --primary-hover: #818CF8;
+      --text: #F8FAFC;
+      --text-secondary: #94A3B8;
+      --text-muted: #64748B;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --danger: #EF4444;
+      --info: #3B82F6;
+      --radius: 12px;
+      --radius-lg: 16px;
+      --shadow: 0 4px 24px rgba(0,0,0,0.25);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      min-height: 100vh;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ========== SIDEBAR ========== */
+    .sidebar {
+      width: 260px;
+      background: var(--sidebar);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      inset: 0 auto 0 0;
+      z-index: 50;
+      transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 20px 18px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 12px rgba(99,102,241,0.35);
+    }
+
+    .brand-text strong {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .brand-text span {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 12px 10px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .nav-section {
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      padding: 12px 12px 6px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 8px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.15s ease;
+      position: relative;
+    }
+
+    .nav-link:hover {
+      background: rgba(255,255,255,0.03);
+      color: var(--text);
+    }
+
+    .nav-link.active {
+      background: var(--primary-soft);
+      color: #A5B4FC;
+    }
+
+    .nav-link.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 18px;
+      background: var(--primary);
+      border-radius: 0 3px 3px 0;
+    }
+
+    .nav-icon {
+      width: 18px;
+      height: 18px;
+      opacity: 0.7;
+      flex-shrink: 0;
+    }
+    .nav-link.active .nav-icon { opacity: 1; }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--danger);
+      border-radius: 50%;
+      margin-left: auto;
+      display: none;
+      box-shadow: 0 0 0 3px rgba(239,68,68,0.2);
+    }
+    .badge-dot.show { display: block; }
+
+    .sidebar-footer {
+      padding: 14px 12px;
+      border-top: 1px solid var(--border);
+    }
+
+    .user-chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      margin-bottom: 10px;
+    }
+
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #334155, #1E293B);
+      display: grid;
+      place-items: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .user-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .user-info .name {
+      font-size: 0.8rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .user-info .role {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--text-muted);
+      flex-shrink: 0;
+    }
+    .status-dot.on {
+      background: var(--success);
+      box-shadow: 0 0 0 3px rgba(16,185,129,0.2);
+    }
+
+    .sidebar-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .lang-row {
+      display: flex;
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    /* ========== MAIN ========== */
+    .main-area {
+      flex: 1;
+      margin-left: 260px;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      height: 60px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 0 28px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(7,11,20,0.8);
+      backdrop-filter: blur(16px);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .page-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      flex: 1;
+    }
+
+    .topbar-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .dashboard-content {
+      padding: 28px;
+      flex: 1;
+      max-width: 1400px;
+    }
+
+    /* ========== BUTTONS ========== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: none;
+      font-family: inherit;
+      font-size: 0.825rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.2), 0 0 0 1px rgba(99,102,241,0.3);
+    }
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      box-shadow: 0 4px 12px rgba(99,102,241,0.3);
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.04);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-strong);
+    }
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.07);
+      color: var(--text);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-muted);
+      border: none;
+    }
+    .btn-ghost:hover { color: var(--text); background: rgba(255,255,255,0.04); }
+
+    .btn-danger {
+      background: rgba(239,68,68,0.1);
+      color: #FCA5A5;
+      border: 1px solid rgba(239,68,68,0.2);
+    }
+    .btn-danger:hover {
+      background: rgba(239,68,68,0.18);
+      color: #FECACA;
+    }
+
+    .btn-sm { padding: 6px 11px; font-size: 0.78rem; }
+    .btn-block { width: 100%; }
+
+    /* ========== GUEST BANNER ========== */
+    .guest-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 18px;
+      margin-bottom: 24px;
+      background: linear-gradient(135deg, rgba(99,102,241,0.1) 0%, rgba(59,130,246,0.06) 100%);
+      border: 1px solid rgba(99,102,241,0.2);
+      border-radius: var(--radius);
+    }
+    .guest-banner.hidden { display: none; }
+    .guest-banner p {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+    .guest-banner strong { color: var(--text); font-weight: 600; }
+    .guest-actions { display: flex; gap: 8px; flex-shrink: 0; }
+
+    /* ========== STATS ========== */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      transition: border-color 0.15s;
+    }
+    .stat-card:hover { border-color: var(--border-strong); }
+
+    .stat-card.danger { border-color: rgba(239,68,68,0.2); }
+    .stat-card.warn { border-color: rgba(245,158,11,0.2); }
+    .stat-card.info { border-color: rgba(59,130,246,0.2); }
+
+    .stat-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .stat-value {
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+    }
+
+    .stat-foot {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    /* ========== LAYOUT ========== */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: border-color 0.15s;
+    }
+    .card:hover { border-color: var(--border-strong); }
+
+    .card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      min-height: 52px;
+    }
+
+    .card-head h3 {
+      font-size: 0.875rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .card-body { padding: 18px; }
+
+    .empty {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      text-align: center;
+      padding: 32px 16px;
+    }
+
+    /* ========== FORMS ========== */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .form-grid .col-span-2 { grid-column: span 2; }
+
+    .form-grid label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .form-grid input,
+    .form-grid textarea,
+    .form-grid select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border-strong);
+      background: var(--bg-elevated);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.875rem;
+      transition: border-color 0.15s;
+    }
+
+    .form-grid input:focus,
+    .form-grid textarea:focus,
+    .form-grid select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-soft);
+    }
+
+    .form-grid textarea { resize: vertical; min-height: 80px; }
+
+    .form-actions {
+      grid-column: span 2;
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .form-error {
+      color: #FCA5A5;
+      font-size: 0.8rem;
+      grid-column: span 2;
+    }
+
+    .risk-chip {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: var(--primary-soft);
+      color: #A5B4FC;
+      letter-spacing: 0.02em;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.825rem;
+    }
+    .data-table th {
+      padding: 10px 12px;
+      text-align: left;
+      font-weight: 500;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      font-size: 0.75rem;
+    }
+    .data-table td {
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:hover td { background: rgba(255,255,255,0.015); }
+
+    .view.hidden { display: none; }
+    .overflow-x { overflow-x: auto; }
+
+    .note {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 14px;
+      padding: 10px 14px;
+      background: var(--primary-soft);
+      border-radius: 8px;
+      border: 1px solid rgba(99,102,241,0.15);
+    }
+
+    .filter-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .filter-row select,
+    .filter-row input {
+      padding: 6px 10px;
+      border-radius: 7px;
+      border: 1px solid var(--border-strong);
+      background: var(--bg-elevated);
+      color: var(--text);
+      font-size: 0.78rem;
+      font-family: inherit;
+    }
+
+    .toast-area {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .mobile-only { display: none; }
+
+    .inline-check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 1100px) {
+      .stat-grid { grid-template-columns: repeat(2, 1fr); }
+      .two-col { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); box-shadow: var(--shadow); }
+      .main-area { margin-left: 0; }
+      .mobile-only { display: inline-flex; }
+      .dashboard-content { padding: 18px 16px; }
+      .topbar { padding: 0 16px; }
+      .stat-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-grid .col-span-2,
+      .form-actions { grid-column: span 1; }
+      .guest-banner { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
 </head>
-<body class="dashboard-page">
+<body>
+
+  <!-- ========== SIDEBAR ========== -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-brand">
-      <span class="brand-mark">🛡️</span>
-      <div>
+      <div class="brand-icon">🛡</div>
+      <div class="brand-text">
         <strong>SENTINEL-AI</strong>
-        <small data-i18n="control_center">Control Center</small>
+        <span>Control Center</span>
       </div>
     </div>
+
     <nav class="sidebar-nav">
-      <a href="#overview" class="nav-link active" data-nav="overview" data-i18n="nav_overview">Overview</a>
-      <a href="#docguard" class="nav-link" data-nav="docguard" data-i18n="nav_doc">DocGuard</a>
-      <a href="#mailguard" class="nav-link" data-nav="mailguard" data-i18n="nav_mail">MailGuard</a>
-      <a href="#sysguard" class="nav-link" data-nav="sysguard" data-i18n="nav_sys">SysGuard</a>
-      <a href="#camguard" class="nav-link" data-nav="camguard" data-i18n="nav_cam">CamGuard</a>
-      <a href="#scanguard" class="nav-link" data-nav="scanguard" data-i18n="nav_scan">ScanGuard</a>
-      <a href="#alerts" class="nav-link" data-nav="alerts" data-i18n="nav_alerts">Alerts <span id="alertsBadge" class="badge badge-dot"></span></a>
-      <a href="#history" class="nav-link" data-nav="history" data-i18n="nav_history">History</a>
+      <div class="nav-section">Main</div>
+      <a href="#overview" class="nav-link active" data-nav="overview">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"/></svg>
+        Overview
+      </a>
+
+      <div class="nav-section">Modules</div>
+      <a href="#docguard" class="nav-link" data-nav="docguard">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
+        DocGuard
+      </a>
+      <a href="#mailguard" class="nav-link" data-nav="mailguard">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
+        MailGuard
+      </a>
+      <a href="#sysguard" class="nav-link" data-nav="sysguard">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25A2.25 2.25 0 015.25 3h13.5A2.25 2.25 0 0121 5.25z"/></svg>
+        SysGuard
+      </a>
+      <a href="#camguard" class="nav-link" data-nav="camguard">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M6 20.25h12m-7.5-3v3m3-3v3m-10.125-3.25h17.25c.621 0 1.125-.504 1.125-1.125V4.875c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v11c0 .621.504 1.125 1.125 1.125z"/></svg>
+        CamGuard
+      </a>
+      <a href="#scanguard" class="nav-link" data-nav="scanguard">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5"/></svg>
+        ScanGuard
+      </a>
+
+      <div class="nav-section">Activity</div>
+      <a href="#alerts" class="nav-link" data-nav="alerts">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"/></svg>
+        Alerts
+        <span id="alertsBadge" class="badge-dot"></span>
+      </a>
+      <a href="#history" class="nav-link" data-nav="history">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        History
+      </a>
     </nav>
+
     <div class="sidebar-footer">
-      <div class="auth-status" id="authStatus">
+      <div class="user-chip" id="userChip">
+        <div class="user-avatar" id="userAvatar">G</div>
+        <div class="user-info">
+          <div class="name" id="authLabel">Guest</div>
+          <div class="role" id="authRole">Not signed in</div>
+        </div>
         <span class="status-dot off" id="authDot"></span>
-        <span id="authLabel" data-i18n="signed_out">Signed out</span>
       </div>
-      <div class="lang-switch">
-        <button type="button" class="btn btn-ghost btn-sm" id="btn-en" aria-pressed="true">EN</button>
-        <button type="button" class="btn btn-ghost btn-sm" id="btn-ar" aria-pressed="false">AR</button>
+
+      <div class="sidebar-actions">
+        <a href="/login" class="btn btn-primary btn-sm btn-block guest-only" id="loginSidebarBtn">Sign in</a>
+        <button type="button" class="btn btn-danger btn-sm btn-block auth-only hidden" id="logoutBtn">Sign out</button>
+        <div class="lang-row">
+          <button type="button" class="btn btn-ghost btn-sm" id="btn-en" style="flex:1">EN</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="btn-ar" style="flex:1">AR</button>
+        </div>
       </div>
     </div>
   </aside>
 
+  <!-- ========== MAIN ========== -->
   <div class="main-area">
     <header class="topbar">
       <button type="button" class="btn btn-ghost mobile-only" id="toggleSidebar" aria-label="Menu">☰</button>
-      <h2 class="page-title" data-i18n="title_overview">Overview</h2>
+      <h2 class="page-title" id="pageTitle">Overview</h2>
       <div class="topbar-actions">
-        <button type="button" class="btn btn-outline btn-sm" id="refreshBtn" data-i18n="refresh">↻ Refresh</button>
-        <button type="button" class="btn btn-primary btn-sm auth-only hidden" id="logoutBtn" data-i18n="logout">Sign out</button>
+        <button type="button" class="btn btn-secondary btn-sm" id="refreshBtn">↻ Refresh</button>
       </div>
     </header>
 
-    <div class="auth-gate" id="authGate">
-      <div class="auth-card">
-        <h3 data-i18n="auth_welcome">Welcome back</h3>
-        <p data-i18n="auth_sub">Sign in to enable scan history &amp; alerts. Continue as guest if you prefer.</p>
-        
-        <!-- تحسين التبويبات لتكون واضحة ومنفصلة احترافياً -->
-        <div class="tabs" role="tablist">
-          <button type="button" class="tab active" role="tab" data-tab="login" data-i18n="tab_login">Sign in</button>
-          <button type="button" class="tab" role="tab" data-tab="register" data-i18n="tab_register">Register</button>
-        </div>
-
-        <form id="authForm">
-          <label data-i18n="f_username">Username or email</label>
-          <input type="text" name="identifier" autocomplete="username" required data-placeholder="username_placeholder" />
-          
-          <label class="register-only hidden" data-i18n="f_email">Email</label>
-          <input type="email" name="email" class="register-only hidden" autocomplete="email" data-placeholder="email_placeholder" />
-          
-          <label data-i18n="f_password">Password</label>
-          <input type="password" name="password" autocomplete="current-password" required minlength="8" data-placeholder="password_placeholder" />
-          
-          <!-- إضافة رابط نسيت كلمة المرور بشكل مرتب ومنفصل عن الشحطات المربكة -->
-          <div class="auth-forgot-row login-only" style="margin-bottom: 12px; text-align: left;">
-            <a href="#forgot" id="forgotPasswordLink" style="font-size: 0.85rem; color: var(--primary-color, #6366f1); text-decoration: none;">Forgot password?</a>
-          </div>
-
-          <label class="register-only hidden" data-i18n="f_first">First name</label>
-          <input type="text" name="first_name" class="register-only hidden" data-placeholder="optional" />
-          
-          <label class="register-only hidden" data-i18n="f_last">Last name</label>
-          <input type="text" name="last_name" class="register-only hidden" data-placeholder="optional" />
-          
-          <div class="form-actions">
-            <button type="submit" class="btn btn-primary" id="authSubmitBtn" data-i18n="btn_login">Sign in</button>
-            <button type="button" class="btn btn-secondary" id="guestBtn" data-i18n="btn_guest">Continue as guest</button>
-          </div>
-          <p class="form-error" id="authError" role="alert"></p>
-        </form>
-      </div>
-    </div>
-
     <main class="dashboard-content" id="dashboardContent">
+
+      <!-- Guest banner -->
+      <div class="guest-banner guest-only" id="guestBanner">
+        <p><strong>Browsing as guest.</strong> Sign in to save scan history and receive alerts.</p>
+        <div class="guest-actions">
+          <a href="/login" class="btn btn-primary btn-sm">Sign in</a>
+          <a href="/register" class="btn btn-secondary btn-sm">Create account</a>
+        </div>
+      </div>
 
       <!-- OVERVIEW -->
       <section class="view" id="view-overview">
         <div class="stat-grid">
           <div class="stat-card">
-            <div class="stat-label" data-i18n="st_scans_24">Scans (24h)</div>
+            <div class="stat-label">Scans (24h)</div>
             <div class="stat-value" id="st-scans-24">—</div>
-            <div class="stat-foot" data-i18n="st_today">Today</div>
+            <div class="stat-foot">Today</div>
           </div>
           <div class="stat-card danger">
-            <div class="stat-label" data-i18n="st_critical">Critical scans</div>
+            <div class="stat-label">Critical scans</div>
             <div class="stat-value" id="st-critical">—</div>
-            <div class="stat-foot" data-i18n="st_risk">Risk ≥ 70</div>
+            <div class="stat-foot">Risk ≥ 70</div>
           </div>
           <div class="stat-card warn">
-            <div class="stat-label" data-i18n="st_high">High-risk scans</div>
+            <div class="stat-label">High-risk scans</div>
             <div class="stat-value" id="st-high">—</div>
-            <div class="stat-foot" data-i18n="st_risk2">Risk ≥ 40</div>
+            <div class="stat-foot">Risk ≥ 40</div>
           </div>
           <div class="stat-card info">
-            <div class="stat-label" data-i18n="st_unread">Unread alerts</div>
+            <div class="stat-label">Unread alerts</div>
             <div class="stat-value" id="st-unread">—</div>
-            <div class="stat-foot" data-i18n="st_action">Action needed</div>
+            <div class="stat-foot">Action needed</div>
           </div>
         </div>
 
         <div class="two-col">
           <div class="card">
-            <div class="card-head">
-              <h3 data-i18n="h_per_module">Per-module performance</h3>
-            </div>
+            <div class="card-head"><h3>Per-module performance</h3></div>
             <div class="card-body" id="moduleBars">
-              <p class="empty" data-i18n="empty_click">Click ↻ Refresh to load dashboard summary.</p>
+              <p class="empty">Click ↻ Refresh to load dashboard summary.</p>
             </div>
           </div>
           <div class="card">
             <div class="card-head">
-              <h3 data-i18n="h_sys_mini">System snapshot</h3>
-              <button type="button" class="btn btn-ghost btn-sm" data-action="sysguard-quick" data-i18n="btn_check">Check now</button>
+              <h3>System snapshot</h3>
+              <button type="button" class="btn btn-ghost btn-sm" data-action="sysguard-quick">Check now</button>
             </div>
             <div class="card-body" id="sysSnapshot">
-              <p class="empty" data-i18n="empty_sys">Run SysGuard to view live CPU / RAM / Disk / Network.</p>
+              <p class="empty">Run SysGuard to view live CPU / RAM / Disk.</p>
             </div>
           </div>
         </div>
 
         <div class="two-col">
           <div class="card">
-            <div class="card-head"><h3 data-i18n="h_recent_scans">Recent scans</h3></div>
+            <div class="card-head"><h3>Recent scans</h3></div>
             <div class="card-body overflow-x"><table class="data-table" id="recentScansTbl"></table></div>
           </div>
           <div class="card">
-            <div class="card-head"><h3 data-i18n="h_recent_alerts">Recent alerts</h3></div>
+            <div class="card-head"><h3>Recent alerts</h3></div>
             <div class="card-body overflow-x"><table class="data-table" id="recentAlertsTbl"></table></div>
           </div>
         </div>
@@ -150,27 +740,27 @@
       <!-- DOCGUARD -->
       <section class="view hidden" id="view-docguard">
         <div class="card">
-          <div class="card-head"><h3 data-i18n="dg_title">DocGuard — Document Scanner</h3></div>
+          <div class="card-head"><h3>DocGuard — Document Scanner</h3></div>
           <div class="card-body">
             <form id="docguardForm" class="form-grid">
               <div>
-                <label data-i18n="dg_upload">Upload PDF / TXT</label>
+                <label>Upload PDF / TXT</label>
                 <input type="file" name="file" accept=".pdf,.txt" />
               </div>
               <div class="col-span-2">
-                <label data-i18n="dg_text">…or paste raw text</label>
-                <textarea name="text" rows="4" data-placeholder="dg_text_ph"></textarea>
+                <label>…or paste raw text</label>
+                <textarea name="text" rows="4" placeholder="Paste document text here…"></textarea>
               </div>
               <div class="form-actions">
-                <button type="submit" class="btn btn-primary" data-i18n="btn_scan">🔍 Scan Document</button>
+                <button type="submit" class="btn btn-primary">🔍 Scan Document</button>
               </div>
               <p class="form-error" id="dgError" role="alert"></p>
             </form>
           </div>
         </div>
-        <div class="card" id="dgResultCard" style="display:none">
+        <div class="card" id="dgResultCard" style="display:none; margin-top:14px">
           <div class="card-head">
-            <h3 data-i18n="dg_result">Scan Result</h3>
+            <h3>Scan Result</h3>
             <span class="risk-chip" id="dgRiskChip">—</span>
           </div>
           <div class="card-body" id="dgResult"></div>
@@ -180,19 +770,19 @@
       <!-- MAILGUARD -->
       <section class="view hidden" id="view-mailguard">
         <div class="card">
-          <div class="card-head"><h3 data-i18n="mg_title">MailGuard — Email Classifier</h3></div>
+          <div class="card-head"><h3>MailGuard — Email Classifier</h3></div>
           <div class="card-body">
             <form id="mailguardForm" class="form-grid">
-              <div><label data-i18n="mg_from">From / Sender</label><input type="text" name="sender" data-placeholder="mg_from_ph"/></div>
-              <div><label data-i18n="mg_subject">Subject</label><input type="text" name="subject" data-placeholder="mg_subject_ph"/></div>
-              <div class="col-span-2"><label data-i18n="mg_body">Body</label><textarea name="body" rows="7" required data-placeholder="mg_body_ph"></textarea></div>
-              <div class="form-actions"><button type="submit" class="btn btn-primary" data-i18n="btn_classify">🎯 Classify Email</button></div>
+              <div><label>From / Sender</label><input type="text" name="sender" placeholder="sender@example.com"/></div>
+              <div><label>Subject</label><input type="text" name="subject" placeholder="Email subject"/></div>
+              <div class="col-span-2"><label>Body</label><textarea name="body" rows="7" required placeholder="Paste email body…"></textarea></div>
+              <div class="form-actions"><button type="submit" class="btn btn-primary">🎯 Classify Email</button></div>
               <p class="form-error" id="mgError" role="alert"></p>
             </form>
           </div>
         </div>
-        <div class="card" id="mgResultCard" style="display:none">
-          <div class="card-head"><h3 data-i18n="mg_result">Classification</h3><span class="risk-chip" id="mgRiskChip">—</span></div>
+        <div class="card" id="mgResultCard" style="display:none; margin-top:14px">
+          <div class="card-head"><h3>Classification</h3><span class="risk-chip" id="mgRiskChip">—</span></div>
           <div class="card-body" id="mgResult"></div>
         </div>
       </section>
@@ -201,18 +791,18 @@
       <section class="view hidden" id="view-sysguard">
         <div class="card">
           <div class="card-head">
-            <h3 data-i18n="sg_title">SysGuard — Real-time System Monitor</h3>
-            <div>
-              <button type="button" class="btn btn-outline btn-sm" id="sgOnce" data-i18n="sg_once">⟳ Check once</button>
-              <button type="button" class="btn btn-primary btn-sm" id="sgStream" data-i18n="sg_start">▶ Auto (5s)</button>
+            <h3>SysGuard — Real-time System Monitor</h3>
+            <div style="display:flex;gap:6px">
+              <button type="button" class="btn btn-secondary btn-sm" id="sgOnce">⟳ Check once</button>
+              <button type="button" class="btn btn-primary btn-sm" id="sgStream">▶ Auto (5s)</button>
             </div>
           </div>
           <div class="card-body" id="sgBody">
-            <p class="empty" data-i18n="empty_click_sys">Click "Check once" to load current status.</p>
+            <p class="empty">Click "Check once" to load current status.</p>
           </div>
         </div>
-        <div class="card">
-          <div class="card-head"><h3 data-i18n="sg_hist">History (last 60 samples)</h3></div>
+        <div class="card" style="margin-top:14px">
+          <div class="card-head"><h3>History (last 60 samples)</h3></div>
           <div class="card-body" id="sgHistory"><p class="empty">—</p></div>
         </div>
       </section>
@@ -220,35 +810,35 @@
       <!-- CAMGUARD -->
       <section class="view hidden" id="view-camguard">
         <div class="card">
-          <div class="card-head"><h3 data-i18n="cg_title">CamGuard — Camera / Frame Analyzer</h3></div>
+          <div class="card-head"><h3>CamGuard — Camera / Frame Analyzer</h3></div>
           <div class="card-body">
             <form id="camguardForm" class="form-grid">
               <div>
-                <label data-i18n="cg_frame">Upload frame image</label>
+                <label>Upload frame image</label>
                 <input type="file" name="frame" accept="image/*" />
               </div>
               <div>
-                <label data-i18n="cg_cam">Camera ID</label>
+                <label>Camera ID</label>
                 <input type="text" name="camera_id" value="default" />
               </div>
               <div class="col-span-2">
-                <label data-i18n="cg_base64">…or paste base64 (data URI ok)</label>
-                <textarea name="base64" rows="3" data-placeholder="cg_b64_ph"></textarea>
+                <label>…or paste base64</label>
+                <textarea name="base64" rows="3" placeholder="data:image/jpeg;base64,..."></textarea>
               </div>
               <div class="col-span-2">
-                <label class="inline">
+                <label class="inline-check">
                   <input type="checkbox" name="yolo" checked />
-                  <span data-i18n="cg_yolo">Attempt YOLO (placeholder — install ultralytics + weights)</span>
+                  Attempt YOLO detection
                 </label>
               </div>
-              <div class="form-actions"><button type="submit" class="btn btn-primary" data-i18n="btn_analyze">📷 Analyze Frame</button></div>
+              <div class="form-actions"><button type="submit" class="btn btn-primary">📷 Analyze Frame</button></div>
               <p class="form-error" id="cgError" role="alert"></p>
             </form>
-            <p class="note info-note" data-i18n="cg_todo">TODO YOLO: pip install ultralytics + drop yolov8*.pt in project root. Motion detection works out of the box.</p>
+            <p class="note">YOLO requires ultralytics + weights. Motion detection works out of the box.</p>
           </div>
         </div>
-        <div class="card" id="cgResultCard" style="display:none">
-          <div class="card-head"><h3 data-i18n="cg_result">Frame analysis</h3><span class="risk-chip" id="cgRiskChip">—</span></div>
+        <div class="card" id="cgResultCard" style="display:none; margin-top:14px">
+          <div class="card-head"><h3>Frame analysis</h3><span class="risk-chip" id="cgRiskChip">—</span></div>
           <div class="card-body" id="cgResult"></div>
         </div>
       </section>
@@ -256,32 +846,32 @@
       <!-- SCANGUARD -->
       <section class="view hidden" id="view-scanguard">
         <div class="card">
-          <div class="card-head"><h3 data-i18n="sg2_title">ScanGuard — Code / Log Scanner</h3></div>
+          <div class="card-head"><h3>ScanGuard — Code / Log Scanner</h3></div>
           <div class="card-body">
             <form id="scanguardForm" class="form-grid">
               <div>
-                <label data-i18n="sg2_upload">Upload file (code / log / txt)</label>
+                <label>Upload file</label>
                 <input type="file" name="file" />
               </div>
               <div>
-                <label data-i18n="sg2_type">Hint type</label>
+                <label>Hint type</label>
                 <select name="type">
-                  <option value="auto" data-i18n="sg2_auto">Auto detect</option>
-                  <option value="code" data-i18n="sg2_code">Code</option>
-                  <option value="log" data-i18n="sg2_log">Log file</option>
+                  <option value="auto">Auto detect</option>
+                  <option value="code">Code</option>
+                  <option value="log">Log file</option>
                 </select>
               </div>
               <div class="col-span-2">
-                <label data-i18n="sg2_text">…or paste code / log text</label>
-                <textarea name="code" rows="8" data-placeholder="sg2_text_ph"></textarea>
+                <label>…or paste code / log text</label>
+                <textarea name="code" rows="8" placeholder="Paste source code or log content…"></textarea>
               </div>
-              <div class="form-actions"><button type="submit" class="btn btn-primary" data-i18n="btn_audit">🛡️ Audit</button></div>
+              <div class="form-actions"><button type="submit" class="btn btn-primary">🛡 Audit</button></div>
               <p class="form-error" id="scanGError" role="alert"></p>
             </form>
           </div>
         </div>
-        <div class="card" id="scanGResultCard" style="display:none">
-          <div class="card-head"><h3 data-i18n="sg2_result">Audit report</h3><span class="risk-chip" id="scanGRiskChip">—</span></div>
+        <div class="card" id="scanGResultCard" style="display:none; margin-top:14px">
+          <div class="card-head"><h3>Audit report</h3><span class="risk-chip" id="scanGRiskChip">—</span></div>
           <div class="card-body" id="scanGResult"></div>
         </div>
       </section>
@@ -290,17 +880,17 @@
       <section class="view hidden" id="view-alerts">
         <div class="card">
           <div class="card-head">
-            <h3 data-i18n="al_title">Alerts</h3>
+            <h3>Alerts</h3>
             <div class="filter-row">
               <select id="alertSeverityFilter">
-                <option value="" data-i18n="al_all">All severities</option>
+                <option value="">All severities</option>
                 <option value="critical">Critical</option>
                 <option value="high">High</option>
                 <option value="medium">Medium</option>
                 <option value="info">Info</option>
               </select>
-              <label class="inline">
-                <input type="checkbox" id="alertUnreadOnly" /> <span data-i18n="al_unread">Unread only</span>
+              <label class="inline-check" style="font-size:0.78rem">
+                <input type="checkbox" id="alertUnreadOnly" /> Unread only
               </label>
             </div>
           </div>
@@ -312,17 +902,17 @@
       <section class="view hidden" id="view-history">
         <div class="card">
           <div class="card-head">
-            <h3 data-i18n="hist_title">Scan history</h3>
+            <h3>Scan history</h3>
             <div class="filter-row">
               <select id="scanModuleFilter">
-                <option value="" data-i18n="hist_all">All modules</option>
+                <option value="">All modules</option>
                 <option value="docguard">DocGuard</option>
                 <option value="mailguard">MailGuard</option>
                 <option value="sysguard">SysGuard</option>
                 <option value="camguard">CamGuard</option>
                 <option value="scanguard">ScanGuard</option>
               </select>
-              <input type="number" id="scanMinRisk" min="0" max="100" placeholder="Min risk 0-100" />
+              <input type="number" id="scanMinRisk" min="0" max="100" placeholder="Min risk" style="width:90px" />
             </div>
           </div>
           <div class="card-body overflow-x"><table class="data-table" id="historyTable"></table></div>
@@ -333,6 +923,55 @@
   </div>
 
   <div id="toastArea" class="toast-area" aria-live="polite"></div>
+
   <script src="js/app.js"></script>
+  <script>
+    // Sidebar toggle
+    document.getElementById('toggleSidebar')?.addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('open');
+    });
+
+    // Navigation
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = link.dataset.nav;
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+        document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+        document.getElementById('view-' + target)?.classList.remove('hidden');
+        document.getElementById('pageTitle').textContent = link.textContent.trim();
+        document.getElementById('sidebar').classList.remove('open');
+      });
+    });
+
+    // Auth UI
+    function setLoggedIn(user) {
+      document.querySelectorAll('.guest-only').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.auth-only').forEach(el => el.classList.remove('hidden'));
+      document.getElementById('authDot').classList.add('on');
+      document.getElementById('authDot').classList.remove('off');
+      document.getElementById('authLabel').textContent = user?.username || 'User';
+      document.getElementById('authRole').textContent = user?.role || 'Signed in';
+      document.getElementById('userAvatar').textContent = (user?.username || 'U')[0].toUpperCase();
+    }
+
+    function setGuest() {
+      document.querySelectorAll('.guest-only').forEach(el => el.classList.remove('hidden'));
+      document.querySelectorAll('.auth-only').forEach(el => el.classList.add('hidden'));
+      document.getElementById('authDot').classList.remove('on');
+      document.getElementById('authDot').classList.add('off');
+      document.getElementById('authLabel').textContent = 'Guest';
+      document.getElementById('authRole').textContent = 'Not signed in';
+      document.getElementById('userAvatar').textContent = 'G';
+    }
+
+    setGuest();
+
+    document.getElementById('logoutBtn')?.addEventListener('click', () => {
+      localStorage.removeItem('token');
+      setGuest();
+    });
+  </script>
 </body>
 </html>
