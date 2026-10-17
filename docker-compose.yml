@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  sentinel-core:
+    build: .
+    container_name: sentinel-ai-onprem
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=on-premise
+      - DATABASE_URL=sqlite:///./sentinel.db
+    volumes:
+      - sentinel_data:/app/data
+    networks:
+      - sentinel-net
+
+volumes:
+  sentinel_data:
+
+networks:
+  sentinel-net:
+    driver: bridge
