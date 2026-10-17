@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SENTINEL-AI | Control Center</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -12,7 +11,6 @@
       --bg-elevated: #0C1220;
       --sidebar: #0A0F1A;
       --card: #0F1629;
-      --card-hover: #131C31;
       --border: rgba(255,255,255,0.06);
       --border-strong: rgba(255,255,255,0.1);
       --primary: #6366F1;
@@ -27,7 +25,6 @@
       --info: #3B82F6;
       --radius: 12px;
       --radius-lg: 16px;
-      --shadow: 0 4px 24px rgba(0,0,0,0.25);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -187,10 +184,7 @@
       color: var(--text-secondary);
     }
 
-    .user-info {
-      flex: 1;
-      min-width: 0;
-    }
+    .user-info { flex: 1; min-width: 0; }
     .user-info .name {
       font-size: 0.8rem;
       font-weight: 600;
@@ -363,7 +357,6 @@
       transition: border-color 0.15s;
     }
     .stat-card:hover { border-color: var(--border-strong); }
-
     .stat-card.danger { border-color: rgba(239,68,68,0.2); }
     .stat-card.warn { border-color: rgba(245,158,11,0.2); }
     .stat-card.info { border-color: rgba(59,130,246,0.2); }
@@ -373,9 +366,6 @@
       font-weight: 500;
       color: var(--text-muted);
       margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
     }
 
     .stat-value {
@@ -492,7 +482,6 @@
       border-radius: 20px;
       background: var(--primary-soft);
       color: #A5B4FC;
-      letter-spacing: 0.02em;
     }
 
     .data-table {
@@ -518,6 +507,7 @@
 
     .view.hidden { display: none; }
     .overflow-x { overflow-x: auto; }
+    .hidden { display: none !important; }
 
     .note {
       font-size: 0.78rem;
@@ -566,7 +556,6 @@
       cursor: pointer;
     }
 
-    /* ========== RESPONSIVE ========== */
     @media (max-width: 1100px) {
       .stat-grid { grid-template-columns: repeat(2, 1fr); }
       .two-col { grid-template-columns: 1fr; }
@@ -574,7 +563,7 @@
 
     @media (max-width: 768px) {
       .sidebar { transform: translateX(-100%); }
-      .sidebar.open { transform: translateX(0); box-shadow: var(--shadow); }
+      .sidebar.open { transform: translateX(0); box-shadow: 0 4px 24px rgba(0,0,0,0.4); }
       .main-area { margin-left: 0; }
       .mobile-only { display: inline-flex; }
       .dashboard-content { padding: 18px 16px; }
@@ -651,8 +640,12 @@
       </div>
 
       <div class="sidebar-actions">
-        <a href="/login" class="btn btn-primary btn-sm btn-block guest-only" id="loginSidebarBtn">Sign in</a>
+        <!-- زر تسجيل الدخول → login.html -->
+        <a href="login.html" class="btn btn-primary btn-sm btn-block guest-only" id="loginSidebarBtn">Sign in</a>
+
+        <!-- زر الخروج → يحول لـ login.html -->
         <button type="button" class="btn btn-danger btn-sm btn-block auth-only hidden" id="logoutBtn">Sign out</button>
+
         <div class="lang-row">
           <button type="button" class="btn btn-ghost btn-sm" id="btn-en" style="flex:1">EN</button>
           <button type="button" class="btn btn-ghost btn-sm" id="btn-ar" style="flex:1">AR</button>
@@ -677,8 +670,8 @@
       <div class="guest-banner guest-only" id="guestBanner">
         <p><strong>Browsing as guest.</strong> Sign in to save scan history and receive alerts.</p>
         <div class="guest-actions">
-          <a href="/login" class="btn btn-primary btn-sm">Sign in</a>
-          <a href="/register" class="btn btn-secondary btn-sm">Create account</a>
+          <a href="login.html" class="btn btn-primary btn-sm">Sign in</a>
+          <a href="register.html" class="btn btn-secondary btn-sm">Create account</a>
         </div>
       </div>
 
@@ -924,14 +917,13 @@
 
   <div id="toastArea" class="toast-area" aria-live="polite"></div>
 
-  <script src="js/app.js"></script>
   <script>
-    // Sidebar toggle
+    // ========== Sidebar toggle ==========
     document.getElementById('toggleSidebar')?.addEventListener('click', () => {
       document.getElementById('sidebar').classList.toggle('open');
     });
 
-    // Navigation
+    // ========== Navigation ==========
     document.querySelectorAll('.nav-link').forEach(link => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
@@ -945,7 +937,7 @@
       });
     });
 
-    // Auth UI
+    // ========== Auth helpers ==========
     function setLoggedIn(user) {
       document.querySelectorAll('.guest-only').forEach(el => el.classList.add('hidden'));
       document.querySelectorAll('.auth-only').forEach(el => el.classList.remove('hidden'));
@@ -966,12 +958,26 @@
       document.getElementById('userAvatar').textContent = 'G';
     }
 
-    setGuest();
-
+    // ========== Logout → يحول لـ login.html ==========
     document.getElementById('logoutBtn')?.addEventListener('click', () => {
       localStorage.removeItem('token');
+      localStorage.removeItem('user');
       setGuest();
+      window.location.href = 'login.html';
     });
+
+    // ========== Check auth on load ==========
+    const token = localStorage.getItem('token');
+    const userStr = localStorage.getItem('user');
+    if (token && userStr) {
+      try {
+        setLoggedIn(JSON.parse(userStr));
+      } catch {
+        setGuest();
+      }
+    } else {
+      setGuest();
+    }
   </script>
 </body>
 </html>
