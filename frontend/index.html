@@ -67,6 +67,7 @@
         <a href="#modules" class="hover:text-white transition">الموديلات</a>
         <a href="#value" class="hover:text-white transition">المميزات</a>
         <a href="#pricing" class="hover:text-white transition">التسعير</a>
+        <a href="#contact" class="hover:text-white transition">تواصل معنا</a>
       </div>
 
       <div class="flex items-center gap-3">
@@ -189,7 +190,7 @@
     </div>
   </section>
 
-  <!-- ========== HOW IT WORKS SECTION (Added) ========== -->
+  <!-- ========== HOW IT WORKS SECTION ========== -->
   <section id="howitworks" class="py-20 border-t border-white/5 bg-navy-800/20">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
       <div class="text-center mb-14">
@@ -451,7 +452,7 @@
               <span data-ar="استضافة سحابية">Cloud hosting</span>
             </li>
           </ul>
-          <a href="mailto:hello@sentinel-ai.sa" class="block text-center py-3 rounded-xl bg-accent hover:bg-accent-hover font-semibold transition shadow-lg shadow-indigo-500/20" data-ar="اطلب عرض سعر">
+          <a href="#contact" class="block text-center py-3 rounded-xl bg-accent hover:bg-accent-hover font-semibold transition shadow-lg shadow-indigo-500/20" data-ar="اطلب عرض سعر">
             Request quote
           </a>
         </div>
@@ -479,7 +480,7 @@
               <span data-ar="دعم أولوية + تخصيص">Priority support + custom</span>
             </li>
           </ul>
-          <a href="mailto:hello@sentinel-ai.sa" class="block text-center py-3 rounded-xl border border-white/15 hover:bg-white/5 font-medium transition" data-ar="تواصل معنا">
+          <a href="#contact" class="block text-center py-3 rounded-xl border border-white/15 hover:bg-white/5 font-medium transition" data-ar="تواصل معنا">
             Contact us
           </a>
         </div>
@@ -488,6 +489,36 @@
       <p class="text-center text-sm text-slate-500 mt-8" data-ar="الأسعار النهائية تُحدد حسب حجم المنشأة ومتطلبات الاستضافة.">
         Final pricing depends on organization size and hosting requirements.
       </p>
+    </div>
+  </section>
+
+  <!-- ========== CONTACT / QUOTE FORM SECTION (Connected to Formspree) ========== -->
+  <section id="contact" class="py-20 border-t border-white/5 bg-navy-800/30">
+    <div class="max-w-2xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-10">
+        <h2 class="text-3xl font-bold mb-2">اطلب عرض سعر أو تواصل معنا</h2>
+        <p class="text-slate-400 text-sm">املأ البيانات أدناه وسنتواصل معك فوراً لتلبية متطلبات منشأتك.</p>
+      </div>
+
+      <div class="bg-navy-800 border border-white/10 rounded-2xl p-6 sm:p-8 shadow-xl">
+        <form action="https://formspree.io/f/maeqvlvw" method="POST" class="space-y-4">
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1.5">اسم الشركة أو المؤسسة</label>
+            <input type="text" name="company_name" required placeholder="مثال: شركة التقنية المتقدمة" class="w-full bg-navy-900 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1.5">البريد الإلكتروني للعمل</label>
+            <input type="email" name="email" required placeholder="name@company.com" class="w-full bg-navy-900 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1.5">تفاصيل الاحتياج (استضافة سحابية، On-Premise، عدد الكاميرات/السيرفرات)</label>
+            <textarea name="message" rows="4" required placeholder="اكتب تفاصيل طلبك هنا..." class="w-full bg-navy-900 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500"></textarea>
+          </div>
+          <button type="submit" class="w-full py-3.5 rounded-xl bg-accent hover:bg-accent-hover font-semibold text-white shadow-lg shadow-indigo-500/20 transition">
+            إرسال الطلب
+          </button>
+        </form>
+      </div>
     </div>
   </section>
 
@@ -510,40 +541,20 @@
   </section>
 
   <!-- ========== FOOTER ========== -->
-  <footer class="border-t border-white/5 py-10">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-500">
+  <footer class="py-12 border-t border-white/5 bg-navy-900 text-sm text-slate-500">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-2">
-        <span class="font-semibold text-slate-300">SENTINEL-AI</span>
-        <span>·</span>
-        <span data-ar="منصة أمنية موحّدة">Unified Security Platform</span>
+        <span class="font-bold text-slate-300">SENTINEL-AI</span>
+        <span>— جميع الحقوق محفوظة © 2026</span>
       </div>
-      <div>© 2026 — All rights reserved</div>
+      <div class="flex items-center gap-6">
+        <a href="#howitworks" class="hover:text-slate-300 transition">كيف تعمل</a>
+        <a href="#modules" class="hover:text-slate-300 transition">الموديلات</a>
+        <a href="#pricing" class="hover:text-slate-300 transition">التسعير</a>
+        <a href="#contact" class="hover:text-slate-300 transition">تواصل معنا</a>
+      </div>
     </div>
   </footer>
 
-  <!-- ========== LANGUAGE TOGGLE SCRIPT ========== -->
-  <script>
-    let isArabic = true;
-
-    function toggleLang() {
-      isArabic = !isArabic;
-      document.documentElement.lang = isArabic ? 'ar' : 'en';
-      document.documentElement.dir = isArabic ? 'rtl' : 'ltr';
-      document.getElementById('langBtn').textContent = isArabic ? 'English' : 'العربية';
-
-      document.querySelectorAll('[data-ar]').forEach(el => {
-        if (!el.dataset.en) {
-          el.dataset.en = el.textContent.trim();
-        }
-        el.textContent = isArabic ? el.dataset.ar : el.dataset.en;
-      });
-    }
-
-    // Initialize Arabic as default
-    document.querySelectorAll('[data-ar]').forEach(el => {
-      el.dataset.en = el.textContent.trim();
-      el.textContent = el.dataset.ar;
-    });
-  </script>
 </body>
 </html>
