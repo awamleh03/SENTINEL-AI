@@ -67,7 +67,6 @@
         <a href="#modules" class="hover:text-white transition">الموديلات</a>
         <a href="#value" class="hover:text-white transition">المميزات</a>
         <a href="#pricing" class="hover:text-white transition">التسعير</a>
-        <a href="#contact" class="hover:text-white transition">تواصل معنا</a>
       </div>
 
       <div class="flex items-center gap-3">
@@ -452,9 +451,9 @@
               <span data-ar="استضافة سحابية">Cloud hosting</span>
             </li>
           </ul>
-          <a href="#contact" class="block text-center py-3 rounded-xl bg-accent hover:bg-accent-hover font-semibold transition shadow-lg shadow-indigo-500/20" data-ar="اطلب عرض سعر">
+          <button type="button" onclick="openQuoteModal()" class="block w-full text-center py-3 rounded-xl bg-accent hover:bg-accent-hover font-semibold transition shadow-lg shadow-indigo-500/20 cursor-pointer" data-ar="اطلب عرض سعر">
             Request quote
-          </a>
+          </button>
         </div>
 
         <!-- Enterprise -->
@@ -480,45 +479,15 @@
               <span data-ar="دعم أولوية + تخصيص">Priority support + custom</span>
             </li>
           </ul>
-          <a href="#contact" class="block text-center py-3 rounded-xl border border-white/15 hover:bg-white/5 font-medium transition" data-ar="تواصل معنا">
+          <button type="button" onclick="openQuoteModal()" class="block w-full text-center py-3 rounded-xl border border-white/15 hover:bg-white/5 font-medium transition cursor-pointer" data-ar="تواصل معنا">
             Contact us
-          </a>
+          </button>
         </div>
       </div>
 
       <p class="text-center text-sm text-slate-500 mt-8" data-ar="الأسعار النهائية تُحدد حسب حجم المنشأة ومتطلبات الاستضافة.">
         Final pricing depends on organization size and hosting requirements.
       </p>
-    </div>
-  </section>
-
-  <!-- ========== CONTACT / QUOTE FORM SECTION (Connected to Formspree) ========== -->
-  <section id="contact" class="py-20 border-t border-white/5 bg-navy-800/30">
-    <div class="max-w-2xl mx-auto px-4 sm:px-6">
-      <div class="text-center mb-10">
-        <h2 class="text-3xl font-bold mb-2">اطلب عرض سعر أو تواصل معنا</h2>
-        <p class="text-slate-400 text-sm">املأ البيانات أدناه وسنتواصل معك فوراً لتلبية متطلبات منشأتك.</p>
-      </div>
-
-      <div class="bg-navy-800 border border-white/10 rounded-2xl p-6 sm:p-8 shadow-xl">
-        <form action="https://formspree.io/f/maeqvlvw" method="POST" class="space-y-4">
-          <div>
-            <label class="block text-xs font-medium text-slate-300 mb-1.5">اسم الشركة أو المؤسسة</label>
-            <input type="text" name="company_name" required placeholder="مثال: شركة التقنية المتقدمة" class="w-full bg-navy-900 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500" />
-          </div>
-          <div>
-            <label class="block text-xs font-medium text-slate-300 mb-1.5">البريد الإلكتروني للعمل</label>
-            <input type="email" name="email" required placeholder="name@company.com" class="w-full bg-navy-900 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500" />
-          </div>
-          <div>
-            <label class="block text-xs font-medium text-slate-300 mb-1.5">تفاصيل الاحتياج (استضافة سحابية، On-Premise، عدد الكاميرات/السيرفرات)</label>
-            <textarea name="message" rows="4" required placeholder="اكتب تفاصيل طلبك هنا..." class="w-full bg-navy-900 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500"></textarea>
-          </div>
-          <button type="submit" class="w-full py-3.5 rounded-xl bg-accent hover:bg-accent-hover font-semibold text-white shadow-lg shadow-indigo-500/20 transition">
-            إرسال الطلب
-          </button>
-        </form>
-      </div>
     </div>
   </section>
 
@@ -533,28 +502,46 @@
       </p>
       <a href="/dashboard" class="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-accent hover:bg-accent-hover font-semibold text-white shadow-xl shadow-indigo-500/25 transition text-lg">
         <span data-ar="ابدأ التجربة المجانية">Start Free Trial</span>
-        <svg class="w-5 h-5 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-        </svg>
       </a>
     </div>
   </section>
 
-  <!-- ========== FOOTER ========== -->
-  <footer class="py-12 border-t border-white/5 bg-navy-900 text-sm text-slate-500">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div class="flex items-center gap-2">
-        <span class="font-bold text-slate-300">SENTINEL-AI</span>
-        <span>— جميع الحقوق محفوظة © 2026</span>
-      </div>
-      <div class="flex items-center gap-6">
-        <a href="#howitworks" class="hover:text-slate-300 transition">كيف تعمل</a>
-        <a href="#modules" class="hover:text-slate-300 transition">الموديلات</a>
-        <a href="#pricing" class="hover:text-slate-300 transition">التسعير</a>
-        <a href="#contact" class="hover:text-slate-300 transition">تواصل معنا</a>
-      </div>
+  <!-- ========== QUOTE MODAL (Formspree Integration) ========== -->
+  <div id="quoteModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm hidden px-4">
+    <div class="bg-navy-800 border border-white/10 rounded-2xl w-full max-w-lg p-6 sm:p-8 relative shadow-2xl">
+      <button type="button" onclick="closeQuoteModal()" class="absolute top-4 left-4 text-slate-400 hover:text-white text-xl font-bold">&times;</button>
+      
+      <h3 class="text-xl font-bold mb-2">طلب عرض سعر / تواصل معنا</h3>
+      <p class="text-sm text-slate-400 mb-6">أدخل تفاصيل منشأتك وسنتواصل معك في أسرع وقت لتوفير الحل الأنسب.</p>
+      
+      <form action="https://formspree.io/f/maeqvlvw" method="POST" class="space-y-4">
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">اسم الشركة أو المؤسسة</label>
+          <input type="text" name="company_name" required placeholder="مثال: شركة التقنية المتقدمة" class="w-full bg-navy-900 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">البريد الإلكتروني للعمل</label>
+          <input type="email" name="email" required placeholder="name@company.com" class="w-full bg-navy-900 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">تفاصيل الاحتياج (نوع الخطة، On-Premise، عدد المستخدمين، إلخ)</label>
+          <textarea name="message" rows="4" required placeholder="اكتب تفاصيل متطلباتك هنا..." class="w-full bg-navy-900 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500"></textarea>
+        </div>
+        <div class="flex justify-end gap-3 pt-2">
+          <button type="button" onclick="closeQuoteModal()" class="px-5 py-2.5 rounded-xl border border-white/10 hover:bg-white/5 text-sm transition">إلغاء</button>
+          <button type="submit" class="px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-hover font-semibold text-sm transition shadow-lg shadow-indigo-500/20">إرسال الطلب</button>
+        </div>
+      </form>
     </div>
-  </footer>
+  </div>
 
+  <script>
+    function openQuoteModal() {
+      document.getElementById('quoteModal').classList.remove('hidden');
+    }
+    function closeQuoteModal() {
+      document.getElementById('quoteModal').classList.add('hidden');
+    }
+  </script>
 </body>
 </html>
