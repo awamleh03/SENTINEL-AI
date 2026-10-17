@@ -51,21 +51,34 @@
       <div class="auth-card">
         <h3 data-i18n="auth_welcome">Welcome back</h3>
         <p data-i18n="auth_sub">Sign in to enable scan history &amp; alerts. Continue as guest if you prefer.</p>
+        
+        <!-- تحسين التبويبات لتكون واضحة ومنفصلة احترافياً -->
         <div class="tabs" role="tablist">
           <button type="button" class="tab active" role="tab" data-tab="login" data-i18n="tab_login">Sign in</button>
           <button type="button" class="tab" role="tab" data-tab="register" data-i18n="tab_register">Register</button>
         </div>
+
         <form id="authForm">
           <label data-i18n="f_username">Username or email</label>
           <input type="text" name="identifier" autocomplete="username" required data-placeholder="username_placeholder" />
+          
           <label class="register-only hidden" data-i18n="f_email">Email</label>
           <input type="email" name="email" class="register-only hidden" autocomplete="email" data-placeholder="email_placeholder" />
+          
           <label data-i18n="f_password">Password</label>
           <input type="password" name="password" autocomplete="current-password" required minlength="8" data-placeholder="password_placeholder" />
+          
+          <!-- إضافة رابط نسيت كلمة المرور بشكل مرتب ومنفصل عن الشحطات المربكة -->
+          <div class="auth-forgot-row login-only" style="margin-bottom: 12px; text-align: left;">
+            <a href="#forgot" id="forgotPasswordLink" style="font-size: 0.85rem; color: var(--primary-color, #6366f1); text-decoration: none;">Forgot password?</a>
+          </div>
+
           <label class="register-only hidden" data-i18n="f_first">First name</label>
           <input type="text" name="first_name" class="register-only hidden" data-placeholder="optional" />
+          
           <label class="register-only hidden" data-i18n="f_last">Last name</label>
           <input type="text" name="last_name" class="register-only hidden" data-placeholder="optional" />
+          
           <div class="form-actions">
             <button type="submit" class="btn btn-primary" id="authSubmitBtn" data-i18n="btn_login">Sign in</button>
             <button type="button" class="btn btn-secondary" id="guestBtn" data-i18n="btn_guest">Continue as guest</button>
