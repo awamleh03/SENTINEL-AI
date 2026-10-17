@@ -58,22 +58,22 @@
         </div>
         <div>
           <div class="font-bold text-sm tracking-wide">SENTINEL-AI</div>
-          <div class="text-[10px] text-slate-400 -mt-0.5">منصة ذكاء أمني</div>
+          <div class="text-[10px] text-slate-400 -mt-0.5" id="brand-sub">منصة ذكاء أمني</div>
         </div>
       </a>
 
       <div class="hidden md:flex items-center gap-8 text-sm text-slate-300">
-        <a href="#howitworks" class="hover:text-white transition">كيف تعمل</a>
-        <a href="#modules" class="hover:text-white transition">الموديلات</a>
-        <a href="#value" class="hover:text-white transition">المميزات</a>
-        <a href="#pricing" class="hover:text-white transition">التسعير</a>
+        <a href="#howitworks" class="hover:text-white transition" id="nav-how">كيف تعمل</a>
+        <a href="#modules" class="hover:text-white transition" id="nav-modules">الموديلات</a>
+        <a href="#value" class="hover:text-white transition" id="nav-value">المميزات</a>
+        <a href="#pricing" class="hover:text-white transition" id="nav-pricing">التسعير</a>
       </div>
 
       <div class="flex items-center gap-3">
         <button id="langBtn" onclick="toggleLang()" class="text-xs px-3 py-1.5 rounded-lg border border-white/10 text-slate-300 hover:bg-white/5 transition">
           English
         </button>
-        <a href="/dashboard" class="text-sm px-4 py-2 rounded-lg bg-accent hover:bg-accent-hover font-medium transition shadow-lg shadow-indigo-500/20">
+        <a href="/dashboard" class="text-sm px-4 py-2 rounded-lg bg-accent hover:bg-accent-hover font-medium transition shadow-lg shadow-indigo-500/20" id="btn-try-nav">
           جرّب مجاناً
         </a>
       </div>
@@ -89,49 +89,49 @@
         <div class="order-2 lg:order-1 text-center lg:text-right">
           <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-medium mb-6">
             <span class="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse"></span>
-            <span data-ar="منصة أمنية موحّدة للمنشآت">Unified Security Platform</span>
+            <span data-ar="منصة أمنية موحّدة للمنشآت" data-en="Unified Security Platform">منصة أمنية موحّدة للمنشآت</span>
           </div>
 
           <h1 class="text-4xl sm:text-5xl lg:text-[3.25rem] font-bold leading-[1.15] tracking-tight mb-5">
-            <span data-ar="منصة أمنية واحدة.">One security platform.</span><br>
-            <span class="text-transparent bg-clip-text bg-gradient-to-l from-indigo-400 to-blue-400" data-ar="تحمي كل شيء.">Every surface protected.</span>
+            <span data-ar="منصة أمنية واحدة." data-en="One security platform.">منصة أمنية واحدة.</span><br>
+            <span class="text-transparent bg-clip-text bg-gradient-to-l from-indigo-400 to-blue-400" data-ar="تحمي كل شيء." data-en="Every surface protected.">تحمي كل شيء.</span>
           </h1>
 
-          <p class="text-slate-400 text-lg leading-relaxed max-w-lg mx-auto lg:mx-0 mb-8" data-ar="افحص ملفات PDF، صنّف الإيميلات، راقب السيرفرات، اكتشف الحركة على الكاميرات، ودقّق الأكواد — كل ذلك من لوحة تحكم واحدة.">
-            Scan PDFs, classify emails, monitor servers, detect camera motion, and audit code — all from a single dashboard.
+          <p class="text-slate-400 text-lg leading-relaxed max-w-lg mx-auto lg:mx-0 mb-8" data-ar="افحص ملفات PDF، صنّف الإيميلات، راقب السيرفرات، اكتشف الحركة على الكاميرات، ودقّق الأكواد — كل ذلك من لوحة تحكم واحدة." data-en="Scan PDFs, classify emails, monitor servers, detect camera motion, and audit code — all from a single dashboard.">
+            افحص ملفات PDF، صنّف الإيميلات، راقب السيرفرات، اكتشف الحركة على الكاميرات، ودقّق الأكواد — كل ذلك من لوحة تحكم واحدة.
           </p>
 
           <div class="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
             <a href="/dashboard" class="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-accent hover:bg-accent-hover font-semibold text-white shadow-xl shadow-indigo-500/25 transition">
-              <span data-ar="جرّب مجاناً">Start Free Trial</span>
+              <span data-ar="جرّب مجاناً" data-en="Start Free Trial">جرّب مجاناً</span>
               <svg class="w-4 h-4 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
               </svg>
             </a>
             <a href="#modules" class="inline-flex items-center justify-center px-7 py-3.5 rounded-xl border border-white/10 hover:bg-white/5 text-slate-200 font-medium transition">
-              <span data-ar="تعرّف على الموديلات">Explore Modules</span>
+              <span data-ar="تعرّف على الموديلات" data-en="Explore Modules">تعرّف على الموديلات</span>
             </a>
           </div>
 
           <!-- Trust Subtext -->
           <div class="mt-4 text-xs text-slate-500 flex items-center justify-center lg:justify-start gap-2">
             <svg class="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
-            <span data-ar="مصمم ليوافق متطلبات الأمن السيبراني • لا يتطلب بطاقة ائتمان للتجربة">Aligned with cybersecurity controls • No credit card required</span>
+            <span data-ar="مصمم ليوافق متطلبات الأمن السيبراني • لا يتطلب بطاقة ائتمان للتجربة" data-en="Aligned with cybersecurity controls • No credit card required">مصمم ليوافق متطلبات الأمن السيبراني • لا يتطلب بطاقة ائتمان للتجربة</span>
           </div>
 
           <!-- Mini stats -->
           <div class="flex items-center justify-center lg:justify-start gap-8 mt-10 pt-8 border-t border-white/5">
             <div class="text-center">
               <div class="text-2xl font-bold">6</div>
-              <div class="text-xs text-slate-500" data-ar="موديلات">Modules</div>
+              <div class="text-xs text-slate-500" data-ar="موديلات" data-en="Modules">موديلات</div>
             </div>
             <div class="text-center">
               <div class="text-2xl font-bold">1</div>
-              <div class="text-xs text-slate-500" data-ar="لوحة تحكم">Dashboard</div>
+              <div class="text-xs text-slate-500" data-ar="لوحة تحكم" data-en="Dashboard">لوحة تحكم</div>
             </div>
             <div class="text-center">
               <div class="text-2xl font-bold">∞</div>
-              <div class="text-xs text-slate-500" data-ar="On-Premise">On-Premise</div>
+              <div class="text-xs text-slate-500" data-ar="On-Premise" data-en="On-Premise">On-Premise</div>
             </div>
           </div>
         </div>
@@ -193,36 +193,36 @@
   <section id="howitworks" class="py-20 border-t border-white/5 bg-navy-800/20">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
       <div class="text-center mb-14">
-        <h2 class="text-3xl sm:text-4xl font-bold mb-3" data-ar="كيف تعمل المنصة؟">
-          How it works
+        <h2 class="text-3xl sm:text-4xl font-bold mb-3" data-ar="كيف تعمل المنصة؟" data-en="How it works">
+          كيف تعمل المنصة؟
         </h2>
-        <p class="text-slate-400 max-w-xl mx-auto" data-ar="ثلاث خطوات بسيطة لتحقيق الأمان الشامل لمنشأتك.">
-          Three simple steps to achieve complete security for your organization.
+        <p class="text-slate-400 max-w-xl mx-auto" data-ar="ثلاث خطوات بسيطة لتحقيق الأمان الشامل لمنشأتك." data-en="Three simple steps to achieve complete security for your organization.">
+          ثلاث خطوات بسيطة لتحقيق الأمان الشامل لمنشأتك.
         </p>
       </div>
 
       <div class="grid md:grid-cols-3 gap-6">
         <div class="bg-navy-800 border border-white/5 rounded-2xl p-6 text-center">
           <div class="w-12 h-12 rounded-full bg-indigo-500/10 text-indigo-400 font-bold text-lg flex items-center justify-center mx-auto mb-4 border border-indigo-500/20">1</div>
-          <h3 class="font-semibold text-lg mb-2" data-ar="ربط الأصول أو رفع الملفات">Connect assets or upload files</h3>
-          <p class="text-sm text-slate-400 leading-relaxed" data-ar="قم بربط مصادر بياناتك، كاميراتك، أو ملفاتك وثغرات أكوادك بسهولة عبر واجهات API الموحدة.">
-            Easily connect your data sources, cameras, or files through unified REST APIs.
+          <h3 class="font-semibold text-lg mb-2" data-ar="ربط الأصول أو رفع الملفات" data-en="Connect assets or upload files">ربط الأصول أو رفع الملفات</h3>
+          <p class="text-sm text-slate-400 leading-relaxed" data-ar="قم بربط مصادر بياناتك، كاميراتك، أو ملفاتك وثغرات أكوادك بسهولة عبر واجهات API الموحدة." data-en="Easily connect your data sources, cameras, or files through unified REST APIs.">
+            قم بربط مصادر بياناتك، كاميراتك، أو ملفاتك وثغرات أكوادك بسهولة عبر واجهات API الموحدة.
           </p>
         </div>
 
         <div class="bg-navy-800 border border-white/5 rounded-2xl p-6 text-center">
           <div class="w-12 h-12 rounded-full bg-indigo-500/10 text-indigo-400 font-bold text-lg flex items-center justify-center mx-auto mb-4 border border-indigo-500/20">2</div>
-          <h3 class="font-semibold text-lg mb-2" data-ar="الرصد الذكي للتهديدات">Smart threat detection</h3>
-          <p class="text-sm text-slate-400 leading-relaxed" data-ar="تعمل الموديولات الستة بذكاء لاكتشاف الشذوذ والتصيد وتسريبات البيانات وتقليل الإنذارات الكاذبة.">
-            The six modules work intelligently to detect anomalies, phishing, and leaks with low false alarms.
+          <h3 class="font-semibold text-lg mb-2" data-ar="الرصد الذكي للتهديدات" data-en="Smart threat detection">الرصد الذكي للتهديدات</h3>
+          <p class="text-sm text-slate-400 leading-relaxed" data-ar="تعمل الموديولات الستة بذكاء لاكتشاف الشذوذ والتصيد وتسريبات البيانات وتقليل الإنذارات الكاذبة." data-en="The six modules work intelligently to detect anomalies, phishing, and leaks with low false alarms.">
+            تعمل الموديولات الستة بذكاء لاكتشاف الشذوذ والتصيد وتسريبات البيانات وتقليل الإنذارات الكاذبة.
           </p>
         </div>
 
         <div class="bg-navy-800 border border-white/5 rounded-2xl p-6 text-center">
           <div class="w-12 h-12 rounded-full bg-indigo-500/10 text-indigo-400 font-bold text-lg flex items-center justify-center mx-auto mb-4 border border-indigo-500/20">3</div>
-          <h3 class="font-semibold text-lg mb-2" data-ar="الإدارة من لوحة واحدة">Manage from a single dashboard</h3>
-          <p class="text-sm text-slate-400 leading-relaxed" data-ar="راقب المخاطر، تتبّع التقارير، واتخذ القرار من لوحة قيادة مركزية واحدة (سحابياً أو On-Premise).">
-            Monitor risks, track reports, and make decisions from a single centralized dashboard.
+          <h3 class="font-semibold text-lg mb-2" data-ar="الإدارة من لوحة واحدة" data-en="Manage from a single dashboard">الإدارة من لوحة واحدة</h3>
+          <p class="text-sm text-slate-400 leading-relaxed" data-ar="راقب المخاطر، تتبّع التقارير، واتخذ القرار من لوحة قيادة مركزية واحدة (سحابياً أو On-Premise)." data-en="Monitor risks, track reports, and make decisions from a single centralized dashboard.">
+            راقب المخاطر، تتبّع التقارير، واتخذ القرار من لوحة قيادة مركزية واحدة (سحابياً أو On-Premise).
           </p>
         </div>
       </div>
@@ -233,11 +233,11 @@
   <section id="value" class="py-20 border-t border-white/5">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
       <div class="text-center mb-14">
-        <h2 class="text-3xl sm:text-4xl font-bold mb-3" data-ar="ماذا ستحصل عند استخدام Sentinel-AI؟">
-          What you get with Sentinel-AI
+        <h2 class="text-3xl sm:text-4xl font-bold mb-3" data-ar="ماذا ستحصل عند استخدام Sentinel-AI؟" data-en="What you get with Sentinel-AI">
+          ماذا ستحصل عند استخدام Sentinel-AI؟
         </h2>
-        <p class="text-slate-400 max-w-xl mx-auto" data-ar="منصة واحدة تحل مشكلة تشتت الأدوات وتكلفتها، وتعطيك رؤية أمنية شاملة.">
-          One platform that solves tool sprawl and cost, and gives you complete security visibility.
+        <p class="text-slate-400 max-w-xl mx-auto" data-ar="منصة واحدة تحل مشكلة تشتت الأدوات وتكلفتها، وتعطيك رؤية أمنية شاملة." data-en="One platform that solves tool sprawl and cost, and gives you complete security visibility.">
+          منصة واحدة تحل مشكلة تشتت الأدوات وتكلفتها، وتعطيك رؤية أمنية شاملة.
         </p>
       </div>
 
@@ -248,9 +248,9 @@
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h3 class="font-semibold mb-2" data-ar="تكلفة أقل">Lower cost</h3>
-          <p class="text-sm text-slate-400 leading-relaxed" data-ar="منصة واحدة بدل ست أدوات منفصلة وفواتير متعددة وفرق تشغيل.">
-            One platform instead of six separate tools, licenses, and teams.
+          <h3 class="font-semibold mb-2" data-ar="تكلفة أقل" data-en="Lower cost">تكلفة أقل</h3>
+          <p class="text-sm text-slate-400 leading-relaxed" data-ar="منصة واحدة بدل ست أدوات منفصلة وفواتير متعددة وفرق تشغيل." data-en="One platform instead of six separate tools, licenses, and teams.">
+            منصة واحدة بدل ست أدوات منفصلة وفواتير متعددة وفرق تشغيل.
           </p>
         </div>
 
@@ -261,9 +261,9 @@
               <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
           </div>
-          <h3 class="font-semibold mb-2" data-ar="رؤية موحّدة">Unified visibility</h3>
-          <p class="text-sm text-slate-400 leading-relaxed" data-ar="كل التهديدات والتنبيهات في لوحة واحدة بدل التبديل بين أنظمة متعددة.">
-            All threats and alerts in one dashboard instead of switching between tools.
+          <h3 class="font-semibold mb-2" data-ar="رؤية موحّدة" data-en="Unified visibility">رؤية موحّدة</h3>
+          <p class="text-sm text-slate-400 leading-relaxed" data-ar="كل التهديدات والتنبيهات في لوحة واحدة بدل التبديل بين أنظمة متعددة." data-en="All threats and alerts in one dashboard instead of switching between tools.">
+            كل التهديدات والتنبيهات في لوحة واحدة بدل التبديل بين أنظمة متعددة.
           </p>
         </div>
 
@@ -273,9 +273,9 @@
               <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 14.25h13.5m-13.5 0a3 3 0 01-3-3m3 3a3 3 0 100-6h13.5a3 3 0 100 6m-16.5-3a3 3 0 013-3h13.5a3 3 0 013 3" />
             </svg>
           </div>
-          <h3 class="font-semibold mb-2" data-ar="تشغيل محلي">On-Premise</h3>
-          <p class="text-sm text-slate-400 leading-relaxed" data-ar="بياناتك تبقى داخل شبكتك. مناسب للمنشآت الحساسة ومتطلبات الامتثال.">
-            Your data stays inside your network. Ideal for sensitive environments and compliance.
+          <h3 class="font-semibold mb-2" data-ar="تشغيل محلي" data-en="On-Premise">تشغيل محلي</h3>
+          <p class="text-sm text-slate-400 leading-relaxed" data-ar="بياناتك تبقى داخل شبكتك. مناسب للمنشآت الحساسة ومتطلبات الامتثال." data-en="Your data stays inside your network. Ideal for sensitive environments and compliance.">
+            بياناتك تبقى داخل شبكتك. مناسب للمنشآت الحساسة ومتطلبات الامتثال.
           </p>
         </div>
 
@@ -285,9 +285,9 @@
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
             </svg>
           </div>
-          <h3 class="font-semibold mb-2" data-ar="جاهز للامتثال">Compliance-ready</h3>
-          <p class="text-sm text-slate-400 leading-relaxed" data-ar="مصمم ليتوافق مع توجهات ومتطلبات الأمن السيبراني السعودية.">
-            Designed to align with Saudi cybersecurity requirements and controls.
+          <h3 class="font-semibold mb-2" data-ar="جاهز للامتثال" data-en="Compliance-ready">جاهز للامتثال</h3>
+          <p class="text-sm text-slate-400 leading-relaxed" data-ar="مصمم ليتوافق مع توجهات ومتطلبات الأمن السيبراني السعودية." data-en="Designed to align with Saudi cybersecurity requirements and controls.">
+            مصمم ليتوافق مع توجهات ومتطلبات الأمن السيبراني السعودية.
           </p>
         </div>
       </div>
@@ -298,11 +298,11 @@
   <section id="modules" class="py-20 border-t border-white/5 bg-navy-800/30">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
       <div class="text-center mb-14">
-        <h2 class="text-3xl sm:text-4xl font-bold mb-3" data-ar="ستة موديلات أمنية متكاملة">
-          Six integrated security modules
+        <h2 class="text-3xl sm:text-4xl font-bold mb-3" data-ar="ستة موديلات أمنية متكاملة" data-en="Six integrated security modules">
+          ستة موديلات أمنية متكاملة
         </h2>
-        <p class="text-slate-400 max-w-xl mx-auto" data-ar="كل موديل يحل مشكلة حقيقية، ويعمل تحت لوحة تحكم واحدة.">
-          Each module solves a real problem, and they all work under one dashboard.
+        <p class="text-slate-400 max-w-xl mx-auto" data-ar="كل موديل يحل مشكلة حقيقية، ويعمل تحت لوحة تحكم واحدة." data-en="Each module solves a real problem, and they all work under one dashboard.">
+          كل موديل يحل مشكلة حقيقية، ويعمل تحت لوحة تحكم واحدة.
         </p>
       </div>
 
@@ -315,8 +315,8 @@
             </svg>
           </div>
           <h3 class="font-semibold text-lg mb-2">DocGuard</h3>
-          <p class="text-sm text-slate-400 leading-relaxed" data-ar="يكتشف الروابط الخبيثة وأرقام البطاقات داخل ملفات PDF قبل أن تصل لموظفيك.">
-            Detects malicious links and credit card numbers inside PDF files before they reach your employees.
+          <p class="text-sm text-slate-400 leading-relaxed" data-ar="يكتشف الروابط الخبيثة وأرقام البطاقات داخل ملفات PDF قبل أن تصل لموظفيك." data-en="Detects malicious links and credit card numbers inside PDF files before they reach your employees.">
+            يكتشف الروابط الخبيثة وأرقام البطاقات داخل ملفات PDF قبل أن تصل لموظفيك.
           </p>
         </div>
 
@@ -328,8 +328,8 @@
             </svg>
           </div>
           <h3 class="font-semibold text-lg mb-2">MailGuard</h3>
-          <p class="text-sm text-slate-400 leading-relaxed" data-ar="يصنّف رسائل البريد ويكشف محاولات التصيّد والهندسة الاجتماعية تلقائياً.">
-            Classifies emails and automatically detects phishing and social engineering attempts.
+          <p class="text-sm text-slate-400 leading-relaxed" data-ar="يصنّف رسائل البريد ويكشف محاولات التصيّد والهندسة الاجتماعية تلقائياً." data-en="Classifies emails and automatically detects phishing and social engineering attempts.">
+            يصنّف رسائل البريد ويكشف محاولات التصيّد والهندسة الاجتماعية تلقائياً.
           </p>
         </div>
 
@@ -341,8 +341,8 @@
             </svg>
           </div>
           <h3 class="font-semibold text-lg mb-2">SysGuard</h3>
-          <p class="text-sm text-slate-400 leading-relaxed" data-ar="يراقب السيرفرات ويكشف السلوك الشاذ قبل أن يتحول إلى مشكلة كبيرة.">
-            Monitors servers and detects anomalous behavior before it becomes a major incident.
+          <p class="text-sm text-slate-400 leading-relaxed" data-ar="يراقب السيرفرات ويكشف السلوك الشاذ قبل أن يتحول إلى مشكلة كبيرة." data-en="Monitors servers and detects anomalous behavior before it becomes a major incident.">
+            يراقب السيرفرات ويكشف السلوك الشاذ قبل أن يتحول إلى مشكلة كبيرة.
           </p>
         </div>
 
@@ -354,8 +354,8 @@
             </svg>
           </div>
           <h3 class="font-semibold text-lg mb-2">CamGuard</h3>
-          <p class="text-sm text-slate-400 leading-relaxed" data-ar="يراقب الكاميرات ويكتشف الحركة والأجسام المشبوهة في الوقت الفعلي.">
-            Monitors cameras and detects motion and suspicious objects in real time.
+          <p class="text-sm text-slate-400 leading-relaxed" data-ar="يراقب الكاميرات ويكتشف الحركة والأجسام المشبوهة في الوقت الفعلي." data-en="Monitors cameras and detects motion and suspicious objects in real time.">
+            يراقب الكاميرات ويكتشف الحركة والأجسام المشبوهة في الوقت الفعلي.
           </p>
         </div>
 
@@ -367,8 +367,8 @@
             </svg>
           </div>
           <h3 class="font-semibold text-lg mb-2">ScanGuard</h3>
-          <p class="text-sm text-slate-400 leading-relaxed" data-ar="يفحص الأكواد والملفات بحثاً عن ثغرات الحقن وتسريب الأسرار الحساسة.">
-            Scans code and files for injection vulnerabilities and sensitive secret leaks.
+          <p class="text-sm text-slate-400 leading-relaxed" data-ar="يفحص الأكواد والملفات بحثاً عن ثغرات الحقن وتسريب الأسرار الحساسة." data-en="Scans code and files for injection vulnerabilities and sensitive secret leaks.">
+            يفحص الأكواد والملفات بحثاً عن ثغرات الحقن وتسريب الأسرار الحساسة.
           </p>
         </div>
 
@@ -380,8 +380,8 @@
             </svg>
           </div>
           <h3 class="font-semibold text-lg mb-2">Auth</h3>
-          <p class="text-sm text-slate-400 leading-relaxed" data-ar="إدارة صلاحيات آمنة مع تسجيل دخول مشفّر وحماية للوصول إلى المنصة.">
-            Secure access control with encrypted login and role-based permissions.
+          <p class="text-sm text-slate-400 leading-relaxed" data-ar="إدارة صلاحيات آمنة مع تسجيل دخول مشفّر وحماية للوصول إلى المنصة." data-en="Secure access control with encrypted login and role-based permissions.">
+            إدارة صلاحيات آمنة مع تسجيل دخول مشفّر وحماية للوصول إلى المنصة.
           </p>
         </div>
       </div>
@@ -392,101 +392,101 @@
   <section id="pricing" class="py-20 border-t border-white/5">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
       <div class="text-center mb-14">
-        <h2 class="text-3xl sm:text-4xl font-bold mb-3" data-ar="خطط تناسب احتياجك">
-          Plans that fit your needs
+        <h2 class="text-3xl sm:text-4xl font-bold mb-3" data-ar="خطط تناسب احتياجك" data-en="Plans that fit your needs">
+          خطط تناسب احتياجك
         </h2>
-        <p class="text-slate-400 max-w-xl mx-auto" data-ar="ابدأ مجاناً، ثم اختر الباقة المناسبة لحجم منشأتك.">
-          Start free, then choose the plan that matches your organization size.
+        <p class="text-slate-400 max-w-xl mx-auto" data-ar="ابدأ مجاناً، ثم اختر الباقة المناسبة لحجم منشأتك." data-en="Start free, then choose the plan that matches your organization size.">
+          ابدأ مجاناً، ثم اختر الباقة المناسبة لحجم منشأتك.
         </p>
       </div>
 
       <div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
         <!-- Free -->
         <div class="bg-navy-800 border border-white/10 rounded-2xl p-7 flex flex-col">
-          <div class="text-sm font-medium text-slate-400 mb-1" data-ar="تجريبي">Free Trial</div>
-          <div class="text-3xl font-bold mb-1" data-ar="مجاناً">Free</div>
-          <div class="text-sm text-slate-500 mb-6" data-ar="١٤ يوم — بدون بطاقة ائتمان">14 days — no credit card</div>
+          <div class="text-sm font-medium text-slate-400 mb-1" data-ar="تجريبي" data-en="Free Trial">تجريبي</div>
+          <div class="text-3xl font-bold mb-1" data-ar="مجاناً" data-en="Free">مجاناً</div>
+          <div class="text-sm text-slate-500 mb-6" data-ar="١٤ يوم — بدون بطاقة ائتمان" data-en="14 days — no credit card">١٤ يوم — بدون بطاقة ائتمان</div>
           <ul class="space-y-3 text-sm text-slate-300 mb-8 flex-1">
             <li class="flex items-start gap-2">
               <svg class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
-              <span data-ar="كل الموديلات الستة">All 6 modules</span>
+              <span data-ar="كل الموديلات الستة" data-en="All 6 modules">كل الموديلات الستة</span>
             </li>
             <li class="flex items-start gap-2">
               <svg class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
-              <span data-ar="لوحة التحكم كاملة">Full dashboard</span>
+              <span data-ar="لوحة التحكم كاملة" data-en="Full dashboard">لوحة التحكم كاملة</span>
             </li>
             <li class="flex items-start gap-2">
               <svg class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
-              <span data-ar="فحوصات محدودة">Limited scans</span>
+              <span data-ar="فحوصات محدودة" data-en="Limited scans">فحوصات محدودة</span>
             </li>
           </ul>
-          <a href="/dashboard" class="block text-center py-3 rounded-xl border border-white/15 hover:bg-white/5 font-medium transition" data-ar="ابدأ الآن">
-            Start now
+          <a href="/dashboard" class="block text-center py-3 rounded-xl border border-white/15 hover:bg-white/5 font-medium transition" data-ar="ابدأ الآن" data-en="Start now">
+            ابدأ الآن
           </a>
         </div>
 
         <!-- Starter -->
         <div class="bg-navy-800 border-2 border-indigo-500/50 rounded-2xl p-7 flex flex-col relative shadow-xl shadow-indigo-500/10">
-          <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-indigo-500 text-xs font-semibold" data-ar="الأكثر طلباً">
-            Popular
+          <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-indigo-500 text-xs font-semibold" data-ar="الأكثر طلباً" data-en="Popular">
+            الأكثر طلباً
           </div>
-          <div class="text-sm font-medium text-indigo-300 mb-1" data-ar="أساسي">Starter</div>
-          <div class="text-3xl font-bold mb-1" data-ar="تواصل معنا">Contact us</div>
-          <div class="text-sm text-slate-500 mb-6" data-ar="مناسب للمنشآت الصغيرة">For small organizations</div>
+          <div class="text-sm font-medium text-indigo-300 mb-1" data-ar="أساسي" data-en="Starter">أساسي</div>
+          <div class="text-3xl font-bold mb-1" data-ar="تواصل معنا" data-en="Contact us">تواصل معنا</div>
+          <div class="text-sm text-slate-500 mb-6" data-ar="مناسب للمنشآت الصغيرة" data-en="For small organizations">مناسب للمنشآت الصغيرة</div>
           <ul class="space-y-3 text-sm text-slate-300 mb-8 flex-1">
             <li class="flex items-start gap-2">
               <svg class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
-              <span data-ar="كل مميزات التجريبي">Everything in Free</span>
+              <span data-ar="كل مميزات التجريبي" data-en="Everything in Free">كل مميزات التجريبي</span>
             </li>
             <li class="flex items-start gap-2">
               <svg class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
-              <span data-ar="فحوصات شهرية أعلى">Higher monthly scans</span>
+              <span data-ar="فحوصات شهرية أعلى" data-en="Higher monthly scans">فحوصات شهرية أعلى</span>
             </li>
             <li class="flex items-start gap-2">
               <svg class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
-              <span data-ar="دعم فني أساسي">Basic support</span>
+              <span data-ar="دعم فني أساسي" data-en="Basic support">دعم فني أساسي</span>
             </li>
             <li class="flex items-start gap-2">
               <svg class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
-              <span data-ar="استضافة سحابية">Cloud hosting</span>
+              <span data-ar="استضافة سحابية" data-en="Cloud hosting">استضافة سحابية</span>
             </li>
           </ul>
-          <button type="button" onclick="openQuoteModal()" class="block w-full text-center py-3 rounded-xl bg-accent hover:bg-accent-hover font-semibold transition shadow-lg shadow-indigo-500/20 cursor-pointer" data-ar="اطلب عرض سعر">
-            Request quote
+          <button type="button" onclick="openQuoteModal()" class="block w-full text-center py-3 rounded-xl bg-accent hover:bg-accent-hover font-semibold transition shadow-lg shadow-indigo-500/20 cursor-pointer" data-ar="اطلب عرض سعر" data-en="Request quote">
+            اطلب عرض سعر
           </button>
         </div>
 
         <!-- Enterprise -->
         <div class="bg-navy-800 border border-white/10 rounded-2xl p-7 flex flex-col">
-          <div class="text-sm font-medium text-slate-400 mb-1" data-ar="مؤسسي">Enterprise</div>
-          <div class="text-3xl font-bold mb-1" data-ar="تواصل معنا">Contact us</div>
-          <div class="text-sm text-slate-500 mb-6" data-ar="للمنشآت المتوسطة والكبيرة">For mid & large orgs</div>
+          <div class="text-sm font-medium text-slate-400 mb-1" data-ar="مؤسسي" data-en="Enterprise">مؤسسي</div>
+          <div class="text-3xl font-bold mb-1" data-ar="تواصل معنا" data-en="Contact us">تواصل معنا</div>
+          <div class="text-sm text-slate-500 mb-6" data-ar="للمنشآت المتوسطة والكبيرة" data-en="For mid & large orgs">للمنشآت المتوسطة والكبيرة</div>
           <ul class="space-y-3 text-sm text-slate-300 mb-8 flex-1">
             <li class="flex items-start gap-2">
               <svg class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
-              <span data-ar="كل مميزات الأساسي">Everything in Starter</span>
+              <span data-ar="كل مميزات الأساسي" data-en="Everything in Starter">كل مميزات الأساسي</span>
             </li>
             <li class="flex items-start gap-2">
               <svg class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
-              <span data-ar="تشغيل On-Premise كامل">Full On-Premise</span>
+              <span data-ar="تشغيل On-Premise كامل" data-en="Full On-Premise">تشغيل On-Premise كامل</span>
             </li>
             <li class="flex items-start gap-2">
               <svg class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
-              <span data-ar="فحوصات غير محدودة">Unlimited scans</span>
+              <span data-ar="فحوصات غير محدودة" data-en="Unlimited scans">فحوصات غير محدودة</span>
             </li>
             <li class="flex items-start gap-2">
               <svg class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
-              <span data-ar="دعم أولوية + تخصيص">Priority support + custom</span>
+              <span data-ar="دعم أولوية + تخصيص" data-en="Priority support + custom">دعم أولوية + تخصيص</span>
             </li>
           </ul>
-          <button type="button" onclick="openQuoteModal()" class="block w-full text-center py-3 rounded-xl border border-white/15 hover:bg-white/5 font-medium transition cursor-pointer" data-ar="تواصل معنا">
-            Contact us
+          <button type="button" onclick="openQuoteModal()" class="block w-full text-center py-3 rounded-xl border border-white/15 hover:bg-white/5 font-medium transition cursor-pointer" data-ar="تواصل معنا" data-en="Contact us">
+            تواصل معنا
           </button>
         </div>
       </div>
 
-      <p class="text-center text-sm text-slate-500 mt-8" data-ar="الأسعار النهائية تُحدد حسب حجم المنشأة ومتطلبات الاستضافة.">
-        Final pricing depends on organization size and hosting requirements.
+      <p class="text-center text-sm text-slate-500 mt-8" data-ar="الأسعار النهائية تُحدد حسب حجم المنشأة ومتطلبات الاستضافة." data-en="Final pricing depends on organization size and hosting requirements.">
+        الأسعار النهائية تُحدد حسب حجم المنشأة ومتطلبات الاستضافة.
       </p>
     </div>
   </section>
@@ -494,14 +494,14 @@
   <!-- ========== FINAL CTA ========== -->
   <section class="py-20 border-t border-white/5">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
-      <h2 class="text-3xl sm:text-4xl font-bold mb-4" data-ar="جاهز تحمي منشأتك؟">
-        Ready to secure your organization?
+      <h2 class="text-3xl sm:text-4xl font-bold mb-4" data-ar="جاهز تحمي منشأتك؟" data-en="Ready to secure your organization?">
+        جاهز تحمي منشأتك؟
       </h2>
-      <p class="text-slate-400 text-lg mb-8" data-ar="ابدأ تجربتك المجانية خلال أقل من دقيقة. بدون بطاقة ائتمان.">
-        Start your free trial in under a minute. No credit card required.
+      <p class="text-slate-400 text-lg mb-8" data-ar="ابدأ تجربتك المجانية خلال أقل من دقيقة. بدون بطاقة ائتمان." data-en="Start your free trial in under a minute. No credit card required.">
+        ابدأ تجربتك المجانية خلال أقل من دقيقة. بدون بطاقة ائتمان.
       </p>
       <a href="/dashboard" class="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-accent hover:bg-accent-hover font-semibold text-white shadow-xl shadow-indigo-500/25 transition text-lg">
-        <span data-ar="ابدأ التجربة المجانية">Start Free Trial</span>
+        <span data-ar="ابدأ التجربة المجانية" data-en="Start Free Trial">ابدأ التجربة المجانية</span>
       </a>
     </div>
   </section>
@@ -511,31 +511,67 @@
     <div class="bg-navy-800 border border-white/10 rounded-2xl w-full max-w-lg p-6 sm:p-8 relative shadow-2xl">
       <button type="button" onclick="closeQuoteModal()" class="absolute top-4 left-4 text-slate-400 hover:text-white text-xl font-bold">&times;</button>
       
-      <h3 class="text-xl font-bold mb-2">طلب عرض سعر / تواصل معنا</h3>
-      <p class="text-sm text-slate-400 mb-6">أدخل تفاصيل منشأتك وسنتواصل معك في أسرع وقت لتوفير الحل الأنسب.</p>
+      <h3 class="text-xl font-bold mb-2" data-ar="طلب عرض سعر / تواصل معنا" data-en="Request Quote / Contact Us">طلب عرض سعر / تواصل معنا</h3>
+      <p class="text-sm text-slate-400 mb-6" data-ar="أدخل تفاصيل منشأتك وسنتواصل معك في أسرع وقت لتوفير الحل الأنسب." data-en="Enter your details and we will reach out promptly to provide the best fit solution.">أدخل تفاصيل منشأتك وسنتواصل معك في أسرع وقت لتوفير الحل الأنسب.</p>
       
       <form action="https://formspree.io/f/maeqvlvw" method="POST" class="space-y-4">
         <div>
-          <label class="block text-xs font-medium text-slate-300 mb-1">اسم الشركة أو المؤسسة</label>
+          <label class="block text-xs font-medium text-slate-300 mb-1" data-ar="اسم الشركة أو المؤسسة" data-en="Company Name">اسم الشركة أو المؤسسة</label>
           <input type="text" name="company_name" required placeholder="مثال: شركة التقنية المتقدمة" class="w-full bg-navy-900 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500" />
         </div>
         <div>
-          <label class="block text-xs font-medium text-slate-300 mb-1">البريد الإلكتروني للعمل</label>
+          <label class="block text-xs font-medium text-slate-300 mb-1" data-ar="البريد الإلكتروني للعمل" data-en="Work Email">البريد الإلكتروني للعمل</label>
           <input type="email" name="email" required placeholder="name@company.com" class="w-full bg-navy-900 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500" />
         </div>
         <div>
-          <label class="block text-xs font-medium text-slate-300 mb-1">تفاصيل الاحتياج (نوع الخطة، On-Premise، عدد المستخدمين، إلخ)</label>
+          <label class="block text-xs font-medium text-slate-300 mb-1" data-ar="تفاصيل الاحتياج (نوع الخطة، On-Premise، عدد المستخدمين، إلخ)" data-en="Requirement Details (Plan type, On-Premise, users, etc.)">تفاصيل الاحتياج (نوع الخطة، On-Premise، عدد المستخدمين، إلخ)</label>
           <textarea name="message" rows="4" required placeholder="اكتب تفاصيل متطلباتك هنا..." class="w-full bg-navy-900 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500"></textarea>
         </div>
         <div class="flex justify-end gap-3 pt-2">
-          <button type="button" onclick="closeQuoteModal()" class="px-5 py-2.5 rounded-xl border border-white/10 hover:bg-white/5 text-sm transition">إلغاء</button>
-          <button type="submit" class="px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-hover font-semibold text-sm transition shadow-lg shadow-indigo-500/20">إرسال الطلب</button>
+          <button type="button" onclick="closeQuoteModal()" class="px-5 py-2.5 rounded-xl border border-white/10 hover:bg-white/5 text-sm transition" data-ar="إلغاء" data-en="Cancel">إلغاء</button>
+          <button type="submit" class="px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-hover font-semibold text-sm transition shadow-lg shadow-indigo-500/20" data-ar="إرسال الطلب" data-en="Submit Request">إرسال الطلب</button>
         </div>
       </form>
     </div>
   </div>
 
   <script>
+    let currentLang = 'ar';
+
+    function toggleLang() {
+      currentLang = currentLang === 'ar' ? 'en' : 'ar';
+      const html = document.documentElement;
+      
+      if (currentLang === 'en') {
+        html.setAttribute('lang', 'en');
+        html.setAttribute('dir', 'ltr');
+        document.getElementById('langBtn').innerText = 'العربية';
+        document.getElementById('brand-sub').innerText = 'Security Intelligence Platform';
+        document.getElementById('nav-how').innerText = 'How it works';
+        document.getElementById('nav-modules').innerText = 'Modules';
+        document.getElementById('nav-value').innerText = 'Features';
+        document.getElementById('nav-pricing').innerText = 'Pricing';
+        document.getElementById('btn-try-nav').innerText = 'Try Free';
+      } else {
+        html.setAttribute('lang', 'ar');
+        html.setAttribute('dir', 'rtl');
+        document.getElementById('langBtn').innerText = 'English';
+        document.getElementById('brand-sub').innerText = 'منصة ذكاء أمني';
+        document.getElementById('nav-how').innerText = 'كيف تعمل';
+        document.getElementById('nav-modules').innerText = 'الموديلات';
+        document.getElementById('nav-value').innerText = 'المميزات';
+        document.getElementById('nav-pricing').innerText = 'التسعير';
+        document.getElementById('btn-try-nav').innerText = 'جرّب مجاناً';
+      }
+
+      document.querySelectorAll('[data-ar]').forEach(el => {
+        const text = el.getAttribute(`data-${currentLang}`);
+        if (text) {
+          el.innerText = text;
+        }
+      });
+    }
+
     function openQuoteModal() {
       document.getElementById('quoteModal').classList.remove('hidden');
     }
