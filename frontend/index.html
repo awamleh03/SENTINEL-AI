@@ -1,136 +1,502 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SENTINEL-AI | Secure Intelligence Platform</title>
-  <meta name="description" content="SENTINEL-AI — unified AI security platform: documents, emails, system, cameras, code & logs." />
-  <link rel="stylesheet" href="css/style.css" />
+  <title>SENTINEL-AI | منصة أمنية موحّدة</title>
+  <meta name="description" content="منصة أمنية واحدة تفحص المستندات والبريد والسيرفرات والكاميرات والأكواد من لوحة تحكم واحدة. خيار On-Premise وتوافق مع متطلبات الأمن السيبراني." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: {
+              900: '#0B1426',
+              800: '#111C33',
+              700: '#1A2744',
+              600: '#243556',
+            },
+            accent: {
+              DEFAULT: '#6366F1',
+              hover: '#818CF8',
+            }
+          },
+          fontFamily: {
+            sans: ['IBM Plex Sans Arabic', 'Segoe UI', 'Tahoma', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'IBM Plex Sans Arabic', sans-serif; }
+    .gradient-hero {
+      background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.15), transparent),
+                  #0B1426;
+    }
+    .card-hover:hover {
+      transform: translateY(-4px);
+      border-color: rgba(99, 102, 241, 0.4);
+    }
+    .module-card {
+      transition: all 0.25s ease;
+    }
+  </style>
 </head>
-<body class="landing-page">
-  <header class="site-header">
-    <div class="container header-inner">
-      <div class="brand">
-        <div class="brand-mark">🛡️</div>
-        <div>
-          <h1 class="brand-title">SENTINEL-AI</h1>
-          <p class="brand-tag" data-i18n="tagline">Secure Intelligence Platform</p>
-        </div>
-      </div>
-      <nav class="lang-switch">
-        <button type="button" class="btn btn-ghost" id="btn-en" aria-pressed="true">English</button>
-        <button type="button" class="btn btn-ghost" id="btn-ar" aria-pressed="false">العربية</button>
-      </nav>
-    </div>
-  </header>
+<body class="bg-navy-900 text-white antialiased">
 
-  <main>
-    <section class="hero">
-      <div class="container hero-inner">
-        <div class="hero-copy">
-          <h2 data-i18n="hero_title">One AI platform. Every security surface.</h2>
-          <p data-i18n="hero_sub">
-            Scan PDFs for threats, classify emails, monitor servers, detect motion on cameras,
-            and audit code and logs — from a single unified dashboard.
-          </p>
-          <div class="hero-cta">
-            <a href="/dashboard" class="btn btn-primary" data-i18n="go_dashboard">Go to Dashboard</a>
-            <a href="#modules" class="btn btn-secondary" data-i18n="explore_modules">Explore Modules</a>
+  <!-- ========== NAVBAR ========== -->
+  <nav class="fixed top-0 inset-x-0 z-50 bg-navy-900/80 backdrop-blur-md border-b border-white/5">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+          <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+          </svg>
+        </div>
+        <div>
+          <div class="font-bold text-sm tracking-wide">SENTINEL-AI</div>
+          <div class="text-[10px] text-slate-400 -mt-0.5">منصة ذكاء أمني</div>
+        </div>
+      </a>
+
+      <div class="hidden md:flex items-center gap-8 text-sm text-slate-300">
+        <a href="#modules" class="hover:text-white transition">الموديلات</a>
+        <a href="#value" class="hover:text-white transition">المميزات</a>
+        <a href="#pricing" class="hover:text-white transition">التسعير</a>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button id="langBtn" onclick="toggleLang()" class="text-xs px-3 py-1.5 rounded-lg border border-white/10 text-slate-300 hover:bg-white/5 transition">
+          English
+        </button>
+        <a href="/dashboard" class="text-sm px-4 py-2 rounded-lg bg-accent hover:bg-accent-hover font-medium transition shadow-lg shadow-indigo-500/20">
+          جرّب مجاناً
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ========== HERO ========== -->
+  <section class="gradient-hero pt-28 pb-20 sm:pt-36 sm:pb-28">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        
+        <!-- Text -->
+        <div class="order-2 lg:order-1 text-center lg:text-right">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-medium mb-6">
+            <span class="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse"></span>
+            <span data-ar="منصة أمنية موحّدة للمنشآت">Unified Security Platform</span>
           </div>
-          <div class="hero-stats">
-            <div><strong>6</strong><span data-i18n="modules">Modules</span></div>
-            <div><strong>JWT</strong><span data-i18n="auth">Auth</span></div>
-            <div><strong>SQLite</strong><span data-i18n="db">Database</span></div>
+
+          <h1 class="text-4xl sm:text-5xl lg:text-[3.25rem] font-bold leading-[1.15] tracking-tight mb-5">
+            <span data-ar="منصة أمنية واحدة.">One security platform.</span><br>
+            <span class="text-transparent bg-clip-text bg-gradient-to-l from-indigo-400 to-blue-400" data-ar="تحمي كل شيء.">Every surface protected.</span>
+          </h1>
+
+          <p class="text-slate-400 text-lg leading-relaxed max-w-lg mx-auto lg:mx-0 mb-8" data-ar="افحص ملفات PDF، صنّف الإيميلات، راقب السيرفرات، اكتشف الحركة على الكاميرات، ودقّق الأكواد — كل ذلك من لوحة تحكم واحدة.">
+            Scan PDFs, classify emails, monitor servers, detect camera motion, and audit code — all from a single dashboard.
+          </p>
+
+          <div class="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
+            <a href="/dashboard" class="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-accent hover:bg-accent-hover font-semibold text-white shadow-xl shadow-indigo-500/25 transition">
+              <span data-ar="جرّب مجاناً">Start Free Trial</span>
+              <svg class="w-4 h-4 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+              </svg>
+            </a>
+            <a href="#modules" class="inline-flex items-center justify-center px-7 py-3.5 rounded-xl border border-white/10 hover:bg-white/5 text-slate-200 font-medium transition">
+              <span data-ar="تعرّف على الموديلات">Explore Modules</span>
+            </a>
+          </div>
+
+          <!-- Mini stats -->
+          <div class="flex items-center justify-center lg:justify-start gap-8 mt-10 pt-8 border-t border-white/5">
+            <div class="text-center">
+              <div class="text-2xl font-bold">6</div>
+              <div class="text-xs text-slate-500" data-ar="موديلات">Modules</div>
+            </div>
+            <div class="text-center">
+              <div class="text-2xl font-bold">1</div>
+              <div class="text-xs text-slate-500" data-ar="لوحة تحكم">Dashboard</div>
+            </div>
+            <div class="text-center">
+              <div class="text-2xl font-bold">∞</div>
+              <div class="text-xs text-slate-500" data-ar="On-Premise">On-Premise</div>
+            </div>
           </div>
         </div>
-        <div class="hero-card" aria-hidden="true">
-          <div class="hero-card-head">
-            <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
-            <span class="hero-card-title">SENTINEL-AI / risk overview</span>
-          </div>
-          <div class="hero-card-body">
-            <div class="risk-chip risk-critical">CRITICAL</div>
-            <div class="hero-grid">
-              <div class="hero-g-cell"><label>DocGuard</label><div class="bar"><span style="width:62%"></span></div><span class="v">62</span></div>
-              <div class="hero-g-cell"><label>MailGuard</label><div class="bar"><span style="width:88%"></span></div><span class="v">88</span></div>
-              <div class="hero-g-cell"><label>SysGuard</label><div class="bar"><span style="width:45%"></span></div><span class="v">45</span></div>
-              <div class="hero-g-cell"><label>ScanGuard</label><div class="bar"><span style="width:73%"></span></div><span class="v">73</span></div>
+
+        <!-- Visual card -->
+        <div class="order-1 lg:order-2 flex justify-center">
+          <div class="relative w-full max-w-md">
+            <div class="absolute -inset-4 bg-indigo-500/10 rounded-3xl blur-2xl"></div>
+            <div class="relative bg-navy-800 border border-white/10 rounded-2xl p-5 shadow-2xl">
+              <div class="flex items-center gap-2 mb-4">
+                <div class="flex gap-1.5">
+                  <span class="w-2.5 h-2.5 rounded-full bg-red-400"></span>
+                  <span class="w-2.5 h-2.5 rounded-full bg-yellow-400"></span>
+                  <span class="w-2.5 h-2.5 rounded-full bg-green-400"></span>
+                </div>
+                <span class="text-xs text-slate-500 mr-2">SENTINEL-AI / risk overview</span>
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <div class="bg-navy-700/80 rounded-xl p-3.5 border border-white/5">
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs text-slate-400">DocGuard</span>
+                    <span class="text-[10px] px-1.5 py-0.5 rounded bg-red-500/20 text-red-300">CRITICAL</span>
+                  </div>
+                  <div class="text-xl font-bold mb-1.5">62</div>
+                  <div class="h-1.5 bg-navy-600 rounded-full overflow-hidden">
+                    <div class="h-full w-[62%] bg-gradient-to-l from-red-500 to-orange-400 rounded-full"></div>
+                  </div>
+                </div>
+                <div class="bg-navy-700/80 rounded-xl p-3.5 border border-white/5">
+                  <div class="text-xs text-slate-400 mb-2">MailGuard</div>
+                  <div class="text-xl font-bold mb-1.5">88</div>
+                  <div class="h-1.5 bg-navy-600 rounded-full overflow-hidden">
+                    <div class="h-full w-[88%] bg-gradient-to-l from-orange-400 to-yellow-400 rounded-full"></div>
+                  </div>
+                </div>
+                <div class="bg-navy-700/80 rounded-xl p-3.5 border border-white/5">
+                  <div class="text-xs text-slate-400 mb-2">SysGuard</div>
+                  <div class="text-xl font-bold mb-1.5">45</div>
+                  <div class="h-1.5 bg-navy-600 rounded-full overflow-hidden">
+                    <div class="h-full w-[45%] bg-gradient-to-l from-emerald-400 to-teal-400 rounded-full"></div>
+                  </div>
+                </div>
+                <div class="bg-navy-700/80 rounded-xl p-3.5 border border-white/5">
+                  <div class="text-xs text-slate-400 mb-2">ScanGuard</div>
+                  <div class="text-xl font-bold mb-1.5">73</div>
+                  <div class="h-1.5 bg-navy-600 rounded-full overflow-hidden">
+                    <div class="h-full w-[73%] bg-gradient-to-l from-orange-400 to-red-400 rounded-full"></div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section id="modules" class="modules">
-      <div class="container">
-        <h3 class="section-title" data-i18n="modules_title">Six integrated security modules</h3>
-        <p class="section-sub" data-i18n="modules_sub">Each module has a dedicated REST API, database logging, and dashboard visualization.</p>
+  <!-- ========== VALUE SECTION ========== -->
+  <section id="value" class="py-20 border-t border-white/5">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-14">
+        <h2 class="text-3xl sm:text-4xl font-bold mb-3" data-ar="ماذا ستحصل عند استخدام Sentinel-AI؟">
+          What you get with Sentinel-AI
+        </h2>
+        <p class="text-slate-400 max-w-xl mx-auto" data-ar="منصة واحدة تحل مشكلة تشتت الأدوات وتكلفتها، وتعطيك رؤية أمنية شاملة.">
+          One platform that solves tool sprawl and cost, and gives you complete security visibility.
+        </p>
+      </div>
 
-        <div class="modules-grid">
-          <article class="module-card">
-            <div class="module-icon doc">📄</div>
-            <h4 data-i18n="m_doc_title">DocGuard</h4>
-            <p data-i18n="m_doc_desc">PDF &amp; document scanner — suspicious URLs, credit cards (Luhn), dangerous keywords (AR/EN).</p>
-            <code>POST /api/docguard/scan</code>
-          </article>
-          <article class="module-card">
-            <div class="module-icon mail">✉️</div>
-            <h4 data-i18n="m_mail_title">MailGuard</h4>
-            <p data-i18n="m_mail_desc">Email classifier: Safe / Spam / Phishing / Urgent using keyword weighting + regex.</p>
-            <code>POST /api/mailguard/classify</code>
-          </article>
-          <article class="module-card">
-            <div class="module-icon sys">💻</div>
-            <h4 data-i18n="m_sys_title">SysGuard</h4>
-            <p data-i18n="m_sys_desc">Real-time CPU, RAM, Disk, Network monitoring with z-score anomaly detection.</p>
-            <code>GET /api/sysguard/status</code>
-          </article>
-          <article class="module-card">
-            <div class="module-icon cam">📹</div>
-            <h4 data-i18n="m_cam_title">CamGuard</h4>
-            <p data-i18n="m_cam_desc">Motion detection via OpenCV; pluggable YOLOv8 object detection (TODO: weights required).</p>
-            <code>POST /api/camguard/analyze</code>
-          </article>
-          <article class="module-card">
-            <div class="module-icon scan">🔍</div>
-            <h4 data-i18n="m_scan_title">ScanGuard</h4>
-            <p data-i18n="m_scan_desc">Static analysis for code &amp; logs — SQLi, XSS, hardcoded secrets, risky functions.</p>
-            <code>POST /api/scanguard/analyze</code>
-          </article>
-          <article class="module-card">
-            <div class="module-icon auth">🔐</div>
-            <h4 data-i18n="m_auth_title">Auth Module</h4>
-            <p data-i18n="m_auth_desc">JWT access tokens, bcrypt password hashing, registration, login, admin listing.</p>
-            <code>POST /api/auth/login</code>
-          </article>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div class="bg-navy-800 border border-white/5 rounded-2xl p-6 module-card card-hover">
+          <div class="w-11 h-11 rounded-xl bg-emerald-500/10 flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h3 class="font-semibold mb-2" data-ar="تكلفة أقل">Lower cost</h3>
+          <p class="text-sm text-slate-400 leading-relaxed" data-ar="منصة واحدة بدل ست أدوات منفصلة وفواتير متعددة وفرق تشغيل.">
+            One platform instead of six separate tools, licenses, and teams.
+          </p>
+        </div>
+
+        <div class="bg-navy-800 border border-white/5 rounded-2xl p-6 module-card card-hover">
+          <div class="w-11 h-11 rounded-xl bg-blue-500/10 flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          </div>
+          <h3 class="font-semibold mb-2" data-ar="رؤية موحّدة">Unified visibility</h3>
+          <p class="text-sm text-slate-400 leading-relaxed" data-ar="كل التهديدات والتنبيهات في لوحة واحدة بدل التبديل بين أنظمة متعددة.">
+            All threats and alerts in one dashboard instead of switching between tools.
+          </p>
+        </div>
+
+        <div class="bg-navy-800 border border-white/5 rounded-2xl p-6 module-card card-hover">
+          <div class="w-11 h-11 rounded-xl bg-violet-500/10 flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 14.25h13.5m-13.5 0a3 3 0 01-3-3m3 3a3 3 0 100-6h13.5a3 3 0 100 6m-16.5-3a3 3 0 013-3h13.5a3 3 0 013 3" />
+            </svg>
+          </div>
+          <h3 class="font-semibold mb-2" data-ar="تشغيل محلي">On-Premise</h3>
+          <p class="text-sm text-slate-400 leading-relaxed" data-ar="بياناتك تبقى داخل شبكتك. مناسب للمنشآت الحساسة ومتطلبات الامتثال.">
+            Your data stays inside your network. Ideal for sensitive environments and compliance.
+          </p>
+        </div>
+
+        <div class="bg-navy-800 border border-white/5 rounded-2xl p-6 module-card card-hover">
+          <div class="w-11 h-11 rounded-xl bg-amber-500/10 flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+            </svg>
+          </div>
+          <h3 class="font-semibold mb-2" data-ar="جاهز للامتثال">Compliance-ready</h3>
+          <p class="text-sm text-slate-400 leading-relaxed" data-ar="مصمم ليتوافق مع توجهات ومتطلبات الأمن السيبراني السعودية.">
+            Designed to align with Saudi cybersecurity requirements and controls.
+          </p>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="cta">
-      <div class="container cta-inner">
-        <div>
-          <h3 data-i18n="cta_title">Ready to secure everything?</h3>
-          <p data-i18n="cta_sub">Open the dashboard, create an account, and start scanning in under 60 seconds.</p>
+  <!-- ========== MODULES ========== -->
+  <section id="modules" class="py-20 border-t border-white/5 bg-navy-800/30">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-14">
+        <h2 class="text-3xl sm:text-4xl font-bold mb-3" data-ar="ستة موديلات أمنية متكاملة">
+          Six integrated security modules
+        </h2>
+        <p class="text-slate-400 max-w-xl mx-auto" data-ar="كل موديل يحل مشكلة حقيقية، ويعمل تحت لوحة تحكم واحدة.">
+          Each module solves a real problem, and they all work under one dashboard.
+        </p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- DocGuard -->
+        <div class="bg-navy-800 border border-white/5 rounded-2xl p-6 module-card card-hover">
+          <div class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+            </svg>
+          </div>
+          <h3 class="font-semibold text-lg mb-2">DocGuard</h3>
+          <p class="text-sm text-slate-400 leading-relaxed" data-ar="يكتشف الروابط الخبيثة وأرقام البطاقات داخل ملفات PDF قبل أن تصل لموظفيك.">
+            Detects malicious links and credit card numbers inside PDF files before they reach your employees.
+          </p>
         </div>
-        <a href="/dashboard" class="btn btn-primary btn-lg" data-i18n="launch">Launch Dashboard →</a>
-      </div>
-    </section>
-  </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <div>
-        <strong>SENTINEL-AI</strong>
-        <span class="dot-sep">·</span>
-        <span data-i18n="copyright">© 2026 — Production-ready security platform</span>
+        <!-- MailGuard -->
+        <div class="bg-navy-800 border border-white/5 rounded-2xl p-6 module-card card-hover">
+          <div class="w-10 h-10 rounded-xl bg-violet-500/10 flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+            </svg>
+          </div>
+          <h3 class="font-semibold text-lg mb-2">MailGuard</h3>
+          <p class="text-sm text-slate-400 leading-relaxed" data-ar="يصنّف رسائل البريد ويكشف محاولات التصيّد والهندسة الاجتماعية تلقائياً.">
+            Classifies emails and automatically detects phishing and social engineering attempts.
+          </p>
+        </div>
+
+        <!-- SysGuard -->
+        <div class="bg-navy-800 border border-white/5 rounded-2xl p-6 module-card card-hover">
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25A2.25 2.25 0 015.25 3h13.5A2.25 2.25 0 0121 5.25z" />
+            </svg>
+          </div>
+          <h3 class="font-semibold text-lg mb-2">SysGuard</h3>
+          <p class="text-sm text-slate-400 leading-relaxed" data-ar="يراقب السيرفرات ويكشف السلوك الشاذ قبل أن يتحول إلى مشكلة كبيرة.">
+            Monitors servers and detects anomalous behavior before it becomes a major incident.
+          </p>
+        </div>
+
+        <!-- CamGuard -->
+        <div class="bg-navy-800 border border-white/5 rounded-2xl p-6 module-card card-hover">
+          <div class="w-10 h-10 rounded-xl bg-rose-500/10 flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-rose-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 20.25h12m-7.5-3v3m3-3v3m-10.125-3.25h17.25c.621 0 1.125-.504 1.125-1.125V4.875c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v11c0 .621.504 1.125 1.125 1.125z" />
+            </svg>
+          </div>
+          <h3 class="font-semibold text-lg mb-2">CamGuard</h3>
+          <p class="text-sm text-slate-400 leading-relaxed" data-ar="يراقب الكاميرات ويكتشف الحركة والأجسام المشبوهة في الوقت الفعلي.">
+            Monitors cameras and detects motion and suspicious objects in real time.
+          </p>
+        </div>
+
+        <!-- ScanGuard -->
+        <div class="bg-navy-800 border border-white/5 rounded-2xl p-6 module-card card-hover">
+          <div class="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" />
+            </svg>
+          </div>
+          <h3 class="font-semibold text-lg mb-2">ScanGuard</h3>
+          <p class="text-sm text-slate-400 leading-relaxed" data-ar="يفحص الأكواد والملفات بحثاً عن ثغرات الحقن وتسريب الأسرار الحساسة.">
+            Scans code and files for injection vulnerabilities and sensitive secret leaks.
+          </p>
+        </div>
+
+        <!-- Auth -->
+        <div class="bg-navy-800 border border-white/5 rounded-2xl p-6 module-card card-hover">
+          <div class="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+            </svg>
+          </div>
+          <h3 class="font-semibold text-lg mb-2">Auth</h3>
+          <p class="text-sm text-slate-400 leading-relaxed" data-ar="إدارة صلاحيات آمنة مع تسجيل دخول مشفّر وحماية للوصول إلى المنصة.">
+            Secure access control with encrypted login and role-based permissions.
+          </p>
+        </div>
       </div>
-      <div>
-        <code>python backend/wsgi.py</code>
+    </div>
+  </section>
+
+  <!-- ========== PRICING ========== -->
+  <section id="pricing" class="py-20 border-t border-white/5">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-14">
+        <h2 class="text-3xl sm:text-4xl font-bold mb-3" data-ar="خطط تناسب احتياجك">
+          Plans that fit your needs
+        </h2>
+        <p class="text-slate-400 max-w-xl mx-auto" data-ar="ابدأ مجاناً، ثم اختر الباقة المناسبة لحجم منشأتك.">
+          Start free, then choose the plan that matches your organization size.
+        </p>
       </div>
+
+      <div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        <!-- Free -->
+        <div class="bg-navy-800 border border-white/10 rounded-2xl p-7 flex flex-col">
+          <div class="text-sm font-medium text-slate-400 mb-1" data-ar="تجريبي">Free Trial</div>
+          <div class="text-3xl font-bold mb-1" data-ar="مجاناً">Free</div>
+          <div class="text-sm text-slate-500 mb-6" data-ar="١٤ يوم — بدون بطاقة ائتمان">14 days — no credit card</div>
+          <ul class="space-y-3 text-sm text-slate-300 mb-8 flex-1">
+            <li class="flex items-start gap-2">
+              <svg class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+              <span data-ar="كل الموديلات الستة">All 6 modules</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <svg class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+              <span data-ar="لوحة التحكم كاملة">Full dashboard</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <svg class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+              <span data-ar="فحوصات محدودة">Limited scans</span>
+            </li>
+          </ul>
+          <a href="/dashboard" class="block text-center py-3 rounded-xl border border-white/15 hover:bg-white/5 font-medium transition" data-ar="ابدأ الآن">
+            Start now
+          </a>
+        </div>
+
+        <!-- Starter -->
+        <div class="bg-navy-800 border-2 border-indigo-500/50 rounded-2xl p-7 flex flex-col relative shadow-xl shadow-indigo-500/10">
+          <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-indigo-500 text-xs font-semibold" data-ar="الأكثر طلباً">
+            Popular
+          </div>
+          <div class="text-sm font-medium text-indigo-300 mb-1" data-ar="أساسي">Starter</div>
+          <div class="text-3xl font-bold mb-1" data-ar="تواصل معنا">Contact us</div>
+          <div class="text-sm text-slate-500 mb-6" data-ar="مناسب للمنشآت الصغيرة">For small organizations</div>
+          <ul class="space-y-3 text-sm text-slate-300 mb-8 flex-1">
+            <li class="flex items-start gap-2">
+              <svg class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+              <span data-ar="كل مميزات التجريبي">Everything in Free</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <svg class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+              <span data-ar="فحوصات شهرية أعلى">Higher monthly scans</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <svg class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+              <span data-ar="دعم فني أساسي">Basic support</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <svg class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+              <span data-ar="استضافة سحابية">Cloud hosting</span>
+            </li>
+          </ul>
+          <a href="mailto:hello@sentinel-ai.sa" class="block text-center py-3 rounded-xl bg-accent hover:bg-accent-hover font-semibold transition shadow-lg shadow-indigo-500/20" data-ar="اطلب عرض سعر">
+            Request quote
+          </a>
+        </div>
+
+        <!-- Enterprise -->
+        <div class="bg-navy-800 border border-white/10 rounded-2xl p-7 flex flex-col">
+          <div class="text-sm font-medium text-slate-400 mb-1" data-ar="مؤسسي">Enterprise</div>
+          <div class="text-3xl font-bold mb-1" data-ar="تواصل معنا">Contact us</div>
+          <div class="text-sm text-slate-500 mb-6" data-ar="للمنشآت المتوسطة والكبيرة">For mid & large orgs</div>
+          <ul class="space-y-3 text-sm text-slate-300 mb-8 flex-1">
+            <li class="flex items-start gap-2">
+              <svg class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+              <span data-ar="كل مميزات الأساسي">Everything in Starter</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <svg class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+              <span data-ar="تشغيل On-Premise كامل">Full On-Premise</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <svg class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+              <span data-ar="فحوصات غير محدودة">Unlimited scans</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <svg class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+              <span data-ar="دعم أولوية + تخصيص">Priority support + custom</span>
+            </li>
+          </ul>
+          <a href="mailto:hello@sentinel-ai.sa" class="block text-center py-3 rounded-xl border border-white/15 hover:bg-white/5 font-medium transition" data-ar="تواصل معنا">
+            Contact us
+          </a>
+        </div>
+      </div>
+
+      <p class="text-center text-sm text-slate-500 mt-8" data-ar="الأسعار النهائية تُحدد حسب حجم المنشأة ومتطلبات الاستضافة.">
+        Final pricing depends on organization size and hosting requirements.
+      </p>
+    </div>
+  </section>
+
+  <!-- ========== FINAL CTA ========== -->
+  <section class="py-20 border-t border-white/5">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+      <h2 class="text-3xl sm:text-4xl font-bold mb-4" data-ar="جاهز تحمي منشأتك؟">
+        Ready to secure your organization?
+      </h2>
+      <p class="text-slate-400 text-lg mb-8" data-ar="ابدأ تجربتك المجانية خلال أقل من دقيقة. بدون بطاقة ائتمان.">
+        Start your free trial in under a minute. No credit card required.
+      </p>
+      <a href="/dashboard" class="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-accent hover:bg-accent-hover font-semibold text-white shadow-xl shadow-indigo-500/25 transition text-lg">
+        <span data-ar="ابدأ التجربة المجانية">Start Free Trial</span>
+        <svg class="w-5 h-5 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="border-t border-white/5 py-10">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-500">
+      <div class="flex items-center gap-2">
+        <span class="font-semibold text-slate-300">SENTINEL-AI</span>
+        <span>·</span>
+        <span data-ar="منصة أمنية موحّدة">Unified Security Platform</span>
+      </div>
+      <div>© 2026 — All rights reserved</div>
     </div>
   </footer>
 
-  <script src="js/app.js"></script>
+  <!-- ========== LANGUAGE TOGGLE SCRIPT ========== -->
+  <script>
+    let isArabic = true;
+
+    function toggleLang() {
+      isArabic = !isArabic;
+      document.documentElement.lang = isArabic ? 'ar' : 'en';
+      document.documentElement.dir = isArabic ? 'rtl' : 'ltr';
+      document.getElementById('langBtn').textContent = isArabic ? 'English' : 'العربية';
+
+      document.querySelectorAll('[data-ar]').forEach(el => {
+        if (!el.dataset.en) {
+          el.dataset.en = el.textContent.trim();
+        }
+        el.textContent = isArabic ? el.dataset.ar : el.dataset.en;
+      });
+    }
+
+    // Initialize Arabic as default
+    document.querySelectorAll('[data-ar]').forEach(el => {
+      el.dataset.en = el.textContent.trim();
+      el.textContent = el.dataset.ar;
+    });
+  </script>
 </body>
 </html>
