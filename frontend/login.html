@@ -28,7 +28,29 @@
       padding: 24px;
       -webkit-font-smoothing: antialiased;
     }
-    .auth-wrap { width: 100%; max-width: 400px; }
+    .auth-wrap { width: 100%; max-width: 400px; position: relative; }
+    .lang-switch {
+      position: absolute;
+      top: -8px;
+      right: 0;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .lang-switch:hover {
+      background: rgba(255,255,255,0.1);
+      color: var(--text);
+    }
+    [dir="rtl"] .lang-switch {
+      right: auto;
+      left: 0;
+    }
     .brand {
       display: flex;
       align-items: center;
@@ -83,6 +105,7 @@
       text-align: right;
       margin: -8px 0 20px;
     }
+    [dir="rtl"] .forgot-row { text-align: left; }
     .forgot-row a {
       font-size: 0.8rem;
       color: #818CF8;
@@ -136,41 +159,107 @@
 </head>
 <body>
   <div class="auth-wrap">
+    <button type="button" class="lang-switch" id="langSwitch">العربية</button>
+
     <div class="brand">
       <div class="brand-icon">🛡</div>
       <div>
         <strong>SENTINEL-AI</strong>
-        <span>Control Center</span>
+        <span data-i18n="brand_sub">Control Center</span>
       </div>
     </div>
 
     <div class="card">
-      <h1>Welcome back</h1>
-      <p class="sub">Sign in to continue to your dashboard</p>
+      <h1 data-i18n="title">Welcome back</h1>
+      <p class="sub" data-i18n="sub">Sign in to continue to your dashboard</p>
 
       <form id="loginForm">
-        <label>Username or email</label>
-        <input type="text" name="identifier" autocomplete="username" required placeholder="you@example.com or username" />
+        <label data-i18n="label_id">Username or email</label>
+        <input type="text" name="identifier" autocomplete="username" required data-i18n-placeholder="ph_id" placeholder="you@example.com or username" />
 
-        <label>Password</label>
+        <label data-i18n="label_pass">Password</label>
         <input type="password" name="password" autocomplete="current-password" required minlength="8" placeholder="••••••••" />
 
         <div class="forgot-row">
-          <a href="forgot-password.html">Forgot password?</a>
+          <a href="forgot-password.html" data-i18n="forgot">Forgot password?</a>
         </div>
 
-        <button type="submit" class="btn btn-primary">Sign in</button>
-        <a href="dashboard.html" class="btn btn-ghost">Continue as guest</a>
+        <button type="submit" class="btn btn-primary" data-i18n="btn_login">Sign in</button>
+        <a href="dashboard.html" class="btn btn-ghost" data-i18n="btn_guest">Continue as guest</a>
         <p class="error" id="loginError"></p>
       </form>
     </div>
 
     <div class="footer">
-      Don't have an account? <a href="register.html">Create one</a>
+      <span data-i18n="no_account">Don't have an account?</span>
+      <a href="register.html" data-i18n="create">Create one</a>
     </div>
   </div>
 
   <script>
+    const translations = {
+      en: {
+        brand_sub: "Control Center",
+        title: "Welcome back",
+        sub: "Sign in to continue to your dashboard",
+        label_id: "Username or email",
+        ph_id: "you@example.com or username",
+        label_pass: "Password",
+        forgot: "Forgot password?",
+        btn_login: "Sign in",
+        btn_guest: "Continue as guest",
+        no_account: "Don't have an account?",
+        create: "Create one",
+        switch_btn: "العربية"
+      },
+      ar: {
+        brand_sub: "مركز التحكم",
+        title: "مرحباً بعودتك",
+        sub: "سجّل الدخول للمتابعة إلى لوحة التحكم",
+        label_id: "اسم المستخدم أو البريد",
+        ph_id: "you@example.com أو اسم المستخدم",
+        label_pass: "كلمة المرور",
+        forgot: "نسيت كلمة المرور؟",
+        btn_login: "تسجيل الدخول",
+        btn_guest: "المتابعة كزائر",
+        no_account: "ما عندك حساب؟",
+        create: "أنشئ حساب",
+        switch_btn: "English"
+      }
+    };
+
+    let currentLang = localStorage.getItem('lang') || 'en';
+
+    function applyLang(lang) {
+      currentLang = lang;
+      localStorage.setItem('lang', lang);
+
+      const html = document.documentElement;
+      html.lang = lang;
+      html.dir = lang === 'ar' ? 'rtl' : 'ltr';
+
+      const t = translations[lang];
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key]) el.textContent = t[key];
+      });
+
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (t[key]) el.placeholder = t[key];
+      });
+
+      document.getElementById('langSwitch').textContent = t.switch_btn;
+    }
+
+    document.getElementById('langSwitch').addEventListener('click', () => {
+      applyLang(currentLang === 'en' ? 'ar' : 'en');
+    });
+
+    // تطبيق اللغة المحفوظة عند فتح الصفحة
+    applyLang(currentLang);
+
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const form = e.target;

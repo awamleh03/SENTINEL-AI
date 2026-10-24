@@ -28,7 +28,30 @@
       padding: 24px;
       -webkit-font-smoothing: antialiased;
     }
-    .auth-wrap { width: 100%; max-width: 400px; }
+    .auth-wrap { width: 100%; max-width: 400px; position: relative; }
+    .lang-btn {
+      position: absolute;
+      top: -8px;
+      right: 0;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: inherit;
+    }
+    .lang-btn:hover {
+      background: rgba(255,255,255,0.1);
+      color: var(--text);
+    }
+    html[dir="rtl"] .lang-btn {
+      right: auto;
+      left: 0;
+    }
     .brand {
       display: flex;
       align-items: center;
@@ -127,48 +150,129 @@
 </head>
 <body>
   <div class="auth-wrap">
+    <!-- زر تحويل اللغة -->
+    <button type="button" class="lang-btn" id="langToggle">العربية</button>
+
     <div class="brand">
       <div class="brand-icon">🛡</div>
       <div>
         <strong>SENTINEL-AI</strong>
-        <span>Control Center</span>
+        <span data-i18n="brand_sub">Control Center</span>
       </div>
     </div>
 
     <div class="card">
-      <h1>Create account</h1>
-      <p class="sub">Join SENTINEL-AI to save scans and alerts</p>
+      <h1 data-i18n="title">Create account</h1>
+      <p class="sub" data-i18n="subtitle">Join SENTINEL-AI to save scans and alerts</p>
 
       <form id="registerForm">
-        <label>Username</label>
-        <input type="text" name="username" autocomplete="username" required placeholder="Choose a username" />
+        <label data-i18n="username">Username</label>
+        <input type="text" name="username" autocomplete="username" required data-i18n-placeholder="ph_username" placeholder="Choose a username" />
 
-        <label>Email</label>
-        <input type="email" name="email" autocomplete="email" required placeholder="you@example.com" />
+        <label data-i18n="email">Email</label>
+        <input type="email" name="email" autocomplete="email" required data-i18n-placeholder="ph_email" placeholder="you@example.com" />
 
-        <label>Password</label>
-        <input type="password" name="password" autocomplete="new-password" required minlength="8" placeholder="At least 8 characters" />
+        <label data-i18n="password">Password</label>
+        <input type="password" name="password" autocomplete="new-password" required minlength="8" data-i18n-placeholder="ph_password" placeholder="At least 8 characters" />
 
-        <label>First name <span class="optional">(optional)</span></label>
-        <input type="text" name="first_name" placeholder="Optional" />
+        <label><span data-i18n="first_name">First name</span> <span class="optional" data-i18n="optional">(optional)</span></label>
+        <input type="text" name="first_name" data-i18n-placeholder="ph_optional" placeholder="Optional" />
 
-        <label>Last name <span class="optional">(optional)</span></label>
-        <input type="text" name="last_name" placeholder="Optional" />
+        <label><span data-i18n="last_name">Last name</span> <span class="optional" data-i18n="optional">(optional)</span></label>
+        <input type="text" name="last_name" data-i18n-placeholder="ph_optional" placeholder="Optional" />
 
-        <!-- ملاحظة: ما في رابط نسيت كلمة المرور هنا -->
-
-        <button type="submit" class="btn btn-primary">Create account</button>
-        <a href="dashboard.html" class="btn btn-ghost">Continue as guest</a>
+        <button type="submit" class="btn btn-primary" data-i18n="btn_create">Create account</button>
+        <a href="dashboard.html" class="btn btn-ghost" data-i18n="btn_guest">Continue as guest</a>
         <p class="error" id="registerError"></p>
       </form>
     </div>
 
     <div class="footer">
-      Already have an account? <a href="login.html">Sign in</a>
+      <span data-i18n="have_account">Already have an account?</span> <a href="login.html" data-i18n="sign_in">Sign in</a>
     </div>
   </div>
 
   <script>
+    // ===== Language System =====
+    const translations = {
+      en: {
+        brand_sub: "Control Center",
+        title: "Create account",
+        subtitle: "Join SENTINEL-AI to save scans and alerts",
+        username: "Username",
+        email: "Email",
+        password: "Password",
+        first_name: "First name",
+        last_name: "Last name",
+        optional: "(optional)",
+        btn_create: "Create account",
+        btn_guest: "Continue as guest",
+        have_account: "Already have an account?",
+        sign_in: "Sign in",
+        ph_username: "Choose a username",
+        ph_email: "you@example.com",
+        ph_password: "At least 8 characters",
+        ph_optional: "Optional",
+        lang_btn: "العربية"
+      },
+      ar: {
+        brand_sub: "مركز التحكم",
+        title: "إنشاء حساب",
+        subtitle: "انضم إلى SENTINEL-AI لحفظ الفحوصات والتنبيهات",
+        username: "اسم المستخدم",
+        email: "البريد الإلكتروني",
+        password: "كلمة المرور",
+        first_name: "الاسم الأول",
+        last_name: "اسم العائلة",
+        optional: "(اختياري)",
+        btn_create: "إنشاء حساب",
+        btn_guest: "المتابعة كزائر",
+        have_account: "لديك حساب بالفعل؟",
+        sign_in: "تسجيل الدخول",
+        ph_username: "اختر اسم مستخدم",
+        ph_email: "you@example.com",
+        ph_password: "8 أحرف على الأقل",
+        ph_optional: "اختياري",
+        lang_btn: "English"
+      }
+    };
+
+    let currentLang = localStorage.getItem('lang') || 'en';
+
+    function applyLanguage(lang) {
+      currentLang = lang;
+      localStorage.setItem('lang', lang);
+
+      const t = translations[lang];
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+
+      // نصوص عادية
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key]) el.textContent = t[key];
+      });
+
+      // الـ placeholders
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (t[key]) el.placeholder = t[key];
+      });
+
+      // نص الزر
+      document.getElementById('langToggle').textContent = t.lang_btn;
+    }
+
+    // تطبيق اللغة عند التحميل
+    applyLanguage(currentLang);
+
+    // زر التحويل
+    document.getElementById('langToggle').addEventListener('click', () => {
+      const next = currentLang === 'en' ? 'ar' : 'en';
+      applyLanguage(next);
+    });
+
+    // ===== Register Form (نفس الكود الأصلي) =====
     document.getElementById('registerForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const form = e.target;
