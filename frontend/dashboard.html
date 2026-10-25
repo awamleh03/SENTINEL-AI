@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
@@ -109,6 +110,7 @@
       font-weight: 500;
       transition: all 0.15s ease;
       position: relative;
+      cursor: pointer;
     }
     .nav-link:hover {
       background: rgba(255,255,255,0.03);
@@ -278,6 +280,10 @@
     .btn-primary:hover {
       background: var(--primary-hover);
       box-shadow: 0 4px 12px rgba(99,102,241,0.3);
+    }
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
     }
     .btn-secondary {
       background: rgba(255,255,255,0.04);
@@ -545,38 +551,38 @@
     </div>
     <nav class="sidebar-nav">
       <div class="nav-section" data-i18n="nav_main">Main</div>
-      <a href="#overview" class="nav-link active" data-nav="overview">
+      <a href="#" class="nav-link active" data-nav="overview">
         <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"/></svg>
         <span data-i18n="nav_overview">Overview</span>
       </a>
       <div class="nav-section" data-i18n="nav_modules">Modules</div>
-      <a href="#docguard" class="nav-link" data-nav="docguard">
+      <a href="#" class="nav-link" data-nav="docguard">
         <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
         DocGuard
       </a>
-      <a href="#mailguard" class="nav-link" data-nav="mailguard">
+      <a href="#" class="nav-link" data-nav="mailguard">
         <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
         MailGuard
       </a>
-      <a href="#sysguard" class="nav-link" data-nav="sysguard">
+      <a href="#" class="nav-link" data-nav="sysguard">
         <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25A2.25 2.25 0 015.25 3h13.5A2.25 2.25 0 0121 5.25z"/></svg>
         SysGuard
       </a>
-      <a href="#camguard" class="nav-link" data-nav="camguard">
+      <a href="#" class="nav-link" data-nav="camguard">
         <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M6 20.25h12m-7.5-3v3m3-3v3m-10.125-3.25h17.25c.621 0 1.125-.504 1.125-1.125V4.875c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v11c0 .621.504 1.125 1.125 1.125z"/></svg>
         CamGuard
       </a>
-      <a href="#scanguard" class="nav-link" data-nav="scanguard">
+      <a href="#" class="nav-link" data-nav="scanguard">
         <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5"/></svg>
         ScanGuard
       </a>
       <div class="nav-section" data-i18n="nav_activity">Activity</div>
-      <a href="#alerts" class="nav-link" data-nav="alerts">
+      <a href="#" class="nav-link" data-nav="alerts">
         <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"/></svg>
         <span data-i18n="nav_alerts">Alerts</span>
         <span id="alertsBadge" class="badge-dot"></span>
       </a>
-      <a href="#history" class="nav-link" data-nav="history">
+      <a href="#" class="nav-link" data-nav="history">
         <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
         <span data-i18n="nav_history">History</span>
       </a>
@@ -618,6 +624,7 @@
         </div>
       </div>
 
+      <!-- OVERVIEW -->
       <section class="view" id="view-overview">
         <div class="stat-grid">
           <div class="stat-card">
@@ -670,6 +677,7 @@
         </div>
       </section>
 
+      <!-- DOCGUARD -->
       <section class="view hidden" id="view-docguard">
         <div class="card">
           <div class="card-head"><h3 data-i18n="dg_title">DocGuard — Document Scanner</h3></div>
@@ -699,6 +707,7 @@
         </div>
       </section>
 
+      <!-- MAILGUARD -->
       <section class="view hidden" id="view-mailguard">
         <div class="card">
           <div class="card-head"><h3 data-i18n="mg_title">MailGuard — Email Classifier</h3></div>
@@ -718,6 +727,7 @@
         </div>
       </section>
 
+      <!-- SYSGUARD -->
       <section class="view hidden" id="view-sysguard">
         <div class="card">
           <div class="card-head">
@@ -737,6 +747,7 @@
         </div>
       </section>
 
+      <!-- CAMGUARD -->
       <section class="view hidden" id="view-camguard">
         <div class="card">
           <div class="card-head"><h3 data-i18n="cg_title">CamGuard — Camera / Frame Analyzer</h3></div>
@@ -772,6 +783,7 @@
         </div>
       </section>
 
+      <!-- SCANGUARD -->
       <section class="view hidden" id="view-scanguard">
         <div class="card">
           <div class="card-head"><h3 data-i18n="sc_title">ScanGuard — Code / Log Scanner</h3></div>
@@ -804,6 +816,7 @@
         </div>
       </section>
 
+      <!-- ALERTS -->
       <section class="view hidden" id="view-alerts">
         <div class="card">
           <div class="card-head">
@@ -825,6 +838,7 @@
         </div>
       </section>
 
+      <!-- HISTORY -->
       <section class="view hidden" id="view-history">
         <div class="card">
           <div class="card-head">
@@ -848,300 +862,674 @@
   </div>
   <div id="toastArea" class="toast-area" aria-live="polite"></div>
 
- <script>
-  // ========== i18n ==========
-  const translations = {
-    en: {
-      control_center: "Control Center",
-      nav_main: "Main",
-      nav_overview: "Overview",
-      nav_modules: "Modules",
-      nav_activity: "Activity",
-      nav_alerts: "Alerts",
-      nav_history: "History",
-      guest: "Guest",
-      not_signed: "Not signed in",
-      sign_in: "Sign in",
-      sign_out: "Sign out",
-      create_account: "Create account",
-      refresh: "↻ Refresh",
-      guest_title: "Browsing as guest.",
-      guest_desc: "Sign in to save scan history and receive alerts.",
-      st_scans: "Scans (24h)",
-      st_today: "Today",
-      st_critical: "Critical scans",
-      st_risk70: "Risk ≥ 70",
-      st_high: "High-risk scans",
-      st_risk40: "Risk ≥ 40",
-      st_unread: "Unread alerts",
-      st_action: "Action needed",
-      per_module: "Per-module performance",
-      click_refresh: "Click ↻ Refresh to load dashboard summary.",
-      sys_snapshot: "System snapshot",
-      check_now: "Check now",
-      run_sysguard: "Run SysGuard to view live CPU / RAM / Disk.",
-      recent_scans: "Recent scans",
-      recent_alerts: "Recent alerts",
-      dg_title: "DocGuard — Document Scanner",
-      dg_upload: "Upload PDF / TXT",
-      dg_paste: "…or paste raw text",
-      dg_placeholder: "Paste document text here…",
-      dg_scan: "🔍 Scan Document",
-      scan_result: "Scan Result",
-      mg_title: "MailGuard — Email Classifier",
-      mg_from: "From / Sender",
-      mg_from_ph: "sender@example.com",
-      mg_subject: "Subject",
-      mg_subject_ph: "Email subject",
-      mg_body: "Body",
-      mg_body_ph: "Paste email body…",
-      mg_classify: "🎯 Classify Email",
-      classification: "Classification",
-      sg_title: "SysGuard — Real-time System Monitor",
-      sg_once: "⟳ Check once",
-      sg_auto: "▶ Auto (5s)",
-      sg_empty: "Click \"Check once\" to load current status.",
-      sg_history: "History (last 60 samples)",
-      cg_title: "CamGuard — Camera / Frame Analyzer",
-      cg_upload: "Upload frame image",
-      cg_cam_id: "Camera ID",
-      cg_base64: "…or paste base64",
-      cg_base64_ph: "data:image/jpeg;base64,...",
-      cg_yolo: "Attempt YOLO detection",
-      cg_analyze: "📷 Analyze Frame",
-      cg_note: "YOLO requires ultralytics + weights. Motion detection works out of the box.",
-      cg_result: "Frame analysis",
-      sc_title: "ScanGuard — Code / Log Scanner",
-      sc_upload: "Upload file",
-      sc_type: "Hint type",
-      sc_auto: "Auto detect",
-      sc_code: "Code",
-      sc_log: "Log file",
-      sc_paste: "…or paste code / log text",
-      sc_placeholder: "Paste source code or log content…",
-      sc_audit: "🛡 Audit",
-      sc_report: "Audit report",
-      all_severities: "All severities",
-      critical: "Critical",
-      high: "High",
-      medium: "Medium",
-      info: "Info",
-      unread_only: "Unread only",
-      hist_title: "Scan history",
-      hist_all: "All modules",
-      min_risk: "Min risk",
-      signed_in: "Signed in"
-    },
-    ar: {
-      control_center: "مركز التحكم",
-      nav_main: "الرئيسية",
-      nav_overview: "نظرة عامة",
-      nav_modules: "الوحدات",
-      nav_activity: "النشاط",
-      nav_alerts: "التنبيهات",
-      nav_history: "السجل",
-      guest: "زائر",
-      not_signed: "غير مسجل الدخول",
-      sign_in: "تسجيل الدخول",
-      sign_out: "تسجيل الخروج",
-      create_account: "إنشاء حساب",
-      refresh: "↻ تحديث",
-      guest_title: "تصفح كزائر.",
-      guest_desc: "سجّل الدخول لحفظ سجل الفحوصات واستقبال التنبيهات.",
-      st_scans: "الفحوصات (24 ساعة)",
-      st_today: "اليوم",
-      st_critical: "فحوصات حرجة",
-      st_risk70: "مخاطر ≥ 70",
-      st_high: "فحوصات عالية المخاطر",
-      st_risk40: "مخاطر ≥ 40",
-      st_unread: "تنبيهات غير مقروءة",
-      st_action: "يحتاج إجراء",
-      per_module: "أداء الوحدات",
-      click_refresh: "اضغط ↻ تحديث لتحميل ملخص اللوحة.",
-      sys_snapshot: "لقطة النظام",
-      check_now: "فحص الآن",
-      run_sysguard: "شغّل SysGuard لعرض المعالج / الذاكرة / القرص.",
-      recent_scans: "أحدث الفحوصات",
-      recent_alerts: "أحدث التنبيهات",
-      dg_title: "DocGuard — ماسح المستندات",
-      dg_upload: "رفع PDF / TXT",
-      dg_paste: "…أو الصق النص مباشرة",
-      dg_placeholder: "الصق نص المستند هنا…",
-      dg_scan: "🔍 فحص المستند",
-      scan_result: "نتيجة الفحص",
-      mg_title: "MailGuard — مصنف البريد",
-      mg_from: "المرسل",
-      mg_from_ph: "sender@example.com",
-      mg_subject: "الموضوع",
-      mg_subject_ph: "موضوع البريد",
-      mg_body: "المحتوى",
-      mg_body_ph: "الصق محتوى البريد…",
-      mg_classify: "🎯 تصنيف البريد",
-      classification: "التصنيف",
-      sg_title: "SysGuard — مراقبة النظام المباشرة",
-      sg_once: "⟳ فحص مرة",
-      sg_auto: "▶ تلقائي (5 ث)",
-      sg_empty: "اضغط «فحص مرة» لتحميل الحالة الحالية.",
-      sg_history: "السجل (آخر 60 عينة)",
-      cg_title: "CamGuard — محلل الكاميرا / الإطارات",
-      cg_upload: "رفع صورة إطار",
-      cg_cam_id: "معرّف الكاميرا",
-      cg_base64: "…أو الصق base64",
-      cg_base64_ph: "data:image/jpeg;base64,...",
-      cg_yolo: "محاولة كشف YOLO",
-      cg_analyze: "📷 تحليل الإطار",
-      cg_note: "YOLO يحتاج ultralytics + الأوزان. كشف الحركة يعمل مباشرة.",
-      cg_result: "تحليل الإطار",
-      sc_title: "ScanGuard — ماسح الكود / السجلات",
-      sc_upload: "رفع ملف",
-      sc_type: "نوع التلميح",
-      sc_auto: "اكتشاف تلقائي",
-      sc_code: "كود",
-      sc_log: "ملف سجل",
-      sc_paste: "…أو الصق كود / سجل",
-      sc_placeholder: "الصق الكود أو محتوى السجل…",
-      sc_audit: "🛡 تدقيق",
-      sc_report: "تقرير التدقيق",
-      all_severities: "كل المستويات",
-      critical: "حرج",
-      high: "عالي",
-      medium: "متوسط",
-      info: "معلومة",
-      unread_only: "غير المقروء فقط",
-      hist_title: "سجل الفحوصات",
-      hist_all: "كل الوحدات",
-      min_risk: "أدنى مخاطر",
-      signed_in: "مسجل الدخول"
+  <script>
+    // ========== i18n ==========
+    const translations = {
+      en: {
+        control_center: "Control Center",
+        nav_main: "Main",
+        nav_overview: "Overview",
+        nav_modules: "Modules",
+        nav_activity: "Activity",
+        nav_alerts: "Alerts",
+        nav_history: "History",
+        guest: "Guest",
+        not_signed: "Not signed in",
+        sign_in: "Sign in",
+        sign_out: "Sign out",
+        create_account: "Create account",
+        refresh: "↻ Refresh",
+        guest_title: "Browsing as guest.",
+        guest_desc: "Sign in to save scan history and receive alerts.",
+        st_scans: "Scans (24h)",
+        st_today: "Today",
+        st_critical: "Critical scans",
+        st_risk70: "Risk ≥ 70",
+        st_high: "High-risk scans",
+        st_risk40: "Risk ≥ 40",
+        st_unread: "Unread alerts",
+        st_action: "Action needed",
+        per_module: "Per-module performance",
+        click_refresh: "Click ↻ Refresh to load dashboard summary.",
+        sys_snapshot: "System snapshot",
+        check_now: "Check now",
+        run_sysguard: "Run SysGuard to view live CPU / RAM / Disk.",
+        recent_scans: "Recent scans",
+        recent_alerts: "Recent alerts",
+        dg_title: "DocGuard — Document Scanner",
+        dg_upload: "Upload PDF / TXT",
+        dg_paste: "…or paste raw text",
+        dg_placeholder: "Paste document text here…",
+        dg_scan: "🔍 Scan Document",
+        scan_result: "Scan Result",
+        mg_title: "MailGuard — Email Classifier",
+        mg_from: "From / Sender",
+        mg_from_ph: "sender@example.com",
+        mg_subject: "Subject",
+        mg_subject_ph: "Email subject",
+        mg_body: "Body",
+        mg_body_ph: "Paste email body…",
+        mg_classify: "🎯 Classify Email",
+        classification: "Classification",
+        sg_title: "SysGuard — Real-time System Monitor",
+        sg_once: "⟳ Check once",
+        sg_auto: "▶ Auto (5s)",
+        sg_empty: "Click \"Check once\" to load current status.",
+        sg_history: "History (last 60 samples)",
+        cg_title: "CamGuard — Camera / Frame Analyzer",
+        cg_upload: "Upload frame image",
+        cg_cam_id: "Camera ID",
+        cg_base64: "…or paste base64",
+        cg_base64_ph: "data:image/jpeg;base64,...",
+        cg_yolo: "Attempt YOLO detection",
+        cg_analyze: "📷 Analyze Frame",
+        cg_note: "YOLO requires ultralytics + weights. Motion detection works out of the box.",
+        cg_result: "Frame analysis",
+        sc_title: "ScanGuard — Code / Log Scanner",
+        sc_upload: "Upload file",
+        sc_type: "Hint type",
+        sc_auto: "Auto detect",
+        sc_code: "Code",
+        sc_log: "Log file",
+        sc_paste: "…or paste code / log text",
+        sc_placeholder: "Paste source code or log content…",
+        sc_audit: "🛡 Audit",
+        sc_report: "Audit report",
+        all_severities: "All severities",
+        critical: "Critical",
+        high: "High",
+        medium: "Medium",
+        info: "Info",
+        unread_only: "Unread only",
+        hist_title: "Scan history",
+        hist_all: "All modules",
+        min_risk: "Min risk",
+        signed_in: "Signed in"
+      },
+      ar: {
+        control_center: "مركز التحكم",
+        nav_main: "الرئيسية",
+        nav_overview: "نظرة عامة",
+        nav_modules: "الوحدات",
+        nav_activity: "النشاط",
+        nav_alerts: "التنبيهات",
+        nav_history: "السجل",
+        guest: "زائر",
+        not_signed: "غير مسجل الدخول",
+        sign_in: "تسجيل الدخول",
+        sign_out: "تسجيل الخروج",
+        create_account: "إنشاء حساب",
+        refresh: "↻ تحديث",
+        guest_title: "تصفح كزائر.",
+        guest_desc: "سجّل الدخول لحفظ سجل الفحوصات واستقبال التنبيهات.",
+        st_scans: "الفحوصات (24 ساعة)",
+        st_today: "اليوم",
+        st_critical: "فحوصات حرجة",
+        st_risk70: "مخاطر ≥ 70",
+        st_high: "فحوصات عالية المخاطر",
+        st_risk40: "مخاطر ≥ 40",
+        st_unread: "تنبيهات غير مقروءة",
+        st_action: "يحتاج إجراء",
+        per_module: "أداء الوحدات",
+        click_refresh: "اضغط ↻ تحديث لتحميل ملخص اللوحة.",
+        sys_snapshot: "لقطة النظام",
+        check_now: "فحص الآن",
+        run_sysguard: "شغّل SysGuard لعرض المعالج / الذاكرة / القرص.",
+        recent_scans: "أحدث الفحوصات",
+        recent_alerts: "أحدث التنبيهات",
+        dg_title: "DocGuard — ماسح المستندات",
+        dg_upload: "رفع PDF / TXT",
+        dg_paste: "…أو الصق النص مباشرة",
+        dg_placeholder: "الصق نص المستند هنا…",
+        dg_scan: "🔍 فحص المستند",
+        scan_result: "نتيجة الفحص",
+        mg_title: "MailGuard — مصنف البريد",
+        mg_from: "المرسل",
+        mg_from_ph: "sender@example.com",
+        mg_subject: "الموضوع",
+        mg_subject_ph: "موضوع البريد",
+        mg_body: "المحتوى",
+        mg_body_ph: "الصق محتوى البريد…",
+        mg_classify: "🎯 تصنيف البريد",
+        classification: "التصنيف",
+        sg_title: "SysGuard — مراقبة النظام المباشرة",
+        sg_once: "⟳ فحص مرة",
+        sg_auto: "▶ تلقائي (5 ث)",
+        sg_empty: "اضغط «فحص مرة» لتحميل الحالة الحالية.",
+        sg_history: "السجل (آخر 60 عينة)",
+        cg_title: "CamGuard — محلل الكاميرا / الإطارات",
+        cg_upload: "رفع صورة إطار",
+        cg_cam_id: "معرّف الكاميرا",
+        cg_base64: "…أو الصق base64",
+        cg_base64_ph: "data:image/jpeg;base64,...",
+        cg_yolo: "محاولة كشف YOLO",
+        cg_analyze: "📷 تحليل الإطار",
+        cg_note: "YOLO يحتاج ultralytics + الأوزان. كشف الحركة يعمل مباشرة.",
+        cg_result: "تحليل الإطار",
+        sc_title: "ScanGuard — ماسح الكود / السجلات",
+        sc_upload: "رفع ملف",
+        sc_type: "نوع التلميح",
+        sc_auto: "اكتشاف تلقائي",
+        sc_code: "كود",
+        sc_log: "ملف سجل",
+        sc_paste: "…أو الصق كود / سجل",
+        sc_placeholder: "الصق الكود أو محتوى السجل…",
+        sc_audit: "🛡 تدقيق",
+        sc_report: "تقرير التدقيق",
+        all_severities: "كل المستويات",
+        critical: "حرج",
+        high: "عالي",
+        medium: "متوسط",
+        info: "معلومة",
+        unread_only: "غير المقروء فقط",
+        hist_title: "سجل الفحوصات",
+        hist_all: "كل الوحدات",
+        min_risk: "أدنى مخاطر",
+        signed_in: "مسجل الدخول"
+      }
+    };
+
+    let currentLang = localStorage.getItem('lang') || 'en';
+
+    function applyLanguage(lang) {
+      currentLang = lang;
+      localStorage.setItem('lang', lang);
+      const t = translations[lang];
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key] !== undefined) el.textContent = t[key];
+      });
+
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (t[key] !== undefined) el.placeholder = t[key];
+      });
+
+      const activeNav = document.querySelector('.nav-link.active');
+      if (activeNav) {
+        const span = activeNav.querySelector('[data-i18n]');
+        document.getElementById('pageTitle').textContent = span ? span.textContent : activeNav.textContent.trim();
+      }
+
+      document.getElementById('btn-en').classList.toggle('active-lang', lang === 'en');
+      document.getElementById('btn-ar').classList.toggle('active-lang', lang === 'ar');
     }
-  };
 
-  let currentLang = localStorage.getItem('lang') || 'en';
+    document.getElementById('btn-en').addEventListener('click', () => applyLanguage('en'));
+    document.getElementById('btn-ar').addEventListener('click', () => applyLanguage('ar'));
 
-  function applyLanguage(lang) {
-    currentLang = lang;
-    localStorage.setItem('lang', lang);
-    const t = translations[lang];
-    document.documentElement.lang = lang;
-    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-      const key = el.getAttribute('data-i18n');
-      if (t[key] !== undefined) el.textContent = t[key];
+    // ========== Sidebar toggle ==========
+    document.getElementById('toggleSidebar')?.addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('open');
     });
 
-    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-      const key = el.getAttribute('data-i18n-placeholder');
-      if (t[key] !== undefined) el.placeholder = t[key];
+    // ========== Navigation ==========
+    function showView(target) {
+      document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+      const viewEl = document.getElementById('view-' + target);
+      if (viewEl) {
+        viewEl.classList.remove('hidden');
+      } else {
+        document.getElementById('view-overview')?.classList.remove('hidden');
+        target = 'overview';
+      }
+      document.querySelectorAll('.nav-link').forEach(l => {
+        l.classList.toggle('active', l.dataset.nav === target);
+      });
+      const activeLink = document.querySelector(`.nav-link[data-nav="${target}"]`);
+      if (activeLink) {
+        const span = activeLink.querySelector('[data-i18n]');
+        document.getElementById('pageTitle').textContent = span ? span.textContent : activeLink.textContent.trim();
+      }
+      document.getElementById('sidebar')?.classList.remove('open');
+    }
+
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const target = link.dataset.nav;
+        if (target) showView(target);
+      });
     });
 
-    // تحديث عنوان الصفحة حسب التبويب النشط
-    const activeNav = document.querySelector('.nav-link.active');
-    if (activeNav) {
-      const span = activeNav.querySelector('[data-i18n]');
-      document.getElementById('pageTitle').textContent = span ? span.textContent : activeNav.textContent.trim();
+    // ========== Auth helpers ==========
+    function setLoggedIn(user) {
+      document.querySelectorAll('.guest-only').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.auth-only').forEach(el => el.classList.remove('hidden'));
+      document.getElementById('authDot').classList.add('on');
+      document.getElementById('authDot').classList.remove('off');
+      document.getElementById('authLabel').textContent = user?.username || 'User';
+      document.getElementById('authRole').textContent = translations[currentLang].signed_in;
+      document.getElementById('userAvatar').textContent = (user?.username || 'U')[0].toUpperCase();
     }
 
-    document.getElementById('btn-en').classList.toggle('active-lang', lang === 'en');
-    document.getElementById('btn-ar').classList.toggle('active-lang', lang === 'ar');
-  }
-
-  document.getElementById('btn-en').addEventListener('click', () => applyLanguage('en'));
-  document.getElementById('btn-ar').addEventListener('click', () => applyLanguage('ar'));
-
-  // ========== Sidebar toggle ==========
-  document.getElementById('toggleSidebar')?.addEventListener('click', () => {
-    document.getElementById('sidebar').classList.toggle('open');
-  });
-
-  // ========== Navigation (Fixed) ==========
-  function showView(target) {
-    // إخفاء كل الـ views
-    document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
-
-    // إظهار الـ view المطلوب
-    const viewEl = document.getElementById('view-' + target);
-    if (viewEl) {
-      viewEl.classList.remove('hidden');
-    } else {
-      // fallback
-      document.getElementById('view-overview')?.classList.remove('hidden');
-      target = 'overview';
+    function setGuest() {
+      document.querySelectorAll('.guest-only').forEach(el => el.classList.remove('hidden'));
+      document.querySelectorAll('.auth-only').forEach(el => el.classList.add('hidden'));
+      document.getElementById('authDot').classList.remove('on');
+      document.getElementById('authDot').classList.add('off');
+      document.getElementById('authLabel').textContent = translations[currentLang].guest;
+      document.getElementById('authRole').textContent = translations[currentLang].not_signed;
+      document.getElementById('userAvatar').textContent = 'G';
     }
 
-    // تحديث حالة الروابط
-    document.querySelectorAll('.nav-link').forEach(l => {
-      l.classList.toggle('active', l.dataset.nav === target);
+    document.getElementById('logoutBtn')?.addEventListener('click', () => {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      setGuest();
+      window.location.href = 'login.html';
     });
 
-    // تحديث عنوان الصفحة
-    const activeLink = document.querySelector(`.nav-link[data-nav="${target}"]`);
-    if (activeLink) {
-      const span = activeLink.querySelector('[data-i18n]');
-      document.getElementById('pageTitle').textContent = span 
-        ? span.textContent 
-        : activeLink.textContent.trim();
+    // ========== Helper: risk chip style ==========
+    function styleRiskChip(chip, score, label) {
+      if (!chip) return;
+      chip.textContent = `${score} · ${label}`;
+      chip.style.background = score >= 70 ? 'rgba(239,68,68,0.15)' :
+                              score >= 40 ? 'rgba(245,158,11,0.15)' :
+                              'rgba(16,185,129,0.15)';
+      chip.style.color = score >= 70 ? '#FCA5A5' :
+                         score >= 40 ? '#FCD34D' : '#6EE7B7';
     }
 
-    // إغلاق السايدبار على الموبايل
-    document.getElementById('sidebar')?.classList.remove('open');
-  }
-
-  // ربط النقر على روابط التنقل
-  document.querySelectorAll('.nav-link').forEach(link => {
-    // نزيل أي href يسبب قفز الصفحة
-    link.setAttribute('href', '#');
-    
-    link.addEventListener('click', (e) => {
+    // ========== DocGuard ==========
+    document.getElementById('docguardForm')?.addEventListener('submit', async (e) => {
       e.preventDefault();
-      e.stopPropagation();
-      const target = link.dataset.nav;
-      if (target) showView(target);
+      const form = e.target;
+      const errorEl = document.getElementById('dgError');
+      const resultCard = document.getElementById('dgResultCard');
+      const resultEl = document.getElementById('dgResult');
+      const riskChip = document.getElementById('dgRiskChip');
+      errorEl.textContent = '';
+      resultCard.style.display = 'none';
+
+      const fileInput = form.querySelector('input[name="file"]');
+      const textInput = form.querySelector('textarea[name="text"]')?.value?.trim();
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = 'Scanning...';
+
+      try {
+        let res;
+        if (fileInput?.files?.length > 0) {
+          const formData = new FormData();
+          formData.append('file', fileInput.files[0]);
+          res = await fetch('/api/docguard/scan', { method: 'POST', body: formData });
+        } else if (textInput) {
+          res = await fetch('/api/docguard/scan', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: textInput, filename: 'pasted_text' })
+          });
+        } else {
+          errorEl.textContent = 'Please upload a PDF/TXT file or paste text.';
+          return;
+        }
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Scan failed');
+
+        styleRiskChip(riskChip, data.risk_score, data.risk_level);
+        let html = `
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+            <div><strong>Risk Score:</strong> ${data.risk_score}</div>
+            <div><strong>Level:</strong> ${data.risk_level}</div>
+            <div><strong>Text Length:</strong> ${data.text_length || 0}</div>
+            <div><strong>Issues Found:</strong> ${data.issues_found || 0}</div>
+          </div>`;
+        if (data.issues?.suspicious_urls?.length) {
+          html += `<h4 style="margin:12px 0 6px;font-size:0.85rem;color:#FCA5A5">Suspicious URLs</h4><ul style="padding-left:18px;color:var(--text-secondary)">`;
+          data.issues.suspicious_urls.forEach(u => { html += `<li>${u.url} <span style="opacity:0.7">(risk ${u.risk})</span></li>`; });
+          html += `</ul>`;
+        }
+        if (data.issues?.credit_cards?.length) {
+          html += `<h4 style="margin:12px 0 6px;font-size:0.85rem;color:#FCA5A5">Credit Cards Detected</h4><ul style="padding-left:18px;color:var(--text-secondary)">`;
+          data.issues.credit_cards.forEach(c => { html += `<li>${c.card_number_masked} (risk ${c.risk})</li>`; });
+          html += `</ul>`;
+        }
+        if (data.issues?.dangerous_keywords?.length) {
+          html += `<h4 style="margin:12px 0 6px;font-size:0.85rem;color:#FCD34D">Dangerous Keywords</h4><ul style="padding-left:18px;color:var(--text-secondary)">`;
+          data.issues.dangerous_keywords.slice(0, 10).forEach(k => { html += `<li>${k.keyword} × ${k.count}</li>`; });
+          html += `</ul>`;
+        }
+        if (data.issues_found === 0) html += `<p style="color:var(--success);margin-top:10px">No major issues detected.</p>`;
+        resultEl.innerHTML = html;
+        resultCard.style.display = 'block';
+      } catch (err) {
+        errorEl.textContent = err.message || 'Something went wrong';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+      }
     });
-  });
 
-  // ========== Auth helpers ==========
-  function setLoggedIn(user) {
-    document.querySelectorAll('.guest-only').forEach(el => el.classList.add('hidden'));
-    document.querySelectorAll('.auth-only').forEach(el => el.classList.remove('hidden'));
-    document.getElementById('authDot').classList.add('on');
-    document.getElementById('authDot').classList.remove('off');
-    document.getElementById('authLabel').textContent = user?.username || 'User';
-    document.getElementById('authRole').textContent = translations[currentLang].signed_in;
-    document.getElementById('userAvatar').textContent = (user?.username || 'U')[0].toUpperCase();
-  }
+    // ========== MailGuard ==========
+    document.getElementById('mailguardForm')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const errorEl = document.getElementById('mgError');
+      const resultCard = document.getElementById('mgResultCard');
+      const resultEl = document.getElementById('mgResult');
+      const riskChip = document.getElementById('mgRiskChip');
+      errorEl.textContent = '';
+      resultCard.style.display = 'none';
 
-  function setGuest() {
-    document.querySelectorAll('.guest-only').forEach(el => el.classList.remove('hidden'));
-    document.querySelectorAll('.auth-only').forEach(el => el.classList.add('hidden'));
-    document.getElementById('authDot').classList.remove('on');
-    document.getElementById('authDot').classList.add('off');
-    document.getElementById('authLabel').textContent = translations[currentLang].guest;
-    document.getElementById('authRole').textContent = translations[currentLang].not_signed;
-    document.getElementById('userAvatar').textContent = 'G';
-  }
+      const sender = form.querySelector('input[name="sender"]')?.value?.trim() || '';
+      const subject = form.querySelector('input[name="subject"]')?.value?.trim() || '';
+      const body = form.querySelector('textarea[name="body"]')?.value?.trim() || '';
+      if (!body && !subject) {
+        errorEl.textContent = 'Please provide at least the email body or subject.';
+        return;
+      }
 
-  document.getElementById('logoutBtn')?.addEventListener('click', () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    setGuest();
-    window.location.href = 'login.html';
-  });
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = 'Classifying...';
 
-  // ========== Init ==========
-  applyLanguage(currentLang);
+      try {
+        const res = await fetch('/api/mailguard/classify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sender, subject, body })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Classification failed');
 
-  // عرض نظرة عامة بشكل افتراضي
-  showView('overview');
+        styleRiskChip(riskChip, data.risk_score, data.classification);
+        let html = `
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+            <div><strong>Classification:</strong> ${data.classification}</div>
+            <div><strong>Risk Score:</strong> ${data.risk_score}</div>
+            <div><strong>Level:</strong> ${data.risk_level}</div>
+            <div><strong>Text Length:</strong> ${data.text_length || 0}</div>
+          </div>`;
+        if (data.ai_reasoning) {
+          html += `<p style="margin:10px 0;padding:10px;background:rgba(99,102,241,0.08);border-radius:8px;font-size:0.85rem"><strong>AI Reasoning:</strong> ${data.ai_reasoning}</p>`;
+        }
+        if (data.category_scores) {
+          html += `<h4 style="margin:12px 0 6px;font-size:0.85rem">Category Scores</h4><ul style="padding-left:18px;color:var(--text-secondary)">`;
+          for (const [key, val] of Object.entries(data.category_scores)) {
+            html += `<li>${key}: ${Number(val).toFixed(1)}</li>`;
+          }
+          html += `</ul>`;
+        }
+        if (data.link_issues?.length) {
+          html += `<h4 style="margin:12px 0 6px;font-size:0.85rem;color:#FCA5A5">Link Issues</h4><ul style="padding-left:18px;color:var(--text-secondary)">`;
+          data.link_issues.forEach(l => { html += `<li>${l.issue}${l.url ? ' → ' + l.url : ''}</li>`; });
+          html += `</ul>`;
+        }
+        if (data.header_notes?.length) {
+          html += `<h4 style="margin:12px 0 6px;font-size:0.85rem">Header Notes</h4><ul style="padding-left:18px;color:var(--text-secondary)">`;
+          data.header_notes.forEach(n => html += `<li>${n}</li>`);
+          html += `</ul>`;
+        }
+        resultEl.innerHTML = html;
+        resultCard.style.display = 'block';
+      } catch (err) {
+        errorEl.textContent = err.message || 'Something went wrong';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+      }
+    });
 
-  const token = localStorage.getItem('token');
-  const userStr = localStorage.getItem('user');
-  if (token && userStr) {
-    try {
-      setLoggedIn(JSON.parse(userStr));
-    } catch {
+    // ========== SysGuard ==========
+    let sysStreamInterval = null;
+
+    async function fetchSysStatus() {
+      const bodyEl = document.getElementById('sgBody');
+      const snapshotEl = document.getElementById('sysSnapshot');
+      try {
+        const res = await fetch('/api/sysguard/status');
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed to get system status');
+
+        const html = `
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:16px">
+            <div style="background:rgba(255,255,255,0.03);padding:12px;border-radius:8px;text-align:center">
+              <div style="font-size:0.7rem;color:var(--text-muted)">CPU</div>
+              <div style="font-size:1.4rem;font-weight:700;color:${(data.cpu?.percent||0) > 80 ? '#FCA5A5' : '#A5B4FC'}">${data.cpu?.percent ?? '—'}%</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.03);padding:12px;border-radius:8px;text-align:center">
+              <div style="font-size:0.7rem;color:var(--text-muted)">Memory</div>
+              <div style="font-size:1.4rem;font-weight:700;color:${(data.memory?.percent||0) > 85 ? '#FCA5A5' : '#A5B4FC'}">${data.memory?.percent ?? '—'}%</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.03);padding:12px;border-radius:8px;text-align:center">
+              <div style="font-size:0.7rem;color:var(--text-muted)">Disk</div>
+              <div style="font-size:1.4rem;font-weight:700;color:${(data.disk?.max_used_percent||0) > 90 ? '#FCA5A5' : '#A5B4FC'}">${data.disk?.max_used_percent ?? '—'}%</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.03);padding:12px;border-radius:8px;text-align:center">
+              <div style="font-size:0.7rem;color:var(--text-muted)">Risk</div>
+              <div style="font-size:1.4rem;font-weight:700">${data.risk_score ?? '—'} · ${data.risk_level || ''}</div>
+            </div>
+          </div>
+          ${data.anomalies?.length ? `<p style="color:#FCD34D;font-size:0.85rem;margin-bottom:10px">⚠ ${data.anomalies.map(a => a.message).join(' · ')}</p>` : ''}
+          ${data.top_processes?.length ? `
+            <h4 style="font-size:0.8rem;margin-bottom:6px">Top Processes</h4>
+            <ul style="padding-left:18px;color:var(--text-secondary);font-size:0.8rem">
+              ${data.top_processes.slice(0,5).map(p => `<li>${p.name} (CPU ${p.cpu_percent}% · RAM ${p.memory_percent}%)</li>`).join('')}
+            </ul>` : ''}`;
+        if (bodyEl) bodyEl.innerHTML = html;
+        if (snapshotEl) snapshotEl.innerHTML = html;
+        return data;
+      } catch (err) {
+        const msg = `<p class="empty" style="color:#FCA5A5">${err.message}</p>`;
+        if (bodyEl) bodyEl.innerHTML = msg;
+        if (snapshotEl) snapshotEl.innerHTML = msg;
+      }
+    }
+
+    async function fetchSysHistory() {
+      const histEl = document.getElementById('sgHistory');
+      if (!histEl) return;
+      try {
+        const res = await fetch('/api/sysguard/history?limit=30');
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed to load history');
+        if (!data.count) {
+          histEl.innerHTML = `<p class="empty">No history yet. Run a few checks.</p>`;
+          return;
+        }
+        histEl.innerHTML = `
+          <div style="font-size:0.8rem;color:var(--text-secondary)">
+            <p>Samples: ${data.count}</p>
+            <p>CPU (last): ${data.cpu?.slice(-1)[0] ?? '—'}%</p>
+            <p>Memory (last): ${data.memory?.slice(-1)[0] ?? '—'}%</p>
+            <p>Disk (last): ${data.disk?.slice(-1)[0] ?? '—'}%</p>
+          </div>`;
+      } catch (err) {
+        histEl.innerHTML = `<p class="empty" style="color:#FCA5A5">${err.message}</p>`;
+      }
+    }
+
+    document.getElementById('sgOnce')?.addEventListener('click', async () => {
+      await fetchSysStatus();
+      await fetchSysHistory();
+    });
+
+    document.getElementById('sgStream')?.addEventListener('click', function () {
+      if (sysStreamInterval) {
+        clearInterval(sysStreamInterval);
+        sysStreamInterval = null;
+        this.textContent = '▶ Auto (5s)';
+        return;
+      }
+      this.textContent = '■ Stop';
+      fetchSysStatus();
+      fetchSysHistory();
+      sysStreamInterval = setInterval(async () => {
+        await fetchSysStatus();
+        await fetchSysHistory();
+      }, 5000);
+    });
+
+    document.querySelector('[data-action="sysguard-quick"]')?.addEventListener('click', async () => {
+      await fetchSysStatus();
+    });
+
+    // ========== CamGuard ==========
+    document.getElementById('camguardForm')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const errorEl = document.getElementById('cgError');
+      const resultCard = document.getElementById('cgResultCard');
+      const resultEl = document.getElementById('cgResult');
+      const riskChip = document.getElementById('cgRiskChip');
+      errorEl.textContent = '';
+      resultCard.style.display = 'none';
+
+      const formData = new FormData();
+      const fileInput = form.querySelector('input[name="frame"]');
+      const cameraId = form.querySelector('input[name="camera_id"]')?.value || 'default';
+      const base64Input = form.querySelector('textarea[name="base64"]')?.value?.trim();
+      const yoloChecked = form.querySelector('input[name="yolo"]')?.checked ?? true;
+
+      if (fileInput?.files?.length > 0) {
+        formData.append('frame', fileInput.files[0]);
+      } else if (base64Input) {
+        formData.append('base64', base64Input);
+      } else {
+        errorEl.textContent = 'Please upload an image or paste base64.';
+        return;
+      }
+      formData.append('camera_id', cameraId);
+      formData.append('yolo', yoloChecked ? 'true' : 'false');
+
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = 'Analyzing...';
+
+      try {
+        const res = await fetch('/api/camguard/analyze', { method: 'POST', body: formData });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Analysis failed');
+
+        styleRiskChip(riskChip, data.risk_score, data.risk_level);
+        let html = `
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+            <div><strong>Risk Score:</strong> ${data.risk_score}</div>
+            <div><strong>Level:</strong> ${data.risk_level}</div>
+            <div><strong>Objects:</strong> ${data.yolo?.detection_count || 0}</div>
+            <div><strong>Motion Score:</strong> ${data.motion?.motion_score || 0}</div>
+          </div>
+          <p style="margin-bottom:10px;color:var(--text-secondary)">${data.detection_status_message || ''}</p>`;
+        if (data.yolo?.detections?.length) {
+          html += `<h4 style="margin:12px 0 8px;font-size:0.85rem">Detected Objects</h4><ul style="padding-left:18px;color:var(--text-secondary)">`;
+          data.yolo.detections.forEach(d => { html += `<li>${d.class} (${(d.confidence * 100).toFixed(1)}%)</li>`; });
+          html += `</ul>`;
+        }
+        if (data.scene?.tags?.length) {
+          html += `<p style="margin-top:12px"><strong>Tags:</strong> ${data.scene.tags.join(', ')}</p>`;
+        }
+        resultEl.innerHTML = html;
+        resultCard.style.display = 'block';
+      } catch (err) {
+        errorEl.textContent = err.message || 'Something went wrong';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+      }
+    });
+
+    // ========== ScanGuard ==========
+    document.getElementById('scanguardForm')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const errorEl = document.getElementById('scanGError');
+      const resultCard = document.getElementById('scanGResultCard');
+      const resultEl = document.getElementById('scanGResult');
+      const riskChip = document.getElementById('scanGRiskChip');
+      errorEl.textContent = '';
+      resultCard.style.display = 'none';
+
+      const fileInput = form.querySelector('input[name="file"]');
+      const typeSelect = form.querySelector('select[name="type"]')?.value || 'auto';
+      const codeText = form.querySelector('textarea[name="code"]')?.value?.trim() || '';
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = 'Auditing...';
+
+      try {
+        let res;
+        if (fileInput?.files?.length > 0) {
+          const formData = new FormData();
+          formData.append('file', fileInput.files[0]);
+          res = await fetch('/api/scanguard/analyze', { method: 'POST', body: formData });
+        } else if (codeText) {
+          res = await fetch('/api/scanguard/analyze', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ code: codeText, type: typeSelect, filename: 'pasted_input' })
+          });
+        } else {
+          errorEl.textContent = 'Please upload a file or paste code/log text.';
+          return;
+        }
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Audit failed');
+
+        styleRiskChip(riskChip, data.risk_score, data.risk_level);
+        let html = `
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+            <div><strong>Risk Score:</strong> ${data.risk_score}</div>
+            <div><strong>Level:</strong> ${data.risk_level}</div>
+            <div><strong>Issues Found:</strong> ${data.total_issues_found || 0}</div>
+            <div><strong>Type:</strong> ${data.detected_input_type || '—'}</div>
+          </div>`;
+        if (data.ai_summary) {
+          html += `<p style="margin:10px 0;padding:10px;background:rgba(99,102,241,0.08);border-radius:8px;font-size:0.85rem"><strong>AI Summary:</strong> ${data.ai_summary}</p>`;
+        }
+        if (data.category_summary) {
+          html += `<h4 style="margin:12px 0 6px;font-size:0.85rem">Category Summary</h4><ul style="padding-left:18px;color:var(--text-secondary)">`;
+          for (const [cat, info] of Object.entries(data.category_summary)) {
+            if (info.count > 0) html += `<li><strong>${cat}</strong>: ${info.count} issue(s)${info.top_issue ? ' — ' + info.top_issue : ''}</li>`;
+          }
+          html += `</ul>`;
+        }
+        if (data.vulnerabilities?.length) {
+          html += `<h4 style="margin:12px 0 6px;font-size:0.85rem;color:#FCA5A5">Vulnerabilities</h4><ul style="padding-left:18px;color:var(--text-secondary)">`;
+          data.vulnerabilities.slice(0, 8).forEach(v => { html += `<li><strong>${v.type || v.severity}</strong>: ${v.description || ''}</li>`; });
+          html += `</ul>`;
+        }
+        if (data.findings) {
+          ['sqli', 'xss', 'secrets'].forEach(cat => {
+            const items = data.findings[cat] || [];
+            if (items.length) {
+              html += `<h4 style="margin:12px 0 6px;font-size:0.85rem;color:#FCA5A5">${cat.toUpperCase()}</h4><ul style="padding-left:18px;color:var(--text-secondary)">`;
+              items.slice(0, 5).forEach(f => { html += `<li>Line ${f.line}: ${f.rule}</li>`; });
+              html += `</ul>`;
+            }
+          });
+        }
+        if ((data.total_issues_found || 0) === 0) html += `<p style="color:var(--success);margin-top:10px">No major issues detected.</p>`;
+        resultEl.innerHTML = html;
+        resultCard.style.display = 'block';
+      } catch (err) {
+        errorEl.textContent = err.message || 'Something went wrong';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+      }
+    });
+
+    // ========== Init ==========
+    applyLanguage(currentLang);
+    showView('overview');
+
+    const token = localStorage.getItem('token');
+    const userStr = localStorage.getItem('user');
+    if (token && userStr) {
+      try { setLoggedIn(JSON.parse(userStr)); }
+      catch { setGuest(); }
+    } else {
       setGuest();
     }
-  } else {
-    setGuest();
-  }
-</script>
+  </script>
+</body>
+</html>
