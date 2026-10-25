@@ -848,268 +848,300 @@
   </div>
   <div id="toastArea" class="toast-area" aria-live="polite"></div>
 
-  <script>
-    // ========== i18n ==========
-    const translations = {
-      en: {
-        control_center: "Control Center",
-        nav_main: "Main",
-        nav_overview: "Overview",
-        nav_modules: "Modules",
-        nav_activity: "Activity",
-        nav_alerts: "Alerts",
-        nav_history: "History",
-        guest: "Guest",
-        not_signed: "Not signed in",
-        sign_in: "Sign in",
-        sign_out: "Sign out",
-        create_account: "Create account",
-        refresh: "↻ Refresh",
-        guest_title: "Browsing as guest.",
-        guest_desc: "Sign in to save scan history and receive alerts.",
-        st_scans: "Scans (24h)",
-        st_today: "Today",
-        st_critical: "Critical scans",
-        st_risk70: "Risk ≥ 70",
-        st_high: "High-risk scans",
-        st_risk40: "Risk ≥ 40",
-        st_unread: "Unread alerts",
-        st_action: "Action needed",
-        per_module: "Per-module performance",
-        click_refresh: "Click ↻ Refresh to load dashboard summary.",
-        sys_snapshot: "System snapshot",
-        check_now: "Check now",
-        run_sysguard: "Run SysGuard to view live CPU / RAM / Disk.",
-        recent_scans: "Recent scans",
-        recent_alerts: "Recent alerts",
-        dg_title: "DocGuard — Document Scanner",
-        dg_upload: "Upload PDF / TXT",
-        dg_paste: "…or paste raw text",
-        dg_placeholder: "Paste document text here…",
-        dg_scan: "🔍 Scan Document",
-        scan_result: "Scan Result",
-        mg_title: "MailGuard — Email Classifier",
-        mg_from: "From / Sender",
-        mg_from_ph: "sender@example.com",
-        mg_subject: "Subject",
-        mg_subject_ph: "Email subject",
-        mg_body: "Body",
-        mg_body_ph: "Paste email body…",
-        mg_classify: "🎯 Classify Email",
-        classification: "Classification",
-        sg_title: "SysGuard — Real-time System Monitor",
-        sg_once: "⟳ Check once",
-        sg_auto: "▶ Auto (5s)",
-        sg_empty: "Click \"Check once\" to load current status.",
-        sg_history: "History (last 60 samples)",
-        cg_title: "CamGuard — Camera / Frame Analyzer",
-        cg_upload: "Upload frame image",
-        cg_cam_id: "Camera ID",
-        cg_base64: "…or paste base64",
-        cg_base64_ph: "data:image/jpeg;base64,...",
-        cg_yolo: "Attempt YOLO detection",
-        cg_analyze: "📷 Analyze Frame",
-        cg_note: "YOLO requires ultralytics + weights. Motion detection works out of the box.",
-        cg_result: "Frame analysis",
-        sc_title: "ScanGuard — Code / Log Scanner",
-        sc_upload: "Upload file",
-        sc_type: "Hint type",
-        sc_auto: "Auto detect",
-        sc_code: "Code",
-        sc_log: "Log file",
-        sc_paste: "…or paste code / log text",
-        sc_placeholder: "Paste source code or log content…",
-        sc_audit: "🛡 Audit",
-        sc_report: "Audit report",
-        all_severities: "All severities",
-        critical: "Critical",
-        high: "High",
-        medium: "Medium",
-        info: "Info",
-        unread_only: "Unread only",
-        hist_title: "Scan history",
-        hist_all: "All modules",
-        min_risk: "Min risk",
-        signed_in: "Signed in"
-      },
-      ar: {
-        control_center: "مركز التحكم",
-        nav_main: "الرئيسية",
-        nav_overview: "نظرة عامة",
-        nav_modules: "الوحدات",
-        nav_activity: "النشاط",
-        nav_alerts: "التنبيهات",
-        nav_history: "السجل",
-        guest: "زائر",
-        not_signed: "غير مسجل الدخول",
-        sign_in: "تسجيل الدخول",
-        sign_out: "تسجيل الخروج",
-        create_account: "إنشاء حساب",
-        refresh: "↻ تحديث",
-        guest_title: "تصفح كزائر.",
-        guest_desc: "سجّل الدخول لحفظ سجل الفحوصات واستقبال التنبيهات.",
-        st_scans: "الفحوصات (24 ساعة)",
-        st_today: "اليوم",
-        st_critical: "فحوصات حرجة",
-        st_risk70: "مخاطر ≥ 70",
-        st_high: "فحوصات عالية المخاطر",
-        st_risk40: "مخاطر ≥ 40",
-        st_unread: "تنبيهات غير مقروءة",
-        st_action: "يحتاج إجراء",
-        per_module: "أداء الوحدات",
-        click_refresh: "اضغط ↻ تحديث لتحميل ملخص اللوحة.",
-        sys_snapshot: "لقطة النظام",
-        check_now: "فحص الآن",
-        run_sysguard: "شغّل SysGuard لعرض المعالج / الذاكرة / القرص.",
-        recent_scans: "أحدث الفحوصات",
-        recent_alerts: "أحدث التنبيهات",
-        dg_title: "DocGuard — ماسح المستندات",
-        dg_upload: "رفع PDF / TXT",
-        dg_paste: "…أو الصق النص مباشرة",
-        dg_placeholder: "الصق نص المستند هنا…",
-        dg_scan: "🔍 فحص المستند",
-        scan_result: "نتيجة الفحص",
-        mg_title: "MailGuard — مصنف البريد",
-        mg_from: "المرسل",
-        mg_from_ph: "sender@example.com",
-        mg_subject: "الموضوع",
-        mg_subject_ph: "موضوع البريد",
-        mg_body: "المحتوى",
-        mg_body_ph: "الصق محتوى البريد…",
-        mg_classify: "🎯 تصنيف البريد",
-        classification: "التصنيف",
-        sg_title: "SysGuard — مراقبة النظام المباشرة",
-        sg_once: "⟳ فحص مرة",
-        sg_auto: "▶ تلقائي (5 ث)",
-        sg_empty: "اضغط «فحص مرة» لتحميل الحالة الحالية.",
-        sg_history: "السجل (آخر 60 عينة)",
-        cg_title: "CamGuard — محلل الكاميرا / الإطارات",
-        cg_upload: "رفع صورة إطار",
-        cg_cam_id: "معرّف الكاميرا",
-        cg_base64: "…أو الصق base64",
-        cg_base64_ph: "data:image/jpeg;base64,...",
-        cg_yolo: "محاولة كشف YOLO",
-        cg_analyze: "📷 تحليل الإطار",
-        cg_note: "YOLO يحتاج ultralytics + الأوزان. كشف الحركة يعمل مباشرة.",
-        cg_result: "تحليل الإطار",
-        sc_title: "ScanGuard — ماسح الكود / السجلات",
-        sc_upload: "رفع ملف",
-        sc_type: "نوع التلميح",
-        sc_auto: "اكتشاف تلقائي",
-        sc_code: "كود",
-        sc_log: "ملف سجل",
-        sc_paste: "…أو الصق كود / سجل",
-        sc_placeholder: "الصق الكود أو محتوى السجل…",
-        sc_audit: "🛡 تدقيق",
-        sc_report: "تقرير التدقيق",
-        all_severities: "كل المستويات",
-        critical: "حرج",
-        high: "عالي",
-        medium: "متوسط",
-        info: "معلومة",
-        unread_only: "غير المقروء فقط",
-        hist_title: "سجل الفحوصات",
-        hist_all: "كل الوحدات",
-        min_risk: "أدنى مخاطر",
-        signed_in: "مسجل الدخول"
-      }
-    };
-
-    let currentLang = localStorage.getItem('lang') || 'en';
-
-    function applyLanguage(lang) {
-      currentLang = lang;
-      localStorage.setItem('lang', lang);
-      const t = translations[lang];
-      document.documentElement.lang = lang;
-      document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-
-      document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (t[key] !== undefined) el.textContent = t[key];
-      });
-
-      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-        const key = el.getAttribute('data-i18n-placeholder');
-        if (t[key] !== undefined) el.placeholder = t[key];
-      });
-
-      // تحديث عنوان الصفحة حسب التبويب النشط
-      const activeNav = document.querySelector('.nav-link.active');
-      if (activeNav) {
-        const span = activeNav.querySelector('[data-i18n]');
-        document.getElementById('pageTitle').textContent = span ? span.textContent : activeNav.textContent.trim();
-      }
-
-      // تمييز الزر النشط
-      document.getElementById('btn-en').classList.toggle('active-lang', lang === 'en');
-      document.getElementById('btn-ar').classList.toggle('active-lang', lang === 'ar');
+ <script>
+  // ========== i18n ==========
+  const translations = {
+    en: {
+      control_center: "Control Center",
+      nav_main: "Main",
+      nav_overview: "Overview",
+      nav_modules: "Modules",
+      nav_activity: "Activity",
+      nav_alerts: "Alerts",
+      nav_history: "History",
+      guest: "Guest",
+      not_signed: "Not signed in",
+      sign_in: "Sign in",
+      sign_out: "Sign out",
+      create_account: "Create account",
+      refresh: "↻ Refresh",
+      guest_title: "Browsing as guest.",
+      guest_desc: "Sign in to save scan history and receive alerts.",
+      st_scans: "Scans (24h)",
+      st_today: "Today",
+      st_critical: "Critical scans",
+      st_risk70: "Risk ≥ 70",
+      st_high: "High-risk scans",
+      st_risk40: "Risk ≥ 40",
+      st_unread: "Unread alerts",
+      st_action: "Action needed",
+      per_module: "Per-module performance",
+      click_refresh: "Click ↻ Refresh to load dashboard summary.",
+      sys_snapshot: "System snapshot",
+      check_now: "Check now",
+      run_sysguard: "Run SysGuard to view live CPU / RAM / Disk.",
+      recent_scans: "Recent scans",
+      recent_alerts: "Recent alerts",
+      dg_title: "DocGuard — Document Scanner",
+      dg_upload: "Upload PDF / TXT",
+      dg_paste: "…or paste raw text",
+      dg_placeholder: "Paste document text here…",
+      dg_scan: "🔍 Scan Document",
+      scan_result: "Scan Result",
+      mg_title: "MailGuard — Email Classifier",
+      mg_from: "From / Sender",
+      mg_from_ph: "sender@example.com",
+      mg_subject: "Subject",
+      mg_subject_ph: "Email subject",
+      mg_body: "Body",
+      mg_body_ph: "Paste email body…",
+      mg_classify: "🎯 Classify Email",
+      classification: "Classification",
+      sg_title: "SysGuard — Real-time System Monitor",
+      sg_once: "⟳ Check once",
+      sg_auto: "▶ Auto (5s)",
+      sg_empty: "Click \"Check once\" to load current status.",
+      sg_history: "History (last 60 samples)",
+      cg_title: "CamGuard — Camera / Frame Analyzer",
+      cg_upload: "Upload frame image",
+      cg_cam_id: "Camera ID",
+      cg_base64: "…or paste base64",
+      cg_base64_ph: "data:image/jpeg;base64,...",
+      cg_yolo: "Attempt YOLO detection",
+      cg_analyze: "📷 Analyze Frame",
+      cg_note: "YOLO requires ultralytics + weights. Motion detection works out of the box.",
+      cg_result: "Frame analysis",
+      sc_title: "ScanGuard — Code / Log Scanner",
+      sc_upload: "Upload file",
+      sc_type: "Hint type",
+      sc_auto: "Auto detect",
+      sc_code: "Code",
+      sc_log: "Log file",
+      sc_paste: "…or paste code / log text",
+      sc_placeholder: "Paste source code or log content…",
+      sc_audit: "🛡 Audit",
+      sc_report: "Audit report",
+      all_severities: "All severities",
+      critical: "Critical",
+      high: "High",
+      medium: "Medium",
+      info: "Info",
+      unread_only: "Unread only",
+      hist_title: "Scan history",
+      hist_all: "All modules",
+      min_risk: "Min risk",
+      signed_in: "Signed in"
+    },
+    ar: {
+      control_center: "مركز التحكم",
+      nav_main: "الرئيسية",
+      nav_overview: "نظرة عامة",
+      nav_modules: "الوحدات",
+      nav_activity: "النشاط",
+      nav_alerts: "التنبيهات",
+      nav_history: "السجل",
+      guest: "زائر",
+      not_signed: "غير مسجل الدخول",
+      sign_in: "تسجيل الدخول",
+      sign_out: "تسجيل الخروج",
+      create_account: "إنشاء حساب",
+      refresh: "↻ تحديث",
+      guest_title: "تصفح كزائر.",
+      guest_desc: "سجّل الدخول لحفظ سجل الفحوصات واستقبال التنبيهات.",
+      st_scans: "الفحوصات (24 ساعة)",
+      st_today: "اليوم",
+      st_critical: "فحوصات حرجة",
+      st_risk70: "مخاطر ≥ 70",
+      st_high: "فحوصات عالية المخاطر",
+      st_risk40: "مخاطر ≥ 40",
+      st_unread: "تنبيهات غير مقروءة",
+      st_action: "يحتاج إجراء",
+      per_module: "أداء الوحدات",
+      click_refresh: "اضغط ↻ تحديث لتحميل ملخص اللوحة.",
+      sys_snapshot: "لقطة النظام",
+      check_now: "فحص الآن",
+      run_sysguard: "شغّل SysGuard لعرض المعالج / الذاكرة / القرص.",
+      recent_scans: "أحدث الفحوصات",
+      recent_alerts: "أحدث التنبيهات",
+      dg_title: "DocGuard — ماسح المستندات",
+      dg_upload: "رفع PDF / TXT",
+      dg_paste: "…أو الصق النص مباشرة",
+      dg_placeholder: "الصق نص المستند هنا…",
+      dg_scan: "🔍 فحص المستند",
+      scan_result: "نتيجة الفحص",
+      mg_title: "MailGuard — مصنف البريد",
+      mg_from: "المرسل",
+      mg_from_ph: "sender@example.com",
+      mg_subject: "الموضوع",
+      mg_subject_ph: "موضوع البريد",
+      mg_body: "المحتوى",
+      mg_body_ph: "الصق محتوى البريد…",
+      mg_classify: "🎯 تصنيف البريد",
+      classification: "التصنيف",
+      sg_title: "SysGuard — مراقبة النظام المباشرة",
+      sg_once: "⟳ فحص مرة",
+      sg_auto: "▶ تلقائي (5 ث)",
+      sg_empty: "اضغط «فحص مرة» لتحميل الحالة الحالية.",
+      sg_history: "السجل (آخر 60 عينة)",
+      cg_title: "CamGuard — محلل الكاميرا / الإطارات",
+      cg_upload: "رفع صورة إطار",
+      cg_cam_id: "معرّف الكاميرا",
+      cg_base64: "…أو الصق base64",
+      cg_base64_ph: "data:image/jpeg;base64,...",
+      cg_yolo: "محاولة كشف YOLO",
+      cg_analyze: "📷 تحليل الإطار",
+      cg_note: "YOLO يحتاج ultralytics + الأوزان. كشف الحركة يعمل مباشرة.",
+      cg_result: "تحليل الإطار",
+      sc_title: "ScanGuard — ماسح الكود / السجلات",
+      sc_upload: "رفع ملف",
+      sc_type: "نوع التلميح",
+      sc_auto: "اكتشاف تلقائي",
+      sc_code: "كود",
+      sc_log: "ملف سجل",
+      sc_paste: "…أو الصق كود / سجل",
+      sc_placeholder: "الصق الكود أو محتوى السجل…",
+      sc_audit: "🛡 تدقيق",
+      sc_report: "تقرير التدقيق",
+      all_severities: "كل المستويات",
+      critical: "حرج",
+      high: "عالي",
+      medium: "متوسط",
+      info: "معلومة",
+      unread_only: "غير المقروء فقط",
+      hist_title: "سجل الفحوصات",
+      hist_all: "كل الوحدات",
+      min_risk: "أدنى مخاطر",
+      signed_in: "مسجل الدخول"
     }
+  };
 
-    document.getElementById('btn-en').addEventListener('click', () => applyLanguage('en'));
-    document.getElementById('btn-ar').addEventListener('click', () => applyLanguage('ar'));
+  let currentLang = localStorage.getItem('lang') || 'en';
 
-    // ========== Sidebar toggle ==========
-    document.getElementById('toggleSidebar')?.addEventListener('click', () => {
-      document.getElementById('sidebar').classList.toggle('open');
+  function applyLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem('lang', lang);
+    const t = translations[lang];
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (t[key] !== undefined) el.textContent = t[key];
     });
 
-    // ========== Navigation ==========
-    document.querySelectorAll('.nav-link').forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const target = link.dataset.nav;
-        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-        link.classList.add('active');
-        document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
-        document.getElementById('view-' + target)?.classList.remove('hidden');
-        const span = link.querySelector('[data-i18n]');
-        document.getElementById('pageTitle').textContent = span ? span.textContent : link.textContent.trim();
-        document.getElementById('sidebar').classList.remove('open');
-      });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const key = el.getAttribute('data-i18n-placeholder');
+      if (t[key] !== undefined) el.placeholder = t[key];
     });
 
-    // ========== Auth helpers ==========
-    function setLoggedIn(user) {
-      document.querySelectorAll('.guest-only').forEach(el => el.classList.add('hidden'));
-      document.querySelectorAll('.auth-only').forEach(el => el.classList.remove('hidden'));
-      document.getElementById('authDot').classList.add('on');
-      document.getElementById('authDot').classList.remove('off');
-      document.getElementById('authLabel').textContent = user?.username || 'User';
-      document.getElementById('authRole').textContent = translations[currentLang].signed_in;
-      document.getElementById('userAvatar').textContent = (user?.username || 'U')[0].toUpperCase();
-    }
-    function setGuest() {
-      document.querySelectorAll('.guest-only').forEach(el => el.classList.remove('hidden'));
-      document.querySelectorAll('.auth-only').forEach(el => el.classList.add('hidden'));
-      document.getElementById('authDot').classList.remove('on');
-      document.getElementById('authDot').classList.add('off');
-      document.getElementById('authLabel').textContent = translations[currentLang].guest;
-      document.getElementById('authRole').textContent = translations[currentLang].not_signed;
-      document.getElementById('userAvatar').textContent = 'G';
+    // تحديث عنوان الصفحة حسب التبويب النشط
+    const activeNav = document.querySelector('.nav-link.active');
+    if (activeNav) {
+      const span = activeNav.querySelector('[data-i18n]');
+      document.getElementById('pageTitle').textContent = span ? span.textContent : activeNav.textContent.trim();
     }
 
-    document.getElementById('logoutBtn')?.addEventListener('click', () => {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      setGuest();
-      window.location.href = 'login.html';
-    });
+    document.getElementById('btn-en').classList.toggle('active-lang', lang === 'en');
+    document.getElementById('btn-ar').classList.toggle('active-lang', lang === 'ar');
+  }
 
-    // ========== Init ==========
-    applyLanguage(currentLang);
+  document.getElementById('btn-en').addEventListener('click', () => applyLanguage('en'));
+  document.getElementById('btn-ar').addEventListener('click', () => applyLanguage('ar'));
 
-    const token = localStorage.getItem('token');
-    const userStr = localStorage.getItem('user');
-    if (token && userStr) {
-      try {
-        setLoggedIn(JSON.parse(userStr));
-      } catch {
-        setGuest();
-      }
+  // ========== Sidebar toggle ==========
+  document.getElementById('toggleSidebar')?.addEventListener('click', () => {
+    document.getElementById('sidebar').classList.toggle('open');
+  });
+
+  // ========== Navigation (Fixed) ==========
+  function showView(target) {
+    // إخفاء كل الـ views
+    document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+
+    // إظهار الـ view المطلوب
+    const viewEl = document.getElementById('view-' + target);
+    if (viewEl) {
+      viewEl.classList.remove('hidden');
     } else {
+      // fallback
+      document.getElementById('view-overview')?.classList.remove('hidden');
+      target = 'overview';
+    }
+
+    // تحديث حالة الروابط
+    document.querySelectorAll('.nav-link').forEach(l => {
+      l.classList.toggle('active', l.dataset.nav === target);
+    });
+
+    // تحديث عنوان الصفحة
+    const activeLink = document.querySelector(`.nav-link[data-nav="${target}"]`);
+    if (activeLink) {
+      const span = activeLink.querySelector('[data-i18n]');
+      document.getElementById('pageTitle').textContent = span 
+        ? span.textContent 
+        : activeLink.textContent.trim();
+    }
+
+    // إغلاق السايدبار على الموبايل
+    document.getElementById('sidebar')?.classList.remove('open');
+  }
+
+  // ربط النقر على روابط التنقل
+  document.querySelectorAll('.nav-link').forEach(link => {
+    // نزيل أي href يسبب قفز الصفحة
+    link.setAttribute('href', '#');
+    
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const target = link.dataset.nav;
+      if (target) showView(target);
+    });
+  });
+
+  // ========== Auth helpers ==========
+  function setLoggedIn(user) {
+    document.querySelectorAll('.guest-only').forEach(el => el.classList.add('hidden'));
+    document.querySelectorAll('.auth-only').forEach(el => el.classList.remove('hidden'));
+    document.getElementById('authDot').classList.add('on');
+    document.getElementById('authDot').classList.remove('off');
+    document.getElementById('authLabel').textContent = user?.username || 'User';
+    document.getElementById('authRole').textContent = translations[currentLang].signed_in;
+    document.getElementById('userAvatar').textContent = (user?.username || 'U')[0].toUpperCase();
+  }
+
+  function setGuest() {
+    document.querySelectorAll('.guest-only').forEach(el => el.classList.remove('hidden'));
+    document.querySelectorAll('.auth-only').forEach(el => el.classList.add('hidden'));
+    document.getElementById('authDot').classList.remove('on');
+    document.getElementById('authDot').classList.add('off');
+    document.getElementById('authLabel').textContent = translations[currentLang].guest;
+    document.getElementById('authRole').textContent = translations[currentLang].not_signed;
+    document.getElementById('userAvatar').textContent = 'G';
+  }
+
+  document.getElementById('logoutBtn')?.addEventListener('click', () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setGuest();
+    window.location.href = 'login.html';
+  });
+
+  // ========== Init ==========
+  applyLanguage(currentLang);
+
+  // عرض نظرة عامة بشكل افتراضي
+  showView('overview');
+
+  const token = localStorage.getItem('token');
+  const userStr = localStorage.getItem('user');
+  if (token && userStr) {
+    try {
+      setLoggedIn(JSON.parse(userStr));
+    } catch {
       setGuest();
     }
-  </script>
-</body>
-</html>
+  } else {
+    setGuest();
+  }
+</script>
