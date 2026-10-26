@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
@@ -652,7 +651,8 @@
           <div class="card">
             <div class="card-head"><h3 data-i18n="per_module">Per-module performance</h3></div>
             <div class="card-body" id="moduleBars">
-              <p class="empty" data-i18n="click_refresh">Click ↻ Refresh to load dashboard summary.</p>
+              <p class="empty" data-i18n="click_refresh">لا توجد بيانات بعد. ابدأ فحصاً من الوحدات على اليسار، أو اضغط ↻ تحديث.</p>
+              <p class="empty" style="padding-top:0;font-size:0.8rem;opacity:0.7" data-i18n="guest_hint_overview">التجربة متاحة بدون تسجيل — سجّل الدخول لحفظ النتائج.</p>
             </div>
           </div>
           <div class="card">
@@ -661,7 +661,7 @@
               <button type="button" class="btn btn-ghost btn-sm" data-action="sysguard-quick" data-i18n="check_now">Check now</button>
             </div>
             <div class="card-body" id="sysSnapshot">
-              <p class="empty" data-i18n="run_sysguard">Run SysGuard to view live CPU / RAM / Disk.</p>
+              <p class="empty" data-i18n="run_sysguard">اضغط «فحص الآن» لعرض المعالج / الذاكرة / القرص مباشرة.</p>
             </div>
           </div>
         </div>
@@ -880,7 +880,7 @@
         create_account: "Create account",
         refresh: "↻ Refresh",
         guest_title: "Browsing as guest.",
-        guest_desc: "Sign in to save scan history and receive alerts.",
+        guest_desc: "You can try all modules without an account. Sign in to save history and alerts.",
         st_scans: "Scans (24h)",
         st_today: "Today",
         st_critical: "Critical scans",
@@ -890,10 +890,10 @@
         st_unread: "Unread alerts",
         st_action: "Action needed",
         per_module: "Per-module performance",
-        click_refresh: "Click ↻ Refresh to load dashboard summary.",
+        click_refresh: "No data yet. Start a scan from the modules on the left, or click ↻ Refresh.",
         sys_snapshot: "System snapshot",
         check_now: "Check now",
-        run_sysguard: "Run SysGuard to view live CPU / RAM / Disk.",
+        run_sysguard: "Click Check now to view live CPU / RAM / Disk.",
         recent_scans: "Recent scans",
         recent_alerts: "Recent alerts",
         dg_title: "DocGuard — Document Scanner",
@@ -961,7 +961,7 @@
         create_account: "إنشاء حساب",
         refresh: "↻ تحديث",
         guest_title: "تصفح كزائر.",
-        guest_desc: "سجّل الدخول لحفظ سجل الفحوصات واستقبال التنبيهات.",
+        guest_desc: "تقدر تجرّب كل الوحدات بدون حساب. سجّل الدخول لحفظ السجل واستقبال التنبيهات.",
         st_scans: "الفحوصات (24 ساعة)",
         st_today: "اليوم",
         st_critical: "فحوصات حرجة",
@@ -971,10 +971,10 @@
         st_unread: "تنبيهات غير مقروءة",
         st_action: "يحتاج إجراء",
         per_module: "أداء الوحدات",
-        click_refresh: "اضغط ↻ تحديث لتحميل ملخص اللوحة.",
+        click_refresh: "لا توجد بيانات بعد. ابدأ فحصاً من الوحدات على اليسار، أو اضغط ↻ تحديث.",
         sys_snapshot: "لقطة النظام",
         check_now: "فحص الآن",
-        run_sysguard: "شغّل SysGuard لعرض المعالج / الذاكرة / القرص.",
+        run_sysguard: "اضغط «فحص الآن» لعرض المعالج / الذاكرة / القرص مباشرة.",
         recent_scans: "أحدث الفحوصات",
         recent_alerts: "أحدث التنبيهات",
         dg_title: "DocGuard — ماسح المستندات",
@@ -1029,7 +1029,7 @@
       }
     };
 
-    let currentLang = localStorage.getItem('lang') || 'en';
+    let currentLang = localStorage.getItem('lang') || 'ar';
 
     function applyLanguage(lang) {
       currentLang = lang;
