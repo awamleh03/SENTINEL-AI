@@ -510,7 +510,15 @@
       right: auto;
       left: 24px;
     }
-    .mobile-only { display: none; }
+    .mobile-only { display: none !important; }
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 45;
+    }
+    .sidebar-overlay.show { display: block; }
     .inline-check {
       display: flex;
       align-items: center;
@@ -524,22 +532,40 @@
       .two-col { grid-template-columns: 1fr; }
     }
     @media (max-width: 768px) {
-      .sidebar { transform: translateX(-100%); }
-      html[dir="rtl"] .sidebar { transform: translateX(100%); }
-      .sidebar.open { transform: translateX(0); box-shadow: 0 4px 24px rgba(0,0,0,0.4); }
-      .main-area { margin-left: 0 !important; margin-right: 0 !important; }
-      .mobile-only { display: inline-flex; }
+      .sidebar {
+        transform: translateX(-110%);
+        width: min(280px, 85vw);
+        z-index: 60;
+      }
+      html[dir="rtl"] .sidebar {
+        transform: translateX(110%);
+        inset: 0 0 0 auto;
+      }
+      .sidebar.open {
+        transform: translateX(0) !important;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+      }
+      .main-area { margin-left: 0 !important; margin-right: 0 !important; width: 100%; }
+      .mobile-only { display: inline-flex !important; align-items: center; justify-content: center; }
+      #toggleSidebar {
+        font-size: 1.35rem;
+        min-width: 40px;
+        min-height: 40px;
+        padding: 6px 10px;
+      }
       .dashboard-content { padding: 18px 16px; }
-      .topbar { padding: 0 16px; }
+      .topbar { padding: 0 12px; gap: 8px; }
       .stat-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
       .form-grid { grid-template-columns: 1fr; }
       .form-grid .col-span-2,
       .form-actions { grid-column: span 1; }
       .guest-banner { flex-direction: column; align-items: flex-start; }
+      .page-title { font-size: 1rem; }
     }
   </style>
 </head>
 <body>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-brand">
       <div class="brand-icon">🛡</div>
@@ -1061,10 +1087,210 @@
     document.getElementById('btn-en').addEventListener('click', () => applyLanguage('en'));
     document.getElementById('btn-ar').addEventListener('click', () => applyLanguage('ar'));
 
-    // ========== Sidebar toggle ==========
-    document.getElementById('toggleSidebar')?.addEventListener('click', () => {
-      document.getElementById('sidebar').classList.toggle('open');
+    // ========== Toast ==========
+    function showToast(msg, type) {
+      const area = document.getElementById('toastArea');
+      if (!area) return;
+      const el = document.createElement('div');
+      el.style.cssText = 'padding:12px 16px;border-radius:10px;font-size:0.85rem;background:' +
+        (type==='danger' ? 'rgba(239,68,68,0.95)' : type==='success' ? 'rgba(16,185,129,0.95)' : 'rgba(99,102,241,0.95)') +
+        ';color:#fff;box-shadow:0 8px 24px rgba(0,0,0,0.35);max-width:320px';
+      el.textContent = msg;
+      area.appendChild(el);
+      setTimeout(() => el.remove(), 4200);
+    }
+
+    function authHeaders() {
+      const h = {};
+      const t = localStorage.getItem('token');
+      if (t) h['Authorization'] = 'Bearer ' + t;
+      return h;
+    }
+
+    function esc(s) {
+      return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+
+    function fmtTime(iso) {
+      if (!iso) return '—';
+      try { return new Date(iso).toLocaleString(currentLang === 'ar' ? 'ar-SA' : 'en-GB', { hour12: false }); }
+      catch { return iso; }
+    }
+
+    function updateAlertsBadge(n) {
+      const badge = document.getElementById('alertsBadge');
+      if (!badge) return;
+      if (n > 0) {
+        badge.textContent = n > 99 ? '99+' : String(n);
+        badge.style.display = 'inline-flex';
+      } else {
+        badge.textContent = '';
+        badge.style.display = 'none';
+      }
+    }
+
+    // ========== Sidebar toggle (mobile) ==========
+    function closeSidebar() {
+      document.getElementById('sidebar')?.classList.remove('open');
+      document.getElementById('sidebarOverlay')?.classList.remove('show');
+    }
+    function toggleSidebar() {
+      const sb = document.getElementById('sidebar');
+      const ov = document.getElementById('sidebarOverlay');
+      if (!sb) return;
+      const open = sb.classList.toggle('open');
+      ov?.classList.toggle('show', open);
+    }
+    document.getElementById('toggleSidebar')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleSidebar();
     });
+    document.getElementById('sidebarOverlay')?.addEventListener('click', closeSidebar);
+
+    // ========== Overview / Alerts / History loaders ==========
+    async function loadOverview() {
+      try {
+        const res = await fetch('/api/dashboard/summary', { headers: authHeaders() });
+        if (!res.ok) throw new Error('summary ' + res.status);
+        const data = await res.json();
+        const scans = data.scans || {};
+        const alerts = data.alerts || {};
+        const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = (v === 0 || v) ? v : '—'; };
+        set('st-scans-24', scans.last_24h ?? scans.total ?? 0);
+        set('st-critical', scans.critical ?? 0);
+        set('st-high', scans.high_risk ?? 0);
+        set('st-unread', alerts.unread ?? 0);
+        updateAlertsBadge(alerts.unread ?? 0);
+
+        const bars = document.getElementById('moduleBars');
+        if (bars) {
+          const mods = data.by_module || [];
+          if (!mods.length) {
+            bars.innerHTML = '<p class="empty">' + (currentLang==='ar' ? 'لا توجد فحوصات بعد. ابدأ من الوحدات.' : 'No scans yet. Start from modules.') + '</p>';
+          } else {
+            bars.innerHTML = mods.map(m => {
+              const risk = Math.round(m.avg_risk || 0);
+              const color = risk >= 70 ? '#EF4444' : risk >= 40 ? '#F59E0B' : '#10B981';
+              return `<div style="margin-bottom:12px">
+                <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:4px">
+                  <strong>${esc(m.module)}</strong>
+                  <span style="color:var(--text-secondary)">${m.scan_count||0} scans · avg ${risk}</span>
+                </div>
+                <div style="height:6px;background:rgba(255,255,255,0.06);border-radius:99px;overflow:hidden">
+                  <div style="height:100%;width:${Math.min(100,risk)}%;background:${color};border-radius:99px"></div>
+                </div>
+              </div>`;
+            }).join('');
+          }
+        }
+
+        const rs = document.getElementById('recentScansTbl');
+        if (rs) {
+          const list = data.recent_scans || [];
+          if (!list.length) rs.innerHTML = '<tr><td class="empty">' + (currentLang==='ar'?'لا فحوصات':'No scans') + '</td></tr>';
+          else {
+            rs.innerHTML = '<thead><tr><th>Module</th><th>Target</th><th>Risk</th><th>Time</th></tr></thead><tbody>' +
+              list.slice(0,8).map(s => `<tr>
+                <td>${esc(s.module)}</td>
+                <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis">${esc(s.target||'—')}</td>
+                <td><span style="color:${(s.risk_score||0)>=70?'#FCA5A5':(s.risk_score||0)>=40?'#FCD34D':'#6EE7B7'}">${esc(s.risk_score)}</span></td>
+                <td style="white-space:nowrap;font-size:0.75rem">${fmtTime(s.created_at)}</td>
+              </tr>`).join('') + '</tbody>';
+          }
+        }
+
+        const ra = document.getElementById('recentAlertsTbl');
+        if (ra) {
+          const list = data.recent_alerts || [];
+          if (!list.length) ra.innerHTML = '<tr><td class="empty">' + (currentLang==='ar'?'لا تنبيهات':'No alerts') + '</td></tr>';
+          else {
+            ra.innerHTML = '<thead><tr><th>Source</th><th>Title</th><th>Sev</th><th>Time</th></tr></thead><tbody>' +
+              list.slice(0,8).map(a => `<tr>
+                <td>${esc(a.source)}</td>
+                <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis">${esc(a.title||a.message)}</td>
+                <td>${esc(a.severity)}</td>
+                <td style="white-space:nowrap;font-size:0.75rem">${fmtTime(a.created_at)}</td>
+              </tr>`).join('') + '</tbody>';
+          }
+        }
+      } catch (err) {
+        console.warn('loadOverview', err);
+      }
+    }
+
+    async function loadAlerts() {
+      const table = document.getElementById('alertsTable');
+      if (!table) return;
+      try {
+        const res = await fetch('/api/alerts', { headers: authHeaders() });
+        if (!res.ok) throw new Error('alerts ' + res.status);
+        const data = await res.json();
+        let list = data.alerts || data || [];
+        if (!Array.isArray(list)) list = [];
+        const sev = document.getElementById('alertSeverityFilter')?.value || '';
+        const unreadOnly = document.getElementById('alertUnreadOnly')?.checked;
+        if (sev) list = list.filter(a => (a.severity||'').toLowerCase() === sev.toLowerCase());
+        if (unreadOnly) list = list.filter(a => !a.is_read);
+        updateAlertsBadge(list.filter(a => !a.is_read).length || (data.alerts||[]).filter(a=>!a.is_read).length);
+        if (!list.length) {
+          table.innerHTML = '<tr><td class="empty">' + (currentLang==='ar'?'لا تنبيهات مطابقة':'No matching alerts') + '</td></tr>';
+          return;
+        }
+        table.innerHTML = '<thead><tr><th>#</th><th>Source</th><th>Title</th><th>Severity</th><th>Message</th><th>Time</th><th>Read</th></tr></thead><tbody>' +
+          list.map(a => `<tr style="${a.is_read?'opacity:0.65':''}">
+            <td>${a.id??''}</td>
+            <td>${esc(a.source)}</td>
+            <td>${esc(a.title||'')}</td>
+            <td><span style="color:${['critical','high'].includes((a.severity||'').toLowerCase())?'#FCA5A5':'#FCD34D'}">${esc(a.severity)}</span></td>
+            <td style="max-width:220px;font-size:0.8rem">${esc(a.message||'')}</td>
+            <td style="white-space:nowrap;font-size:0.75rem">${fmtTime(a.created_at)}</td>
+            <td>${a.is_read ? '✓' : '•'}</td>
+          </tr>`).join('') + '</tbody>';
+      } catch (err) {
+        table.innerHTML = '<tr><td class="empty">Failed to load alerts</td></tr>';
+        console.warn(err);
+      }
+    }
+
+    async function loadHistory() {
+      const table = document.getElementById('historyTable');
+      if (!table) return;
+      try {
+        const mod = document.getElementById('scanModuleFilter')?.value || '';
+        const minRisk = document.getElementById('scanMinRisk')?.value || '';
+        let url = '/api/scans?per_page=50';
+        if (mod) url += '&module=' + encodeURIComponent(mod);
+        const res = await fetch(url, { headers: authHeaders() });
+        if (!res.ok) throw new Error('scans ' + res.status);
+        const data = await res.json();
+        let list = data.scans || [];
+        if (minRisk !== '') list = list.filter(s => (s.risk_score||0) >= Number(minRisk));
+        if (!list.length) {
+          table.innerHTML = '<tr><td class="empty">' + (currentLang==='ar'?'لا سجل فحوصات':'No scan history') + '</td></tr>';
+          return;
+        }
+        table.innerHTML = '<thead><tr><th>ID</th><th>Module</th><th>Target</th><th>Risk</th><th>Status</th><th>Time</th></tr></thead><tbody>' +
+          list.map(s => `<tr>
+            <td>${s.id??''}</td>
+            <td>${esc(s.module)}</td>
+            <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis">${esc(s.target||'—')}</td>
+            <td style="color:${(s.risk_score||0)>=70?'#FCA5A5':(s.risk_score||0)>=40?'#FCD34D':'#6EE7B7'}">${esc(s.risk_score)}</td>
+            <td>${esc(s.status||'—')}</td>
+            <td style="white-space:nowrap;font-size:0.75rem">${fmtTime(s.created_at)}</td>
+          </tr>`).join('') + '</tbody>';
+      } catch (err) {
+        table.innerHTML = '<tr><td class="empty">Failed to load history</td></tr>';
+        console.warn(err);
+      }
+    }
+
+    function afterScan(score, moduleName) {
+      if (score >= 70) showToast((currentLang==='ar'?'تنبيه: مخاطر مرتفعة في ':'High risk in ') + (moduleName||''), 'danger');
+      else if (score >= 40) showToast((currentLang==='ar'?'تم الفحص — مخاطر متوسطة':'Scan done — medium risk'), 'default');
+      else showToast((currentLang==='ar'?'تم الفحص بنجاح':'Scan completed'), 'success');
+      loadOverview();
+    }
 
     // ========== Navigation ==========
     function showView(target) {
@@ -1084,7 +1310,10 @@
         const span = activeLink.querySelector('[data-i18n]');
         document.getElementById('pageTitle').textContent = span ? span.textContent : activeLink.textContent.trim();
       }
-      document.getElementById('sidebar')?.classList.remove('open');
+      closeSidebar();
+      if (target === 'overview') loadOverview();
+      if (target === 'alerts') loadAlerts();
+      if (target === 'history') loadHistory();
     }
 
     document.querySelectorAll('.nav-link').forEach(link => {
@@ -1095,6 +1324,19 @@
         if (target) showView(target);
       });
     });
+
+    document.getElementById('refreshBtn')?.addEventListener('click', () => {
+      loadOverview();
+      const active = document.querySelector('.nav-link.active')?.dataset?.nav;
+      if (active === 'alerts') loadAlerts();
+      if (active === 'history') loadHistory();
+      showToast(currentLang==='ar' ? 'تم التحديث' : 'Refreshed', 'success');
+    });
+
+    document.getElementById('alertSeverityFilter')?.addEventListener('change', loadAlerts);
+    document.getElementById('alertUnreadOnly')?.addEventListener('change', loadAlerts);
+    document.getElementById('scanModuleFilter')?.addEventListener('change', loadHistory);
+    document.getElementById('scanMinRisk')?.addEventListener('change', loadHistory);
 
     // ========== Auth helpers ==========
     function setLoggedIn(user) {
@@ -1198,6 +1440,7 @@
         if (data.issues_found === 0) html += `<p style="color:var(--success);margin-top:10px">No major issues detected.</p>`;
         resultEl.innerHTML = html;
         resultCard.style.display = 'block';
+        afterScan(data.risk_score || 0, 'DocGuard');
       } catch (err) {
         errorEl.textContent = err.message || 'Something went wrong';
       } finally {
@@ -1269,6 +1512,7 @@
         }
         resultEl.innerHTML = html;
         resultCard.style.display = 'block';
+        afterScan(data.risk_score || 0, 'MailGuard');
       } catch (err) {
         errorEl.textContent = err.message || 'Something went wrong';
       } finally {
@@ -1428,6 +1672,7 @@
         }
         resultEl.innerHTML = html;
         resultCard.style.display = 'block';
+        afterScan(data.risk_score || 0, 'CamGuard');
       } catch (err) {
         errorEl.textContent = err.message || 'Something went wrong';
       } finally {
@@ -1510,6 +1755,7 @@
         if ((data.total_issues_found || 0) === 0) html += `<p style="color:var(--success);margin-top:10px">No major issues detected.</p>`;
         resultEl.innerHTML = html;
         resultCard.style.display = 'block';
+        afterScan(data.risk_score || 0, 'ScanGuard');
       } catch (err) {
         errorEl.textContent = err.message || 'Something went wrong';
       } finally {
@@ -1521,6 +1767,7 @@
     // ========== Init ==========
     applyLanguage(currentLang);
     showView('overview');
+    loadOverview();
 
     const token = localStorage.getItem('token');
     const userStr = localStorage.getItem('user');
