@@ -531,29 +531,35 @@
       .stat-grid { grid-template-columns: repeat(2, 1fr); }
       .two-col { grid-template-columns: 1fr; }
     }
-    @media (max-width: 768px) {
+    @media (max-width: 900px) {
       .sidebar {
-        transform: translateX(-110%);
-        width: min(280px, 85vw);
+        transform: translateX(-110%) !important;
+        width: min(280px, 86vw);
         z-index: 60;
+        pointer-events: none;
       }
       html[dir="rtl"] .sidebar {
-        transform: translateX(110%);
+        transform: translateX(110%) !important;
         inset: 0 0 0 auto;
+        border-left: 1px solid var(--border);
+        border-right: none;
       }
       .sidebar.open {
         transform: translateX(0) !important;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+        box-shadow: 0 8px 32px rgba(0,0,0,0.55);
+        pointer-events: auto;
       }
-      .main-area { margin-left: 0 !important; margin-right: 0 !important; width: 100%; }
+      .main-area { margin-left: 0 !important; margin-right: 0 !important; width: 100% !important; }
       .mobile-only { display: inline-flex !important; align-items: center; justify-content: center; }
       #toggleSidebar {
-        font-size: 1.35rem;
-        min-width: 40px;
-        min-height: 40px;
+        font-size: 1.4rem;
+        min-width: 42px;
+        min-height: 42px;
         padding: 6px 10px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
       }
-      .dashboard-content { padding: 18px 16px; }
+      .dashboard-content { padding: 16px 14px; }
       .topbar { padding: 0 12px; gap: 8px; }
       .stat-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
       .form-grid { grid-template-columns: 1fr; }
@@ -561,6 +567,7 @@
       .form-actions { grid-column: span 1; }
       .guest-banner { flex-direction: column; align-items: flex-start; }
       .page-title { font-size: 1rem; }
+      .two-col { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -1190,7 +1197,7 @@
           const list = data.recent_scans || [];
           if (!list.length) rs.innerHTML = '<tr><td class="empty">' + (currentLang==='ar'?'لا فحوصات':'No scans') + '</td></tr>';
           else {
-            rs.innerHTML = '<thead><tr><th>Module</th><th>Target</th><th>Risk</th><th>Time</th></tr></thead><tbody>' +
+            rs.innerHTML = '<thead><tr><th>'+tLabel('Module','الوحدة')+'</th><th>'+tLabel('Target','الهدف')+'</th><th>'+tLabel('Risk','المخاطر')+'</th><th>'+tLabel('Time','الوقت')+'</th></tr></thead><tbody>' +
               list.slice(0,8).map(s => `<tr>
                 <td>${esc(s.module)}</td>
                 <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis">${esc(s.target||'—')}</td>
@@ -1205,7 +1212,7 @@
           const list = data.recent_alerts || [];
           if (!list.length) ra.innerHTML = '<tr><td class="empty">' + (currentLang==='ar'?'لا تنبيهات':'No alerts') + '</td></tr>';
           else {
-            ra.innerHTML = '<thead><tr><th>Source</th><th>Title</th><th>Sev</th><th>Time</th></tr></thead><tbody>' +
+            ra.innerHTML = '<thead><tr><th>'+tLabel('Source','المصدر')+'</th><th>'+tLabel('Title','العنوان')+'</th><th>'+tLabel('Sev','الخطورة')+'</th><th>'+tLabel('Time','الوقت')+'</th></tr></thead><tbody>' +
               list.slice(0,8).map(a => `<tr>
                 <td>${esc(a.source)}</td>
                 <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis">${esc(a.title||a.message)}</td>
@@ -1237,7 +1244,7 @@
           table.innerHTML = '<tr><td class="empty">' + (currentLang==='ar'?'لا تنبيهات مطابقة':'No matching alerts') + '</td></tr>';
           return;
         }
-        table.innerHTML = '<thead><tr><th>#</th><th>Source</th><th>Title</th><th>Severity</th><th>Message</th><th>Time</th><th>Read</th></tr></thead><tbody>' +
+        table.innerHTML = '<thead><tr><th>#</th><th>'+tLabel('Source','المصدر')+'</th><th>'+tLabel('Title','العنوان')+'</th><th>'+tLabel('Severity','الخطورة')+'</th><th>'+tLabel('Message','الرسالة')+'</th><th>'+tLabel('Time','الوقت')+'</th><th>'+tLabel('Read','مقروء')+'</th></tr></thead><tbody>' +
           list.map(a => `<tr style="${a.is_read?'opacity:0.65':''}">
             <td>${a.id??''}</td>
             <td>${esc(a.source)}</td>
@@ -1270,7 +1277,7 @@
           table.innerHTML = '<tr><td class="empty">' + (currentLang==='ar'?'لا سجل فحوصات':'No scan history') + '</td></tr>';
           return;
         }
-        table.innerHTML = '<thead><tr><th>ID</th><th>Module</th><th>Target</th><th>Risk</th><th>Status</th><th>Time</th></tr></thead><tbody>' +
+        table.innerHTML = '<thead><tr><th>ID</th><th>'+tLabel('Module','الوحدة')+'</th><th>'+tLabel('Target','الهدف')+'</th><th>'+tLabel('Risk','المخاطر')+'</th><th>'+tLabel('Status','الحالة')+'</th><th>'+tLabel('Time','الوقت')+'</th></tr></thead><tbody>' +
           list.map(s => `<tr>
             <td>${s.id??''}</td>
             <td>${esc(s.module)}</td>
@@ -1367,6 +1374,18 @@
     });
 
     // ========== Helper: risk chip style ==========
+    
+    function tLabel(en, ar) {
+      return currentLang === 'ar' ? ar : en;
+    }
+
+    function resultGrid(items) {
+      // items: [{en, ar, val}]
+      return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">` +
+        items.map(it => `<div><strong>${tLabel(it.en, it.ar)}:</strong> ${it.val}</div>`).join('') +
+        `</div>`;
+    }
+
     function styleRiskChip(chip, score, label) {
       if (!chip) return;
       chip.textContent = `${score} · ${label}`;
@@ -1417,32 +1436,32 @@
         styleRiskChip(riskChip, data.risk_score, data.risk_level);
         let html = `
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
-            <div><strong>Risk Score:</strong> ${data.risk_score}</div>
-            <div><strong>Level:</strong> ${data.risk_level}</div>
-            <div><strong>Text Length:</strong> ${data.text_length || 0}</div>
-            <div><strong>Issues Found:</strong> ${data.issues_found || 0}</div>
+            <div><strong>${tLabel("Risk Score","درجة المخاطر")}:</strong> ${data.risk_score}</div>
+            <div><strong>${tLabel("Level","المستوى")}:</strong> ${data.risk_level}</div>
+            <div><strong>${tLabel("Text Length","طول النص")}:</strong> ${data.text_length || 0}</div>
+            <div><strong>${tLabel("Issues Found","المشاكل المكتشفة")}:</strong> ${data.issues_found || 0}</div>
           </div>`;
         if (data.issues?.suspicious_urls?.length) {
-          html += `<h4 style="margin:12px 0 6px;font-size:0.85rem;color:#FCA5A5">Suspicious URLs</h4><ul style="padding-left:18px;color:var(--text-secondary)">`;
+          html += `<h4 style="margin:12px 0 6px;font-size:0.85rem;color:#FCA5A5">${tLabel("Suspicious URLs","روابط مشبوهة")}</h4><ul style="padding-left:18px;color:var(--text-secondary)">`;
           data.issues.suspicious_urls.forEach(u => { html += `<li>${u.url} <span style="opacity:0.7">(risk ${u.risk})</span></li>`; });
           html += `</ul>`;
         }
         if (data.issues?.credit_cards?.length) {
-          html += `<h4 style="margin:12px 0 6px;font-size:0.85rem;color:#FCA5A5">Credit Cards Detected</h4><ul style="padding-left:18px;color:var(--text-secondary)">`;
+          html += `<h4 style="margin:12px 0 6px;font-size:0.85rem;color:#FCA5A5">${tLabel("Credit Cards Detected","بطاقات ائتمان مكتشفة")}</h4><ul style="padding-left:18px;color:var(--text-secondary)">`;
           data.issues.credit_cards.forEach(c => { html += `<li>${c.card_number_masked} (risk ${c.risk})</li>`; });
           html += `</ul>`;
         }
         if (data.issues?.dangerous_keywords?.length) {
-          html += `<h4 style="margin:12px 0 6px;font-size:0.85rem;color:#FCD34D">Dangerous Keywords</h4><ul style="padding-left:18px;color:var(--text-secondary)">`;
+          html += `<h4 style="margin:12px 0 6px;font-size:0.85rem;color:#FCD34D">${tLabel("Dangerous Keywords","كلمات خطرة")}</h4><ul style="padding-left:18px;color:var(--text-secondary)">`;
           data.issues.dangerous_keywords.slice(0, 10).forEach(k => { html += `<li>${k.keyword} × ${k.count}</li>`; });
           html += `</ul>`;
         }
-        if (data.issues_found === 0) html += `<p style="color:var(--success);margin-top:10px">No major issues detected.</p>`;
+        if (data.issues_found === 0) html += `<p style="color:var(--success);margin-top:10px">${tLabel("No major issues detected.","لم يتم اكتشاف مشاكل كبيرة.")}</p>`;
         resultEl.innerHTML = html;
         resultCard.style.display = 'block';
         afterScan(data.risk_score || 0, 'DocGuard');
       } catch (err) {
-        errorEl.textContent = err.message || 'Something went wrong';
+        errorEl.textContent = err.message || tLabel('Something went wrong','حدث خطأ');
       } finally {
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalText;
@@ -1485,23 +1504,23 @@
         styleRiskChip(riskChip, data.risk_score, data.classification);
         let html = `
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
-            <div><strong>Classification:</strong> ${data.classification}</div>
-            <div><strong>Risk Score:</strong> ${data.risk_score}</div>
-            <div><strong>Level:</strong> ${data.risk_level}</div>
-            <div><strong>Text Length:</strong> ${data.text_length || 0}</div>
+            <div><strong>${tLabel("Classification","التصنيف")}:</strong> ${data.classification}</div>
+            <div><strong>${tLabel("Risk Score","درجة المخاطر")}:</strong> ${data.risk_score}</div>
+            <div><strong>${tLabel("Level","المستوى")}:</strong> ${data.risk_level}</div>
+            <div><strong>${tLabel("Text Length","طول النص")}:</strong> ${data.text_length || 0}</div>
           </div>`;
         if (data.ai_reasoning) {
           html += `<p style="margin:10px 0;padding:10px;background:rgba(99,102,241,0.08);border-radius:8px;font-size:0.85rem"><strong>AI Reasoning:</strong> ${data.ai_reasoning}</p>`;
         }
         if (data.category_scores) {
-          html += `<h4 style="margin:12px 0 6px;font-size:0.85rem">Category Scores</h4><ul style="padding-left:18px;color:var(--text-secondary)">`;
+          html += `<h4 style="margin:12px 0 6px;font-size:0.85rem">${tLabel("Category Scores","درجات التصنيف")}</h4><ul style="padding-left:18px;color:var(--text-secondary)">`;
           for (const [key, val] of Object.entries(data.category_scores)) {
             html += `<li>${key}: ${Number(val).toFixed(1)}</li>`;
           }
           html += `</ul>`;
         }
         if (data.link_issues?.length) {
-          html += `<h4 style="margin:12px 0 6px;font-size:0.85rem;color:#FCA5A5">Link Issues</h4><ul style="padding-left:18px;color:var(--text-secondary)">`;
+          html += `<h4 style="margin:12px 0 6px;font-size:0.85rem;color:#FCA5A5">${tLabel("Link Issues","مشاكل الروابط")}</h4><ul style="padding-left:18px;color:var(--text-secondary)">`;
           data.link_issues.forEach(l => { html += `<li>${l.issue}${l.url ? ' → ' + l.url : ''}</li>`; });
           html += `</ul>`;
         }
@@ -1514,7 +1533,7 @@
         resultCard.style.display = 'block';
         afterScan(data.risk_score || 0, 'MailGuard');
       } catch (err) {
-        errorEl.textContent = err.message || 'Something went wrong';
+        errorEl.textContent = err.message || tLabel('Something went wrong','حدث خطأ');
       } finally {
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalText;
@@ -1656,14 +1675,14 @@
         styleRiskChip(riskChip, data.risk_score, data.risk_level);
         let html = `
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
-            <div><strong>Risk Score:</strong> ${data.risk_score}</div>
-            <div><strong>Level:</strong> ${data.risk_level}</div>
-            <div><strong>Objects:</strong> ${data.yolo?.detection_count || 0}</div>
-            <div><strong>Motion Score:</strong> ${data.motion?.motion_score || 0}</div>
+            <div><strong>${tLabel("Risk Score","درجة المخاطر")}:</strong> ${data.risk_score}</div>
+            <div><strong>${tLabel("Level","المستوى")}:</strong> ${data.risk_level}</div>
+            <div><strong>${tLabel("Objects","الأجسام")}:</strong> ${data.yolo?.detection_count || 0}</div>
+            <div><strong>${tLabel("Motion Score","درجة الحركة")}:</strong> ${data.motion?.motion_score || 0}</div>
           </div>
           <p style="margin-bottom:10px;color:var(--text-secondary)">${data.detection_status_message || ''}</p>`;
         if (data.yolo?.detections?.length) {
-          html += `<h4 style="margin:12px 0 8px;font-size:0.85rem">Detected Objects</h4><ul style="padding-left:18px;color:var(--text-secondary)">`;
+          html += `<h4 style="margin:12px 0 8px;font-size:0.85rem">${tLabel("Detected Objects","أجسام مكتشفة")}</h4><ul style="padding-left:18px;color:var(--text-secondary)">`;
           data.yolo.detections.forEach(d => { html += `<li>${d.class} (${(d.confidence * 100).toFixed(1)}%)</li>`; });
           html += `</ul>`;
         }
@@ -1674,7 +1693,7 @@
         resultCard.style.display = 'block';
         afterScan(data.risk_score || 0, 'CamGuard');
       } catch (err) {
-        errorEl.textContent = err.message || 'Something went wrong';
+        errorEl.textContent = err.message || tLabel('Something went wrong','حدث خطأ');
       } finally {
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalText;
@@ -1722,10 +1741,10 @@
         styleRiskChip(riskChip, data.risk_score, data.risk_level);
         let html = `
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
-            <div><strong>Risk Score:</strong> ${data.risk_score}</div>
-            <div><strong>Level:</strong> ${data.risk_level}</div>
-            <div><strong>Issues Found:</strong> ${data.total_issues_found || 0}</div>
-            <div><strong>Type:</strong> ${data.detected_input_type || '—'}</div>
+            <div><strong>${tLabel("Risk Score","درجة المخاطر")}:</strong> ${data.risk_score}</div>
+            <div><strong>${tLabel("Level","المستوى")}:</strong> ${data.risk_level}</div>
+            <div><strong>${tLabel("Issues Found","المشاكل المكتشفة")}:</strong> ${data.total_issues_found || 0}</div>
+            <div><strong>${tLabel("Type","النوع")}:</strong> ${data.detected_input_type || '—'}</div>
           </div>`;
         if (data.ai_summary) {
           html += `<p style="margin:10px 0;padding:10px;background:rgba(99,102,241,0.08);border-radius:8px;font-size:0.85rem"><strong>AI Summary:</strong> ${data.ai_summary}</p>`;
@@ -1738,7 +1757,7 @@
           html += `</ul>`;
         }
         if (data.vulnerabilities?.length) {
-          html += `<h4 style="margin:12px 0 6px;font-size:0.85rem;color:#FCA5A5">Vulnerabilities</h4><ul style="padding-left:18px;color:var(--text-secondary)">`;
+          html += `<h4 style="margin:12px 0 6px;font-size:0.85rem;color:#FCA5A5">${tLabel("Vulnerabilities","ثغرات")}</h4><ul style="padding-left:18px;color:var(--text-secondary)">`;
           data.vulnerabilities.slice(0, 8).forEach(v => { html += `<li><strong>${v.type || v.severity}</strong>: ${v.description || ''}</li>`; });
           html += `</ul>`;
         }
@@ -1752,16 +1771,22 @@
             }
           });
         }
-        if ((data.total_issues_found || 0) === 0) html += `<p style="color:var(--success);margin-top:10px">No major issues detected.</p>`;
+        if ((data.total_issues_found || 0) === 0) html += `<p style="color:var(--success);margin-top:10px">${tLabel("No major issues detected.","لم يتم اكتشاف مشاكل كبيرة.")}</p>`;
         resultEl.innerHTML = html;
         resultCard.style.display = 'block';
         afterScan(data.risk_score || 0, 'ScanGuard');
       } catch (err) {
-        errorEl.textContent = err.message || 'Something went wrong';
+        errorEl.textContent = err.message || tLabel('Something went wrong','حدث خطأ');
       } finally {
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalText;
       }
+    });
+
+
+    document.querySelector('[data-action="sysguard-quick"]')?.addEventListener('click', async () => {
+      showView('sysguard');
+      document.getElementById('sgOnce')?.click();
     });
 
     // ========== Init ==========
