@@ -544,7 +544,9 @@
         border-left: 1px solid var(--border);
         border-right: none;
       }
-      .sidebar.open {
+      /* RTL: لازم محدد أقوى عشان القائمة تفتح */
+      .sidebar.open,
+      html[dir="rtl"] .sidebar.open {
         transform: translateX(0) !important;
         box-shadow: 0 8px 32px rgba(0,0,0,0.55);
         pointer-events: auto;
@@ -558,16 +560,21 @@
         padding: 6px 10px;
         border: 1px solid var(--border);
         border-radius: 10px;
+        z-index: 70;
+        position: relative;
       }
       .dashboard-content { padding: 16px 14px; }
       .topbar { padding: 0 12px; gap: 8px; }
       .stat-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-      .form-grid { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr !important; }
+      .form-grid > div,
       .form-grid .col-span-2,
-      .form-actions { grid-column: span 1; }
+      .form-actions { grid-column: 1 / -1 !important; width: 100%; }
       .guest-banner { flex-direction: column; align-items: flex-start; }
       .page-title { font-size: 1rem; }
-      .two-col { grid-template-columns: 1fr; }
+      .two-col { grid-template-columns: 1fr !important; }
+      .card-body { overflow-x: auto; }
+      .data-table { font-size: 0.78rem; }
     }
   </style>
 </head>
