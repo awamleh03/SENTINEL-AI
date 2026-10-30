@@ -25,18 +25,29 @@
   <style>
     body { font-family: 'IBM Plex Sans Arabic', sans-serif; }
     .gradient-hero {
-      background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.15), transparent), #0B1426;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.16), transparent),
+        radial-gradient(ellipse 40% 30% at 90% 20%, rgba(59, 130, 246, 0.06), transparent),
+        #0B1426;
     }
-    .card-hover:hover { transform: translateY(-4px); border-color: rgba(99, 102, 241, 0.4); }
+    .card-hover { transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease; }
+    .card-hover:hover {
+      transform: translateY(-4px);
+      border-color: rgba(99, 102, 241, 0.45);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.25);
+    }
     .module-card { transition: all 0.25s ease; }
+    .nav-blur { backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+    .btn-glow { box-shadow: 0 8px 28px rgba(99, 102, 241, 0.28); }
+    .btn-glow:hover { box-shadow: 0 10px 32px rgba(99, 102, 241, 0.38); }
   </style>
 </head>
 <body class="bg-navy-900 text-white antialiased">
 
-  <nav class="fixed top-0 inset-x-0 z-50 bg-navy-900/80 backdrop-blur-md border-b border-white/5">
+  <nav class="fixed top-0 inset-x-0 z-50 bg-navy-900/85 nav-blur border-b border-white/5">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
       <a href="/" class="flex items-center gap-2.5">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center shadow-lg shadow-indigo-500/25">
           <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
           </svg>
@@ -46,15 +57,16 @@
           <div class="text-[10px] text-slate-400 -mt-0.5" id="brand-sub">منصة ذكاء أمني</div>
         </div>
       </a>
-      <div class="hidden md:flex items-center gap-8 text-sm text-slate-300">
+      <div class="hidden md:flex items-center gap-7 text-sm text-slate-300">
         <a href="#howitworks" class="hover:text-white transition" id="nav-how">كيف تعمل</a>
         <a href="#modules" class="hover:text-white transition" id="nav-modules">الموديلات</a>
         <a href="#value" class="hover:text-white transition" id="nav-value">المميزات</a>
         <a href="#pricing" class="hover:text-white transition" id="nav-pricing">التسعير</a>
       </div>
       <div class="flex items-center gap-3">
+        <a href="login.html" class="hidden sm:inline text-sm text-slate-300 hover:text-white transition" data-ar="تسجيل الدخول" data-en="Sign in">تسجيل الدخول</a>
         <button id="langBtn" onclick="toggleLang()" class="text-xs px-3 py-1.5 rounded-lg border border-white/10 text-slate-300 hover:bg-white/5 transition">English</button>
-        <a href="/dashboard" class="text-sm px-4 py-2 rounded-lg bg-accent hover:bg-accent-hover font-medium transition shadow-lg shadow-indigo-500/20" id="btn-try-nav">جرّب مجاناً</a>
+        <a href="dashboard.html?demo=doc" class="text-sm px-4 py-2 rounded-lg bg-accent hover:bg-accent-hover font-medium transition btn-glow" id="btn-try-nav">جرّب مجاناً</a>
       </div>
     </div>
   </nav>
@@ -75,7 +87,7 @@
             افحص ملفات PDF، صنّف الإيميلات، راقب السيرفرات، اكتشف الحركة على الكاميرات، ودقّق الأكواد — كل ذلك من لوحة تحكم واحدة.
           </p>
           <div class="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
-            <a href="/dashboard" class="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-accent hover:bg-accent-hover font-semibold text-white shadow-xl shadow-indigo-500/25 transition">
+            <a href="dashboard.html?demo=doc" class="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-accent hover:bg-accent-hover font-semibold text-white btn-glow transition">
               <span data-ar="جرّب مجاناً" data-en="Start Free Trial">جرّب مجاناً</span>
               <svg class="w-4 h-4 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
             </a>
@@ -270,7 +282,7 @@
             <li class="flex items-start gap-2"><svg class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg><span data-ar="لوحة التحكم كاملة" data-en="Full dashboard">لوحة التحكم كاملة</span></li>
             <li class="flex items-start gap-2"><svg class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg><span data-ar="فحوصات محدودة" data-en="Limited scans">فحوصات محدودة</span></li>
           </ul>
-          <a href="/dashboard" class="block text-center py-3 rounded-xl border border-white/15 hover:bg-white/5 font-medium transition" data-ar="ابدأ الآن" data-en="Start now">ابدأ الآن</a>
+          <a href="dashboard.html" class="block text-center py-3 rounded-xl border border-white/15 hover:bg-white/5 font-medium transition" data-ar="ابدأ الآن" data-en="Start now">ابدأ الآن</a>
         </div>
         <div class="bg-navy-800 border-2 border-indigo-500/50 rounded-2xl p-7 flex flex-col relative shadow-xl shadow-indigo-500/10">
           <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-indigo-500 text-xs font-semibold" data-ar="الأكثر طلباً" data-en="Popular">الأكثر طلباً</div>
@@ -306,11 +318,28 @@
     <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
       <h2 class="text-3xl sm:text-4xl font-bold mb-4" data-ar="جاهز تحمي منشأتك؟" data-en="Ready to secure your organization?">جاهز تحمي منشأتك؟</h2>
       <p class="text-slate-400 text-lg mb-8" data-ar="ابدأ تجربتك المجانية خلال أقل من دقيقة. بدون بطاقة ائتمان." data-en="Start your free trial in under a minute. No credit card required.">ابدأ تجربتك المجانية خلال أقل من دقيقة. بدون بطاقة ائتمان.</p>
-      <a href="/dashboard" class="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-accent hover:bg-accent-hover font-semibold text-white shadow-xl shadow-indigo-500/25 transition text-lg">
+      <a href="dashboard.html?demo=doc" class="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-accent hover:bg-accent-hover font-semibold text-white btn-glow transition text-lg">
         <span data-ar="ابدأ التجربة المجانية" data-en="Start Free Trial">ابدأ التجربة المجانية</span>
       </a>
     </div>
   </section>
+
+  <footer class="border-t border-white/5 py-10 bg-navy-900">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-500">
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center">
+          <svg class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>
+        </div>
+        <span class="font-medium text-slate-400">SENTINEL-AI</span>
+      </div>
+      <div class="flex items-center gap-5">
+        <a href="login.html" class="hover:text-slate-300 transition" data-ar="تسجيل الدخول" data-en="Sign in">تسجيل الدخول</a>
+        <a href="dashboard.html" class="hover:text-slate-300 transition" data-ar="لوحة التحكم" data-en="Dashboard">لوحة التحكم</a>
+        <a href="#pricing" class="hover:text-slate-300 transition" data-ar="التسعير" data-en="Pricing">التسعير</a>
+      </div>
+      <div data-ar="© 2026 SENTINEL-AI — منصة أمنية موحّدة" data-en="© 2026 SENTINEL-AI — Unified Security Platform">© 2026 SENTINEL-AI — منصة أمنية موحّدة</div>
+    </div>
+  </footer>
 
   <div id="quoteModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm hidden px-4">
     <div class="bg-navy-800 border border-white/10 rounded-2xl w-full max-w-lg p-6 sm:p-8 relative shadow-2xl">
@@ -374,3 +403,4 @@
   </script>
 </body>
 </html>
+

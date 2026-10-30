@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SENTINEL-AI | Control Center</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>SENTINEL-AI | مركز التحكم</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #070B14;
       --bg-elevated: #0C1220;
       --sidebar: #0A0F1A;
       --card: #0F1629;
-      --border: rgba(255,255,255,0.06);
-      --border-strong: rgba(255,255,255,0.1);
+      --border: rgba(255,255,255,0.07);
+      --border-strong: rgba(255,255,255,0.14);
       --primary: #6366F1;
-      --primary-soft: rgba(99,102,241,0.12);
+      --primary-soft: rgba(99,102,241,0.14);
       --primary-hover: #818CF8;
       --text: #F8FAFC;
       --text-secondary: #94A3B8;
@@ -25,62 +25,65 @@
       --info: #3B82F6;
       --radius: 12px;
       --radius-lg: 16px;
+      --sidebar-w: 272px;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-family: 'IBM Plex Sans Arabic', 'Inter', system-ui, sans-serif;
       background: var(--bg);
       color: var(--text);
+      min-height: 100vh;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      background-image: radial-gradient(ellipse 80% 40% at 50% -10%, rgba(99,102,241,0.07), transparent);
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input, select, textarea { font-family: inherit; }
+
+    /* ===== Layout ===== */
+    .app {
       display: flex;
       min-height: 100vh;
-      line-height: 1.5;
-      -webkit-font-smoothing: antialiased;
     }
-    html[dir="rtl"] body { font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif; }
     .sidebar {
-      width: 260px;
-      background: var(--sidebar);
-      border-right: 1px solid var(--border);
+      width: var(--sidebar-w);
+      background: linear-gradient(180deg, #0B1220 0%, #0A0F1A 100%);
+      border-left: 1px solid var(--border);
       display: flex;
       flex-direction: column;
       position: fixed;
-      inset: 0 auto 0 0;
-      z-index: 50;
-      transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
+      top: 0; right: 0; bottom: 0;
+      z-index: 60;
+      transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
+      box-shadow: -8px 0 32px rgba(0,0,0,0.25);
     }
-    html[dir="rtl"] .sidebar {
-      inset: 0 0 0 auto;
-      border-right: none;
-      border-left: 1px solid var(--border);
+    html[dir="ltr"] .sidebar {
+      right: auto; left: 0;
+      border-left: none;
+      border-right: 1px solid var(--border);
     }
+    .sidebar.closed { transform: translateX(105%); }
+    html[dir="ltr"] .sidebar.closed { transform: translateX(-105%); }
+
     .sidebar-brand {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 20px 18px;
+      padding: 18px 18px 16px;
       border-bottom: 1px solid var(--border);
     }
     .brand-icon {
-      width: 36px;
-      height: 36px;
-      background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
-      border-radius: 10px;
-      display: grid;
-      place-items: center;
-      font-size: 1.1rem;
-      box-shadow: 0 4px 12px rgba(99,102,241,0.35);
+      width: 38px; height: 38px;
+      background: linear-gradient(135deg, #6366F1, #4F46E5);
+      border-radius: 11px;
+      display: grid; place-items: center;
+      box-shadow: 0 4px 14px rgba(99,102,241,0.4);
+      flex-shrink: 0;
     }
-    .brand-text strong {
-      display: block;
-      font-size: 0.9rem;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-    }
-    .brand-text span {
-      font-size: 0.68rem;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
+    .brand-icon svg { width: 20px; height: 20px; color: #fff; }
+    .brand-text strong { display: block; font-size: 0.92rem; font-weight: 700; letter-spacing: -0.01em; }
+    .brand-text span { font-size: 0.68rem; color: var(--text-muted); font-weight: 500; }
+
     .sidebar-nav {
       flex: 1;
       padding: 12px 10px;
@@ -90,1725 +93,1403 @@
       gap: 2px;
     }
     .nav-section {
-      font-size: 0.65rem;
+      font-size: 0.62rem;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.07em;
       color: var(--text-muted);
-      padding: 12px 12px 6px;
+      padding: 14px 12px 6px;
     }
     .nav-link {
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 9px 12px;
-      border-radius: 8px;
+      padding: 10px 12px;
+      border-radius: 9px;
       color: var(--text-secondary);
-      text-decoration: none;
       font-size: 0.875rem;
       font-weight: 500;
       transition: all 0.15s ease;
-      position: relative;
       cursor: pointer;
+      position: relative;
+      border: none;
+      background: transparent;
+      width: 100%;
+      text-align: inherit;
     }
-    .nav-link:hover {
-      background: rgba(255,255,255,0.03);
-      color: var(--text);
-    }
+    .nav-link:hover { background: rgba(255,255,255,0.04); color: var(--text); }
     .nav-link.active {
       background: var(--primary-soft);
       color: #A5B4FC;
+      box-shadow: inset 0 0 0 1px rgba(99,102,241,0.18);
     }
     .nav-link.active::before {
       content: '';
       position: absolute;
-      left: 0;
       top: 50%;
       transform: translateY(-50%);
-      width: 3px;
-      height: 18px;
+      width: 3px; height: 18px;
       background: var(--primary);
+      border-radius: 3px 0 0 3px;
+      right: 0;
+    }
+    html[dir="ltr"] .nav-link.active::before {
+      right: auto; left: 0;
       border-radius: 0 3px 3px 0;
     }
-    html[dir="rtl"] .nav-link.active::before {
-      left: auto;
-      right: 0;
-      border-radius: 3px 0 0 3px;
-    }
-    .nav-icon {
-      width: 18px;
-      height: 18px;
-      opacity: 0.7;
-      flex-shrink: 0;
-    }
+    .nav-icon { width: 18px; height: 18px; opacity: 0.75; flex-shrink: 0; }
     .nav-link.active .nav-icon { opacity: 1; }
     .badge-dot {
-      width: 7px;
-      height: 7px;
+      width: 7px; height: 7px;
       background: var(--danger);
       border-radius: 50%;
-      margin-left: auto;
+      margin-inline-start: auto;
       display: none;
-      box-shadow: 0 0 0 3px rgba(239,68,68,0.2);
     }
-    html[dir="rtl"] .badge-dot { margin-left: 0; margin-right: auto; }
     .badge-dot.show { display: block; }
+
     .sidebar-footer {
-      padding: 14px 12px;
+      padding: 14px;
       border-top: 1px solid var(--border);
     }
-    .user-chip {
+    .user-card {
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 10px 12px;
+      padding: 10px;
       border-radius: 10px;
-      background: rgba(255,255,255,0.02);
-      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
       margin-bottom: 10px;
     }
     .user-avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-      background: linear-gradient(135deg, #334155, #1E293B);
-      display: grid;
-      place-items: center;
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: var(--text-secondary);
-    }
-    .user-info { flex: 1; min-width: 0; }
-    .user-info .name {
-      font-size: 0.8rem;
-      font-weight: 600;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .user-info .role {
-      font-size: 0.68rem;
-      color: var(--text-muted);
-    }
-    .status-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--text-muted);
+      width: 34px; height: 34px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, #6366F1, #818CF8);
+      display: grid; place-items: center;
+      font-weight: 700; font-size: 0.85rem;
       flex-shrink: 0;
     }
-    .status-dot.on {
-      background: var(--success);
-      box-shadow: 0 0 0 3px rgba(16,185,129,0.2);
+    .user-meta strong { display: block; font-size: 0.8rem; }
+    .user-meta span { font-size: 0.68rem; color: var(--text-muted); }
+    .auth-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      display: inline-block; margin-inline-end: 4px;
     }
-    .sidebar-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
+    .auth-dot.on { background: var(--success); box-shadow: 0 0 6px var(--success); }
+    .auth-dot.off { background: var(--text-muted); }
+
+    .btn-side {
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      width: 100%; padding: 9px 12px;
+      border-radius: 9px; font-size: 0.82rem; font-weight: 600;
+      border: 1px solid var(--border-strong);
+      background: transparent; color: var(--text-secondary);
+      cursor: pointer; transition: all 0.15s;
     }
-    .lang-row {
-      display: flex;
-      gap: 4px;
-      margin-top: 4px;
-    }
-    .lang-row .btn.active-lang {
-      background: var(--primary-soft);
-      color: #A5B4FC;
-    }
-    .main-area {
-      flex: 1;
-      margin-left: 260px;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-    html[dir="rtl"] .main-area {
-      margin-left: 0;
-      margin-right: 260px;
-    }
-    .topbar {
-      height: 60px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 0 28px;
-      border-bottom: 1px solid var(--border);
-      background: rgba(7,11,20,0.8);
-      backdrop-filter: blur(16px);
-      position: sticky;
-      top: 0;
-      z-index: 40;
-    }
-    .page-title {
-      font-size: 1.05rem;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      flex: 1;
-    }
-    .topbar-actions {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-    .dashboard-content {
-      padding: 28px;
-      flex: 1;
-      max-width: 1400px;
-    }
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      padding: 8px 14px;
-      border-radius: 8px;
-      border: none;
-      font-family: inherit;
-      font-size: 0.825rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      text-decoration: none;
-      white-space: nowrap;
-    }
-    .btn-primary {
-      background: var(--primary);
-      color: #fff;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.2), 0 0 0 1px rgba(99,102,241,0.3);
-    }
-    .btn-primary:hover {
-      background: var(--primary-hover);
+    .btn-side:hover { background: rgba(255,255,255,0.05); color: var(--text); }
+    .btn-side.primary {
+      background: var(--primary); border-color: transparent; color: #fff;
       box-shadow: 0 4px 12px rgba(99,102,241,0.3);
     }
-    .btn-primary:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
+    .btn-side.primary:hover { background: var(--primary-hover); }
+    .btn-side.danger:hover { border-color: rgba(239,68,68,0.4); color: #FCA5A5; }
+
+    .lang-row {
+      display: flex; gap: 6px; margin-top: 8px;
     }
-    .btn-secondary {
-      background: rgba(255,255,255,0.04);
-      color: var(--text-secondary);
-      border: 1px solid var(--border-strong);
+    .lang-row button {
+      flex: 1; padding: 6px; border-radius: 7px;
+      border: 1px solid var(--border); background: transparent;
+      color: var(--text-muted); font-size: 0.72rem; font-weight: 600;
+      cursor: pointer;
     }
-    .btn-secondary:hover {
-      background: rgba(255,255,255,0.07);
-      color: var(--text);
+    .lang-row button.active {
+      background: var(--primary-soft); color: #A5B4FC; border-color: rgba(99,102,241,0.3);
     }
-    .btn-ghost {
-      background: transparent;
-      color: var(--text-muted);
-      border: none;
+
+    /* ===== Main ===== */
+    .main {
+      flex: 1;
+      margin-right: var(--sidebar-w);
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
     }
-    .btn-ghost:hover { color: var(--text); background: rgba(255,255,255,0.04); }
-    .btn-danger {
-      background: rgba(239,68,68,0.1);
-      color: #FCA5A5;
-      border: 1px solid rgba(239,68,68,0.2);
-    }
-    .btn-danger:hover {
-      background: rgba(239,68,68,0.18);
-      color: #FECACA;
-    }
-    .btn-sm { padding: 6px 11px; font-size: 0.78rem; }
-    .btn-block { width: 100%; }
-    .guest-banner {
+    html[dir="ltr"] .main { margin-right: 0; margin-left: var(--sidebar-w); }
+    .main.full { margin-right: 0; margin-left: 0; }
+
+    .topbar {
+      height: 58px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 14px 18px;
-      margin-bottom: 24px;
-      background: linear-gradient(135deg, rgba(99,102,241,0.1) 0%, rgba(59,130,246,0.06) 100%);
-      border: 1px solid rgba(99,102,241,0.2);
-      border-radius: var(--radius);
+      gap: 12px;
+      padding: 0 22px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(7,11,20,0.88);
+      backdrop-filter: blur(14px);
+      position: sticky; top: 0; z-index: 40;
     }
-    .guest-banner.hidden { display: none; }
-    .guest-banner p {
-      font-size: 0.875rem;
-      color: var(--text-secondary);
+    .topbar-title {
+      font-size: 1rem; font-weight: 600;
+      flex: 1;
     }
-    .guest-banner strong { color: var(--text); font-weight: 600; }
-    .guest-actions { display: flex; gap: 8px; flex-shrink: 0; }
-    .stat-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
-      margin-bottom: 24px;
-    }
-    .stat-card {
-      background: var(--card);
+    .icon-btn {
+      width: 36px; height: 36px;
+      border-radius: 9px;
       border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 18px 20px;
-      transition: border-color 0.15s;
+      background: transparent;
+      color: var(--text-secondary);
+      display: grid; place-items: center;
+      cursor: pointer;
+      transition: all 0.15s;
     }
-    .stat-card:hover { border-color: var(--border-strong); }
-    .stat-card.danger { border-color: rgba(239,68,68,0.2); }
-    .stat-card.warn { border-color: rgba(245,158,11,0.2); }
-    .stat-card.info { border-color: rgba(59,130,246,0.2); }
-    .stat-label {
-      font-size: 0.75rem;
-      font-weight: 500;
-      color: var(--text-muted);
-      margin-bottom: 8px;
+    .icon-btn:hover { background: rgba(255,255,255,0.05); color: var(--text); }
+    .content {
+      padding: 24px 24px 48px;
+      flex: 1;
+      max-width: 1280px;
     }
-    .stat-value {
-      font-size: 1.75rem;
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      line-height: 1.1;
-    }
-    .stat-foot {
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      margin-top: 6px;
-    }
-    .two-col {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-bottom: 14px;
-    }
+
+    /* ===== Cards & UI ===== */
     .card {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
       overflow: hidden;
-      transition: border-color 0.15s;
+      box-shadow: 0 1px 0 rgba(255,255,255,0.03);
     }
-    .card:hover { border-color: var(--border-strong); }
     .card-head {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 14px 18px;
+      gap: 12px;
+      padding: 15px 18px;
       border-bottom: 1px solid var(--border);
-      min-height: 52px;
+      flex-wrap: wrap;
+      background: rgba(255,255,255,0.015);
     }
-    .card-head h3 {
-      font-size: 0.875rem;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-    }
+    .card-head h3 { font-size: 0.95rem; font-weight: 600; }
     .card-body { padding: 18px; }
-    .empty {
-      color: var(--text-muted);
-      font-size: 0.85rem;
-      text-align: center;
-      padding: 32px 16px;
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 18px;
     }
-    .form-grid {
+    @media (max-width: 1100px) { .stat-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 560px) { .stat-grid { grid-template-columns: 1fr; } }
+
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .stat-card:hover {
+      border-color: var(--border-strong);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+    }
+    .stat-label { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 6px; }
+    .stat-value { font-size: 1.65rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
+    .stat-sub { font-size: 0.72rem; color: var(--text-muted); margin-top: 4px; }
+    .stat-card.danger .stat-value { color: #FCA5A5; }
+    .stat-card.warning .stat-value { color: #FCD34D; }
+    .stat-card.success .stat-value { color: #6EE7B7; }
+
+    .grid-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 14px;
+      margin-bottom: 14px;
     }
-    .form-grid .col-span-2 { grid-column: span 2; }
-    .form-grid label {
+    @media (max-width: 900px) { .grid-2 { grid-template-columns: 1fr; } }
+
+    .empty-state {
+      text-align: center;
+      padding: 32px 18px;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      border: 1px dashed rgba(255,255,255,0.06);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.015);
+    }
+    .empty-state strong { display: block; color: var(--text-secondary); margin-bottom: 6px; font-weight: 600; }
+
+    .guest-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      padding: 15px 18px;
+      background: linear-gradient(90deg, rgba(99,102,241,0.14), rgba(99,102,241,0.04));
+      border: 1px solid rgba(99,102,241,0.28);
+      border-radius: var(--radius);
+      margin-bottom: 18px;
+      box-shadow: 0 0 0 1px rgba(99,102,241,0.05);
+    }
+    .guest-banner p { font-size: 0.85rem; color: var(--text-secondary); }
+    .guest-banner strong { color: var(--text); }
+    .guest-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+      padding: 9px 16px;
+      border-radius: 9px;
+      font-size: 0.85rem; font-weight: 600;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.15s;
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(99,102,241,0.22);
+    }
+    .btn:hover { background: var(--primary-hover); box-shadow: 0 6px 18px rgba(99,102,241,0.3); }
+    .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+    .btn-ghost {
+      background: transparent;
+      border-color: var(--border-strong);
+      color: var(--text-secondary);
+      box-shadow: none;
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,0.05); color: var(--text); box-shadow: none; }
+    .btn-sm { padding: 7px 12px; font-size: 0.8rem; }
+    .btn-demo {
+      background: rgba(16,185,129,0.12);
+      border: 1px solid rgba(16,185,129,0.35);
+      color: #6EE7B7;
+    }
+    .btn-demo:hover { background: rgba(16,185,129,0.2); }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    @media (max-width: 640px) { .form-row { grid-template-columns: 1fr; } }
+    .form-group { margin-bottom: 12px; }
+    .form-group label {
       display: block;
-      font-size: 0.75rem;
+      font-size: 0.78rem;
       font-weight: 500;
       color: var(--text-secondary);
       margin-bottom: 6px;
     }
-    .form-grid input,
-    .form-grid textarea,
-    .form-grid select {
+    .form-control {
       width: 100%;
-      padding: 10px 12px;
-      border-radius: 8px;
-      border: 1px solid var(--border-strong);
       background: var(--bg-elevated);
-      color: var(--text);
-      font-family: inherit;
-      font-size: 0.875rem;
-      transition: border-color 0.15s;
-    }
-    .form-grid input:focus,
-    .form-grid textarea:focus,
-    .form-grid select:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px var(--primary-soft);
-    }
-    .form-grid textarea { resize: vertical; min-height: 80px; }
-    .form-actions {
-      grid-column: span 2;
-      display: flex;
-      gap: 8px;
-      margin-top: 4px;
-    }
-    .form-error {
-      color: #FCA5A5;
-      font-size: 0.8rem;
-      grid-column: span 2;
-    }
-    .risk-chip {
-      font-size: 0.7rem;
-      font-weight: 600;
-      padding: 3px 10px;
-      border-radius: 20px;
-      background: var(--primary-soft);
-      color: #A5B4FC;
-    }
-    .data-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.825rem;
-    }
-    .data-table th {
+      border: 1px solid var(--border-strong);
+      border-radius: 9px;
       padding: 10px 12px;
-      text-align: left;
-      font-weight: 500;
-      color: var(--text-muted);
-      border-bottom: 1px solid var(--border);
-      font-size: 0.75rem;
+      color: var(--text);
+      font-size: 0.88rem;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
     }
-    html[dir="rtl"] .data-table th { text-align: right; }
-    .data-table td {
-      padding: 11px 12px;
+    .form-control:focus {
+      border-color: rgba(99,102,241,0.55);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
+    }
+    textarea.form-control { min-height: 110px; resize: vertical; }
+    input[type="file"].form-control { padding: 8px; }
+
+    .result-box {
+      margin-top: 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: none;
+    }
+    .result-box.show { display: block; }
+    .result-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
       border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+    }
+    .result-body { padding: 16px; }
+    .chip {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 0.75rem; font-weight: 600;
+    }
+    .chip-critical, .chip-high { background: rgba(239,68,68,0.15); color: #FCA5A5; }
+    .chip-medium { background: rgba(245,158,11,0.15); color: #FCD34D; }
+    .chip-low, .chip-safe, .chip-info { background: rgba(16,185,129,0.12); color: #6EE7B7; }
+    .chip-spam { background: rgba(245,158,11,0.15); color: #FCD34D; }
+    .chip-phishing { background: rgba(239,68,68,0.15); color: #FCA5A5; }
+
+    .kv-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .kv {
+      background: var(--bg-elevated);
+      border-radius: 9px;
+      padding: 10px 12px;
+    }
+    .kv .k { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 2px; }
+    .kv .v { font-size: 0.95rem; font-weight: 600; }
+
+    .issue-list { list-style: none; }
+    .issue-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.85rem;
       color: var(--text-secondary);
     }
-    .data-table tr:last-child td { border-bottom: none; }
-    .data-table tr:hover td { background: rgba(255,255,255,0.015); }
-    .view.hidden { display: none; }
-    .overflow-x { overflow-x: auto; }
-    .hidden { display: none !important; }
-    .note {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      margin-top: 14px;
-      padding: 10px 14px;
-      background: var(--primary-soft);
-      border-radius: 8px;
-      border: 1px solid rgba(99,102,241,0.15);
+    .issue-list li:last-child { border-bottom: none; }
+    .issue-list .tag {
+      font-size: 0.72rem; font-weight: 600;
+      color: #FCA5A5; margin-bottom: 2px;
     }
-    .filter-row {
-      display: flex;
-      gap: 8px;
-      align-items: center;
+
+    .metric-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
     }
-    .filter-row select,
-    .filter-row input {
-      padding: 6px 10px;
-      border-radius: 7px;
-      border: 1px solid var(--border-strong);
+    @media (max-width: 700px) { .metric-row { grid-template-columns: repeat(2, 1fr); } }
+    .metric {
       background: var(--bg-elevated);
-      color: var(--text);
-      font-size: 0.78rem;
-      font-family: inherit;
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
     }
+    .metric .val { font-size: 1.4rem; font-weight: 700; }
+    .metric .lbl { font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; }
+
+    .view { display: none; }
+    .view.active { display: block; animation: fadeIn 0.2s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+    .quick-actions {
+      display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 4px;
+    }
+    .module-tile {
+      flex: 1; min-width: 140px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .module-tile:hover {
+      border-color: rgba(99,102,241,0.45);
+      transform: translateY(-2px);
+      background: rgba(99,102,241,0.06);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.2);
+    }
+    .module-tile .ico { font-size: 1.35rem; margin-bottom: 8px; }
+    .module-tile .name { font-size: 0.86rem; font-weight: 600; }
+    .module-tile .desc { font-size: 0.7rem; color: var(--text-muted); margin-top: 3px; }
+
     .toast-area {
       position: fixed;
-      bottom: 24px;
-      right: 24px;
+      bottom: 20px;
+      left: 20px;
       z-index: 100;
       display: flex;
       flex-direction: column;
       gap: 8px;
     }
-    html[dir="rtl"] .toast-area {
-      right: auto;
-      left: 24px;
-    }
-    .mobile-only { display: none !important; }
-    .sidebar-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.55);
-      z-index: 45;
-    }
-    .sidebar-overlay.show { display: block; }
-    .inline-check {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    html[dir="ltr"] .toast-area { left: auto; right: 20px; }
+    .toast {
+      padding: 11px 16px;
+      border-radius: 10px;
+      background: var(--card);
+      border: 1px solid var(--border-strong);
       font-size: 0.85rem;
-      color: var(--text-secondary);
-      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+      animation: slideIn 0.25s ease;
+      max-width: 340px;
     }
-    @media (max-width: 1100px) {
-      .stat-grid { grid-template-columns: repeat(2, 1fr); }
-      .two-col { grid-template-columns: 1fr; }
+    .toast.ok { border-color: rgba(16,185,129,0.4); color: #6EE7B7; }
+    .toast.err { border-color: rgba(239,68,68,0.4); color: #FCA5A5; }
+    .toast.warn { border-color: rgba(245,158,11,0.4); color: #FCD34D; }
+    @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+    .overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 55;
     }
+    .overlay.show { display: block; }
+
+    .data-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .data-table th, .data-table td {
+      padding: 10px 12px;
+      text-align: start;
+      border-bottom: 1px solid var(--border);
+    }
+    .data-table th { color: var(--text-muted); font-weight: 500; font-size: 0.75rem; }
+    .overflow-x { overflow-x: auto; }
+
+    .hidden { display: none !important; }
+    .btn .spinner {
+      width: 14px; height: 14px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      display: none;
+    }
+    .btn.loading .spinner { display: inline-block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .api-status {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.72rem; color: var(--text-muted);
+      padding: 4px 10px; border-radius: 999px;
+      border: 1px solid var(--border);
+    }
+    .api-status .dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--text-muted);
+    }
+    .api-status.ok .dot { background: var(--success); box-shadow: 0 0 6px var(--success); }
+    .api-status.bad .dot { background: var(--danger); box-shadow: 0 0 6px var(--danger); }
+
+
     @media (max-width: 900px) {
-      .sidebar {
-        transform: translateX(-110%) !important;
-        width: min(280px, 86vw);
-        z-index: 60;
-        pointer-events: none;
-      }
-      html[dir="rtl"] .sidebar {
-        transform: translateX(110%) !important;
-        inset: 0 0 0 auto;
-        border-left: 1px solid var(--border);
-        border-right: none;
-      }
-      /* RTL: لازم محدد أقوى عشان القائمة تفتح */
-      .sidebar.open,
-      html[dir="rtl"] .sidebar.open {
-        transform: translateX(0) !important;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.55);
-        pointer-events: auto;
-      }
-      .main-area { margin-left: 0 !important; margin-right: 0 !important; width: 100% !important; }
-      .mobile-only { display: inline-flex !important; align-items: center; justify-content: center; }
-      #toggleSidebar {
-        font-size: 1.4rem;
-        min-width: 42px;
-        min-height: 42px;
-        padding: 6px 10px;
-        border: 1px solid var(--border);
-        border-radius: 10px;
-        z-index: 70;
-        position: relative;
-      }
-      .dashboard-content { padding: 16px 14px; }
-      .topbar { padding: 0 12px; gap: 8px; }
-      .stat-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-      .form-grid { grid-template-columns: 1fr !important; }
-      .form-grid > div,
-      .form-grid .col-span-2,
-      .form-actions { grid-column: 1 / -1 !important; width: 100%; }
-      .guest-banner { flex-direction: column; align-items: flex-start; }
-      .page-title { font-size: 1rem; }
-      .two-col { grid-template-columns: 1fr !important; }
-      .card-body { overflow-x: auto; }
-      .data-table { font-size: 0.78rem; }
+      .sidebar { transform: translateX(105%); }
+      html[dir="ltr"] .sidebar { transform: translateX(-105%); }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-right: 0 !important; margin-left: 0 !important; }
     }
   </style>
 </head>
 <body>
-  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+<div class="app">
+  <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+  <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-brand">
-      <div class="brand-icon">🛡</div>
+      <div class="brand-icon">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/>
+        </svg>
+      </div>
       <div class="brand-text">
         <strong>SENTINEL-AI</strong>
-        <span data-i18n="control_center">Control Center</span>
+        <span data-i18n="control_center">مركز التحكم</span>
       </div>
     </div>
+
     <nav class="sidebar-nav">
-      <div class="nav-section" data-i18n="nav_main">Main</div>
-      <a href="#" class="nav-link active" data-nav="overview">
-        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"/></svg>
-        <span data-i18n="nav_overview">Overview</span>
-      </a>
-      <div class="nav-section" data-i18n="nav_modules">Modules</div>
-      <a href="#" class="nav-link" data-nav="docguard">
-        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
+      <div class="nav-section" data-i18n="nav_main">الرئيسية</div>
+      <button type="button" class="nav-link active" data-nav="overview">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/></svg>
+        <span data-i18n="nav_overview">نظرة عامة</span>
+      </button>
+
+      <div class="nav-section" data-i18n="nav_modules">الوحدات الأمنية</div>
+      <button type="button" class="nav-link" data-nav="docguard">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
         DocGuard
-      </a>
-      <a href="#" class="nav-link" data-nav="mailguard">
-        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
+      </button>
+      <button type="button" class="nav-link" data-nav="mailguard">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
         MailGuard
-      </a>
-      <a href="#" class="nav-link" data-nav="sysguard">
-        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25A2.25 2.25 0 015.25 3h13.5A2.25 2.25 0 0121 5.25z"/></svg>
+      </button>
+      <button type="button" class="nav-link" data-nav="sysguard">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25A2.25 2.25 0 015.25 3h13.5A2.25 2.25 0 0121 5.25z"/></svg>
         SysGuard
-      </a>
-      <a href="#" class="nav-link" data-nav="camguard">
-        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M6 20.25h12m-7.5-3v3m3-3v3m-10.125-3.25h17.25c.621 0 1.125-.504 1.125-1.125V4.875c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v11c0 .621.504 1.125 1.125 1.125z"/></svg>
+      </button>
+      <button type="button" class="nav-link" data-nav="camguard">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M6 20.25h12m-7.5-3v3m3-3v3m-10.125-3.25h17.25c.621 0 1.125-.504 1.125-1.125V4.875c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v11c0 .621.504 1.125 1.125 1.125z"/></svg>
         CamGuard
-      </a>
-      <a href="#" class="nav-link" data-nav="scanguard">
-        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5"/></svg>
+      </button>
+      <button type="button" class="nav-link" data-nav="scanguard">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5"/></svg>
         ScanGuard
-      </a>
-      <div class="nav-section" data-i18n="nav_activity">Activity</div>
-      <a href="#" class="nav-link" data-nav="alerts">
-        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"/></svg>
-        <span data-i18n="nav_alerts">Alerts</span>
-        <span id="alertsBadge" class="badge-dot"></span>
-      </a>
-      <a href="#" class="nav-link" data-nav="history">
-        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        <span data-i18n="nav_history">History</span>
-      </a>
+      </button>
+
+      <div class="nav-section" data-i18n="nav_ops">العمليات</div>
+      <button type="button" class="nav-link" data-nav="alerts">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"/></svg>
+        <span data-i18n="nav_alerts">التنبيهات</span>
+        <span class="badge-dot" id="alertsBadge"></span>
+      </button>
+      <button type="button" class="nav-link" data-nav="history">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <span data-i18n="nav_history">السجل</span>
+      </button>
     </nav>
+
     <div class="sidebar-footer">
-      <div class="user-chip" id="userChip">
-        <div class="user-avatar" id="userAvatar">G</div>
-        <div class="user-info">
-          <div class="name" id="authLabel" data-i18n="guest">Guest</div>
-          <div class="role" id="authRole" data-i18n="not_signed">Not signed in</div>
+      <div class="user-card">
+        <div class="user-avatar" id="userAvatar">ز</div>
+        <div class="user-meta">
+          <strong id="authLabel">زائر</strong>
+          <span><span class="auth-dot off" id="authDot"></span><span id="authRole">غير مسجّل</span></span>
         </div>
-        <span class="status-dot off" id="authDot"></span>
       </div>
-      <div class="sidebar-actions">
-        <a href="login.html" class="btn btn-primary btn-sm btn-block guest-only" id="loginSidebarBtn" data-i18n="sign_in">Sign in</a>
-        <button type="button" class="btn btn-danger btn-sm btn-block auth-only hidden" id="logoutBtn" data-i18n="sign_out">Sign out</button>
-        <div class="lang-row">
-          <button type="button" class="btn btn-ghost btn-sm" id="btn-en" style="flex:1">EN</button>
-          <button type="button" class="btn btn-ghost btn-sm" id="btn-ar" style="flex:1">AR</button>
-        </div>
+      <div class="guest-only">
+        <a href="login.html" class="btn-side primary" style="margin-bottom:6px" data-i18n="login">تسجيل الدخول</a>
+        <a href="register.html" class="btn-side" data-i18n="register">إنشاء حساب</a>
+      </div>
+      <div class="auth-only hidden">
+        <button type="button" class="btn-side danger" id="logoutBtn" data-i18n="logout">تسجيل الخروج</button>
+      </div>
+      <div class="lang-row">
+        <button type="button" id="btn-ar" class="active" onclick="setLang('ar')">AR</button>
+        <button type="button" id="btn-en" onclick="setLang('en')">EN</button>
       </div>
     </div>
   </aside>
 
-  <div class="main-area">
+  <!-- MAIN -->
+  <div class="main" id="main">
     <header class="topbar">
-      <button type="button" class="btn btn-ghost mobile-only" id="toggleSidebar" aria-label="Menu">☰</button>
-      <h2 class="page-title" id="pageTitle" data-i18n="nav_overview">Overview</h2>
-      <div class="topbar-actions">
-        <button type="button" class="btn btn-secondary btn-sm" id="refreshBtn" data-i18n="refresh">↻ Refresh</button>
-      </div>
+      <button type="button" class="icon-btn" id="toggleSidebar" title="القائمة" aria-label="Toggle sidebar">
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
+      </button>
+      <div class="topbar-title" id="pageTitle">نظرة عامة</div>
+      <div class="api-status" id="apiStatus" title="API"><span class="dot"></span><span id="apiStatusText">…</span></div>
+      <button type="button" class="icon-btn" id="refreshBtn" title="تحديث">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"/></svg>
+      </button>
     </header>
-    <main class="dashboard-content" id="dashboardContent">
-      <div class="guest-banner guest-only" id="guestBanner">
-        <p><strong data-i18n="guest_title">Browsing as guest.</strong> <span data-i18n="guest_desc">Sign in to save scan history and receive alerts.</span></p>
-        <div class="guest-actions">
-          <a href="login.html" class="btn btn-primary btn-sm" data-i18n="sign_in">Sign in</a>
-          <a href="register.html" class="btn btn-secondary btn-sm" data-i18n="create_account">Create account</a>
-        </div>
-      </div>
+
+    <div class="content">
 
       <!-- OVERVIEW -->
-      <section class="view" id="view-overview">
+      <section class="view active" id="view-overview">
+        <div class="guest-banner guest-only">
+          <p><strong data-i18n="guest_title">تصفح كزائر.</strong> <span data-i18n="guest_msg">تقدر تجرّب كل الوحدات بدون حساب. سجّل الدخول لحفظ السجل واستقبال التنبيهات.</span></p>
+          <div class="guest-actions">
+            <a href="login.html" class="btn btn-sm" data-i18n="login">تسجيل الدخول</a>
+            <a href="register.html" class="btn btn-sm btn-ghost" data-i18n="register">إنشاء حساب</a>
+          </div>
+        </div>
+
         <div class="stat-grid">
           <div class="stat-card">
-            <div class="stat-label" data-i18n="st_scans">Scans (24h)</div>
-            <div class="stat-value" id="st-scans-24">—</div>
-            <div class="stat-foot" data-i18n="st_today">Today</div>
+            <div class="stat-label" data-i18n="st_scans">الفحوصات (24 ساعة)</div>
+            <div class="stat-value" id="statScans">0</div>
+            <div class="stat-sub" data-i18n="st_today">اليوم</div>
           </div>
           <div class="stat-card danger">
-            <div class="stat-label" data-i18n="st_critical">Critical scans</div>
-            <div class="stat-value" id="st-critical">—</div>
-            <div class="stat-foot" data-i18n="st_risk70">Risk ≥ 70</div>
+            <div class="stat-label" data-i18n="st_critical">فحوصات حرجة</div>
+            <div class="stat-value" id="statCritical">0</div>
+            <div class="stat-sub" data-i18n="st_risk70">مخاطر ≥ 70</div>
           </div>
-          <div class="stat-card warn">
-            <div class="stat-label" data-i18n="st_high">High-risk scans</div>
-            <div class="stat-value" id="st-high">—</div>
-            <div class="stat-foot" data-i18n="st_risk40">Risk ≥ 40</div>
+          <div class="stat-card warning">
+            <div class="stat-label" data-i18n="st_high">فحوصات عالية المخاطر</div>
+            <div class="stat-value" id="statHigh">0</div>
+            <div class="stat-sub" data-i18n="st_risk40">مخاطر ≥ 40</div>
           </div>
-          <div class="stat-card info">
-            <div class="stat-label" data-i18n="st_unread">Unread alerts</div>
-            <div class="stat-value" id="st-unread">—</div>
-            <div class="stat-foot" data-i18n="st_action">Action needed</div>
+          <div class="stat-card">
+            <div class="stat-label" data-i18n="st_unread">تنبيهات غير مقروءة</div>
+            <div class="stat-value" id="statUnread">0</div>
+            <div class="stat-sub" data-i18n="st_action">يحتاج إجراء</div>
           </div>
         </div>
-        <div class="two-col">
-          <div class="card">
-            <div class="card-head"><h3 data-i18n="per_module">Per-module performance</h3></div>
-            <div class="card-body" id="moduleBars">
-              <p class="empty" data-i18n="click_refresh">لا توجد بيانات بعد. ابدأ فحصاً من الوحدات على اليسار، أو اضغط ↻ تحديث.</p>
-              <p class="empty" style="padding-top:0;font-size:0.8rem;opacity:0.7" data-i18n="guest_hint_overview">التجربة متاحة بدون تسجيل — سجّل الدخول لحفظ النتائج.</p>
+
+        <div class="card" style="margin-bottom:14px">
+          <div class="card-head">
+            <h3 data-i18n="quick_title">ابدأ فحصاً سريعاً</h3>
+          </div>
+          <div class="card-body">
+            <div class="quick-actions">
+              <div class="module-tile" onclick="showView('docguard')">
+                <div class="ico">📄</div>
+                <div class="name">DocGuard</div>
+                <div class="desc" data-i18n="q_doc">فحص مستندات</div>
+              </div>
+              <div class="module-tile" onclick="showView('mailguard')">
+                <div class="ico">✉️</div>
+                <div class="name">MailGuard</div>
+                <div class="desc" data-i18n="q_mail">تصنيف بريد</div>
+              </div>
+              <div class="module-tile" onclick="showView('sysguard')">
+                <div class="ico">💻</div>
+                <div class="name">SysGuard</div>
+                <div class="desc" data-i18n="q_sys">مراقبة نظام</div>
+              </div>
+              <div class="module-tile" onclick="showView('camguard')">
+                <div class="ico">📷</div>
+                <div class="name">CamGuard</div>
+                <div class="desc" data-i18n="q_cam">تحليل كاميرا</div>
+              </div>
+              <div class="module-tile" onclick="showView('scanguard')">
+                <div class="ico">🛡️</div>
+                <div class="name">ScanGuard</div>
+                <div class="desc" data-i18n="q_scan">تدقيق كود</div>
+              </div>
             </div>
           </div>
+        </div>
+
+        <div class="grid-2">
           <div class="card">
             <div class="card-head">
-              <h3 data-i18n="sys_snapshot">System snapshot</h3>
-              <button type="button" class="btn btn-ghost btn-sm" data-action="sysguard-quick" data-i18n="check_now">Check now</button>
+              <h3 data-i18n="sys_snapshot">لقطة النظام</h3>
+              <button type="button" class="btn btn-sm btn-ghost" onclick="showView('sysguard'); fetchSysStatus()" data-i18n="scan_now">فحص الآن</button>
             </div>
-            <div class="card-body" id="sysSnapshot">
-              <p class="empty" data-i18n="run_sysguard">اضغط «فحص الآن» لعرض المعالج / الذاكرة / القرص مباشرة.</p>
+            <div class="card-body">
+              <div id="overviewSys" class="empty-state">
+                <strong data-i18n="sys_empty_title">اضغط «فحص الآن»</strong>
+                <span data-i18n="sys_empty">لعرض المعالج / الذاكرة / القرص مباشرة.</span>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head"><h3 data-i18n="module_perf">أداء الوحدات</h3></div>
+            <div class="card-body">
+              <div id="overviewModules" class="empty-state">
+                <strong data-i18n="mod_empty_title">لا توجد فحوصات بعد</strong>
+                <span data-i18n="mod_empty">ابدأ من الوحدات أعلاه.</span>
+              </div>
             </div>
           </div>
         </div>
-        <div class="two-col">
+
+        <div class="grid-2">
           <div class="card">
-            <div class="card-head"><h3 data-i18n="recent_scans">Recent scans</h3></div>
-            <div class="card-body overflow-x"><table class="data-table" id="recentScansTbl"></table></div>
+            <div class="card-head"><h3 data-i18n="recent_alerts">أحدث التنبيهات</h3></div>
+            <div class="card-body">
+              <div id="overviewAlerts" class="empty-state" data-i18n="no_alerts">لا تنبيهات</div>
+            </div>
           </div>
           <div class="card">
-            <div class="card-head"><h3 data-i18n="recent_alerts">Recent alerts</h3></div>
-            <div class="card-body overflow-x"><table class="data-table" id="recentAlertsTbl"></table></div>
+            <div class="card-head"><h3 data-i18n="recent_scans">أحدث الفحوصات</h3></div>
+            <div class="card-body">
+              <div id="overviewScans" class="empty-state" data-i18n="no_scans">لا فحوصات</div>
+            </div>
           </div>
         </div>
       </section>
 
       <!-- DOCGUARD -->
-      <section class="view hidden" id="view-docguard">
+      <section class="view" id="view-docguard">
         <div class="card">
-          <div class="card-head"><h3 data-i18n="dg_title">DocGuard — Document Scanner</h3></div>
-          <div class="card-body">
-            <form id="docguardForm" class="form-grid">
-              <div>
-                <label data-i18n="dg_upload">Upload PDF / TXT</label>
-                <input type="file" name="file" accept=".pdf,.txt" />
-              </div>
-              <div class="col-span-2">
-                <label data-i18n="dg_paste">…or paste raw text</label>
-                <textarea name="text" rows="4" data-i18n-placeholder="dg_placeholder" placeholder="Paste document text here…"></textarea>
-              </div>
-              <div class="form-actions">
-                <button type="submit" class="btn btn-primary" data-i18n="dg_scan">🔍 Scan Document</button>
-              </div>
-              <p class="form-error" id="dgError" role="alert"></p>
-            </form>
-          </div>
-        </div>
-        <div class="card" id="dgResultCard" style="display:none; margin-top:14px">
           <div class="card-head">
-            <h3 data-i18n="scan_result">Scan Result</h3>
-            <span class="risk-chip" id="dgRiskChip">—</span>
+            <h3>DocGuard — <span data-i18n="doc_title">ماسح المستندات</span></h3>
+            <button type="button" class="btn btn-sm btn-demo" id="docDemo" data-i18n="try_demo">جرّب مثالاً</button>
           </div>
-          <div class="card-body" id="dgResult"></div>
+          <div class="card-body">
+            <div class="form-group">
+              <label data-i18n="doc_file">رفع PDF / TXT</label>
+              <input type="file" id="docFile" class="form-control" accept=".pdf,.txt,.text,text/plain,application/pdf" />
+            </div>
+            <div class="form-group">
+              <label data-i18n="doc_text">…أو الصق النص مباشرة</label>
+              <textarea id="docText" class="form-control" data-i18n-placeholder="doc_ph" placeholder="الصق نص المستند هنا..."></textarea>
+            </div>
+            <button type="button" class="btn" id="docScanBtn"><span class="spinner"></span>🔍 <span data-i18n="doc_scan">فحص المستند</span></button>
+            <div class="result-box" id="docResult"></div>
+          </div>
         </div>
       </section>
 
       <!-- MAILGUARD -->
-      <section class="view hidden" id="view-mailguard">
+      <section class="view" id="view-mailguard">
         <div class="card">
-          <div class="card-head"><h3 data-i18n="mg_title">MailGuard — Email Classifier</h3></div>
-          <div class="card-body">
-            <form id="mailguardForm" class="form-grid">
-              <div><label data-i18n="mg_from">From / Sender</label><input type="text" name="sender" data-i18n-placeholder="mg_from_ph" placeholder="sender@example.com"/></div>
-              <div><label data-i18n="mg_subject">Subject</label><input type="text" name="subject" data-i18n-placeholder="mg_subject_ph" placeholder="Email subject"/></div>
-              <div class="col-span-2"><label data-i18n="mg_body">Body</label><textarea name="body" rows="7" required data-i18n-placeholder="mg_body_ph" placeholder="Paste email body…"></textarea></div>
-              <div class="form-actions"><button type="submit" class="btn btn-primary" data-i18n="mg_classify">🎯 Classify Email</button></div>
-              <p class="form-error" id="mgError" role="alert"></p>
-            </form>
+          <div class="card-head">
+            <h3>MailGuard — <span data-i18n="mail_title">مصنّف البريد</span></h3>
+            <button type="button" class="btn btn-sm btn-demo" id="mailDemo" data-i18n="try_demo">جرّب مثالاً</button>
           </div>
-        </div>
-        <div class="card" id="mgResultCard" style="display:none; margin-top:14px">
-          <div class="card-head"><h3 data-i18n="classification">Classification</h3><span class="risk-chip" id="mgRiskChip">—</span></div>
-          <div class="card-body" id="mgResult"></div>
+          <div class="card-body">
+            <div class="form-row">
+              <div class="form-group">
+                <label data-i18n="mail_sender">المرسل</label>
+                <input type="text" id="mailSender" class="form-control" placeholder="security@paypal-verify.com" />
+              </div>
+              <div class="form-group">
+                <label data-i18n="mail_subject">الموضوع</label>
+                <input type="text" id="mailSubject" class="form-control" placeholder="Urgent: verify your account" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label data-i18n="mail_body">المحتوى</label>
+              <textarea id="mailBody" class="form-control" placeholder="نص الرسالة..."></textarea>
+            </div>
+            <button type="button" class="btn" id="mailScanBtn"><span class="spinner"></span>🎯 <span data-i18n="mail_scan">تصنيف البريد</span></button>
+            <div class="result-box" id="mailResult"></div>
+          </div>
         </div>
       </section>
 
       <!-- SYSGUARD -->
-      <section class="view hidden" id="view-sysguard">
+      <section class="view" id="view-sysguard">
         <div class="card">
           <div class="card-head">
-            <h3 data-i18n="sg_title">SysGuard — Real-time System Monitor</h3>
-            <div style="display:flex;gap:6px">
-              <button type="button" class="btn btn-secondary btn-sm" id="sgOnce" data-i18n="sg_once">⟳ Check once</button>
-              <button type="button" class="btn btn-primary btn-sm" id="sgStream" data-i18n="sg_auto">▶ Auto (5s)</button>
+            <h3>SysGuard — <span data-i18n="sys_title">مراقبة النظام المباشرة</span></h3>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button type="button" class="btn btn-sm btn-ghost" id="sgOnce">⟳ <span data-i18n="sys_once">فحص مرة</span></button>
+              <button type="button" class="btn btn-sm" id="sgStream">▶ <span data-i18n="sys_stream">تلقائي (5 ث)</span></button>
             </div>
           </div>
-          <div class="card-body" id="sgBody">
-            <p class="empty" data-i18n="sg_empty">Click "Check once" to load current status.</p>
+          <div class="card-body">
+            <div class="metric-row" id="sysMetrics">
+              <div class="metric"><div class="val" id="sysCpu">—</div><div class="lbl">CPU</div></div>
+              <div class="metric"><div class="val" id="sysMem">—</div><div class="lbl">Memory</div></div>
+              <div class="metric"><div class="val" id="sysDisk">—</div><div class="lbl">Disk</div></div>
+              <div class="metric"><div class="val" id="sysRisk">—</div><div class="lbl">Risk</div></div>
+            </div>
+            <div id="sysExtra" class="empty-state" data-i18n="sys_wait">اضغط فحص لعرض العمليات والسجل</div>
           </div>
-        </div>
-        <div class="card" style="margin-top:14px">
-          <div class="card-head"><h3 data-i18n="sg_history">History (last 60 samples)</h3></div>
-          <div class="card-body" id="sgHistory"><p class="empty">—</p></div>
         </div>
       </section>
 
       <!-- CAMGUARD -->
-      <section class="view hidden" id="view-camguard">
+      <section class="view" id="view-camguard">
         <div class="card">
-          <div class="card-head"><h3 data-i18n="cg_title">CamGuard — Camera / Frame Analyzer</h3></div>
-          <div class="card-body">
-            <form id="camguardForm" class="form-grid">
-              <div>
-                <label data-i18n="cg_upload">Upload frame image</label>
-                <input type="file" name="frame" accept="image/*" />
-              </div>
-              <div>
-                <label data-i18n="cg_cam_id">Camera ID</label>
-                <input type="text" name="camera_id" value="default" />
-              </div>
-              <div class="col-span-2">
-                <label data-i18n="cg_base64">…or paste base64</label>
-                <textarea name="base64" rows="3" data-i18n-placeholder="cg_base64_ph" placeholder="data:image/jpeg;base64,..."></textarea>
-              </div>
-              <div class="col-span-2">
-                <label class="inline-check">
-                  <input type="checkbox" name="yolo" checked />
-                  <span data-i18n="cg_yolo">Attempt YOLO detection</span>
-                </label>
-              </div>
-              <div class="form-actions"><button type="submit" class="btn btn-primary" data-i18n="cg_analyze">📷 Analyze Frame</button></div>
-              <p class="form-error" id="cgError" role="alert"></p>
-            </form>
-            <p class="note" data-i18n="cg_note">YOLO requires ultralytics + weights. Motion detection works out of the box.</p>
+          <div class="card-head">
+            <h3>CamGuard — <span data-i18n="cam_title">تحليل الكاميرا</span></h3>
           </div>
-        </div>
-        <div class="card" id="cgResultCard" style="display:none; margin-top:14px">
-          <div class="card-head"><h3 data-i18n="cg_result">Frame analysis</h3><span class="risk-chip" id="cgRiskChip">—</span></div>
-          <div class="card-body" id="cgResult"></div>
+          <div class="card-body">
+            <div class="form-group">
+              <label data-i18n="cam_file">رفع صورة / إطار</label>
+              <input type="file" id="camFile" class="form-control" accept="image/*" />
+            </div>
+            <div class="form-group">
+              <label data-i18n="cam_id">معرّف الكاميرا (اختياري)</label>
+              <input type="text" id="camId" class="form-control" placeholder="cam-01" />
+            </div>
+            <button type="button" class="btn" id="camScanBtn"><span class="spinner"></span>📷 <span data-i18n="cam_scan">تحليل الإطار</span></button>
+            <div class="result-box" id="camResult"></div>
+          </div>
         </div>
       </section>
 
       <!-- SCANGUARD -->
-      <section class="view hidden" id="view-scanguard">
+      <section class="view" id="view-scanguard">
         <div class="card">
-          <div class="card-head"><h3 data-i18n="sc_title">ScanGuard — Code / Log Scanner</h3></div>
-          <div class="card-body">
-            <form id="scanguardForm" class="form-grid">
-              <div>
-                <label data-i18n="sc_upload">Upload file</label>
-                <input type="file" name="file" />
-              </div>
-              <div>
-                <label data-i18n="sc_type">Hint type</label>
-                <select name="type">
-                  <option value="auto" data-i18n="sc_auto">Auto detect</option>
-                  <option value="code" data-i18n="sc_code">Code</option>
-                  <option value="log" data-i18n="sc_log">Log file</option>
-                </select>
-              </div>
-              <div class="col-span-2">
-                <label data-i18n="sc_paste">…or paste code / log text</label>
-                <textarea name="code" rows="8" data-i18n-placeholder="sc_placeholder" placeholder="Paste source code or log content…"></textarea>
-              </div>
-              <div class="form-actions"><button type="submit" class="btn btn-primary" data-i18n="sc_audit">🛡 Audit</button></div>
-              <p class="form-error" id="scanGError" role="alert"></p>
-            </form>
+          <div class="card-head">
+            <h3>ScanGuard — <span data-i18n="scan_title">تدقيق الأكواد والملفات</span></h3>
+            <button type="button" class="btn btn-sm btn-demo" id="scanDemo" data-i18n="try_demo">جرّب مثالاً</button>
           </div>
-        </div>
-        <div class="card" id="scanGResultCard" style="display:none; margin-top:14px">
-          <div class="card-head"><h3 data-i18n="sc_report">Audit report</h3><span class="risk-chip" id="scanGRiskChip">—</span></div>
-          <div class="card-body" id="scanGResult"></div>
+          <div class="card-body">
+            <div class="form-group">
+              <label data-i18n="scan_file">رفع ملف</label>
+              <input type="file" id="scanFile" class="form-control" />
+            </div>
+            <div class="form-group">
+              <label data-i18n="scan_text">…أو الصق كود / نص</label>
+              <textarea id="scanText" class="form-control" placeholder="SELECT * FROM users WHERE id = 1 OR 1=1; ..."></textarea>
+            </div>
+            <button type="button" class="btn" id="scanScanBtn"><span class="spinner"></span>🛡️ <span data-i18n="scan_btn">تدقيق</span></button>
+            <div class="result-box" id="scanResult"></div>
+          </div>
         </div>
       </section>
 
       <!-- ALERTS -->
-      <section class="view hidden" id="view-alerts">
+      <section class="view" id="view-alerts">
         <div class="card">
           <div class="card-head">
-            <h3 data-i18n="nav_alerts">Alerts</h3>
-            <div class="filter-row">
-              <select id="alertSeverityFilter">
-                <option value="" data-i18n="all_severities">All severities</option>
-                <option value="critical" data-i18n="critical">Critical</option>
-                <option value="high" data-i18n="high">High</option>
-                <option value="medium" data-i18n="medium">Medium</option>
-                <option value="info" data-i18n="info">Info</option>
-              </select>
-              <label class="inline-check" style="font-size:0.78rem">
-                <input type="checkbox" id="alertUnreadOnly" /> <span data-i18n="unread_only">Unread only</span>
-              </label>
-            </div>
+            <h3 data-i18n="alerts_title">التنبيهات</h3>
+            <label style="font-size:0.8rem;color:var(--text-muted);display:flex;align-items:center;gap:6px">
+              <input type="checkbox" id="alertUnreadOnly" /> <span data-i18n="al_unread">غير مقروء فقط</span>
+            </label>
           </div>
-          <div class="card-body overflow-x"><table class="data-table" id="alertsTable"></table></div>
+          <div class="card-body overflow-x">
+            <div id="alertsTableWrap" class="empty-state" data-i18n="no_alerts">لا تنبيهات</div>
+          </div>
         </div>
       </section>
 
       <!-- HISTORY -->
-      <section class="view hidden" id="view-history">
+      <section class="view" id="view-history">
         <div class="card">
           <div class="card-head">
-            <h3 data-i18n="hist_title">Scan history</h3>
-            <div class="filter-row">
-              <select id="scanModuleFilter">
-                <option value="" data-i18n="hist_all">All modules</option>
+            <h3 data-i18n="hist_title">سجل الفحوصات</h3>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <select id="scanModuleFilter" class="form-control" style="width:auto;padding:6px 10px">
+                <option value="" data-i18n="hist_all">كل الوحدات</option>
                 <option value="docguard">DocGuard</option>
                 <option value="mailguard">MailGuard</option>
                 <option value="sysguard">SysGuard</option>
                 <option value="camguard">CamGuard</option>
                 <option value="scanguard">ScanGuard</option>
               </select>
-              <input type="number" id="scanMinRisk" min="0" max="100" data-i18n-placeholder="min_risk" placeholder="Min risk" style="width:90px" />
+              <input type="number" id="scanMinRisk" class="form-control" style="width:120px;padding:6px 10px" min="0" max="100" placeholder="Min risk" />
             </div>
           </div>
-          <div class="card-body overflow-x"><table class="data-table" id="historyTable"></table></div>
+          <div class="card-body overflow-x">
+            <div id="historyTableWrap" class="empty-state" data-i18n="no_scans">لا فحوصات</div>
+          </div>
         </div>
       </section>
-    </main>
+
+    </div>
   </div>
-  <div id="toastArea" class="toast-area" aria-live="polite"></div>
+</div>
 
-  <script>
-    // ========== i18n ==========
-    const translations = {
-      en: {
-        control_center: "Control Center",
-        nav_main: "Main",
-        nav_overview: "Overview",
-        nav_modules: "Modules",
-        nav_activity: "Activity",
-        nav_alerts: "Alerts",
-        nav_history: "History",
-        guest: "Guest",
-        not_signed: "Not signed in",
-        sign_in: "Sign in",
-        sign_out: "Sign out",
-        create_account: "Create account",
-        refresh: "↻ Refresh",
-        guest_title: "Browsing as guest.",
-        guest_desc: "You can try all modules without an account. Sign in to save history and alerts.",
-        st_scans: "Scans (24h)",
-        st_today: "Today",
-        st_critical: "Critical scans",
-        st_risk70: "Risk ≥ 70",
-        st_high: "High-risk scans",
-        st_risk40: "Risk ≥ 40",
-        st_unread: "Unread alerts",
-        st_action: "Action needed",
-        per_module: "Per-module performance",
-        click_refresh: "No data yet. Start a scan from the modules on the left, or click ↻ Refresh.",
-        sys_snapshot: "System snapshot",
-        check_now: "Check now",
-        run_sysguard: "Click Check now to view live CPU / RAM / Disk.",
-        recent_scans: "Recent scans",
-        recent_alerts: "Recent alerts",
-        dg_title: "DocGuard — Document Scanner",
-        dg_upload: "Upload PDF / TXT",
-        dg_paste: "…or paste raw text",
-        dg_placeholder: "Paste document text here…",
-        dg_scan: "🔍 Scan Document",
-        scan_result: "Scan Result",
-        mg_title: "MailGuard — Email Classifier",
-        mg_from: "From / Sender",
-        mg_from_ph: "sender@example.com",
-        mg_subject: "Subject",
-        mg_subject_ph: "Email subject",
-        mg_body: "Body",
-        mg_body_ph: "Paste email body…",
-        mg_classify: "🎯 Classify Email",
-        classification: "Classification",
-        sg_title: "SysGuard — Real-time System Monitor",
-        sg_once: "⟳ Check once",
-        sg_auto: "▶ Auto (5s)",
-        sg_empty: "Click \"Check once\" to load current status.",
-        sg_history: "History (last 60 samples)",
-        cg_title: "CamGuard — Camera / Frame Analyzer",
-        cg_upload: "Upload frame image",
-        cg_cam_id: "Camera ID",
-        cg_base64: "…or paste base64",
-        cg_base64_ph: "data:image/jpeg;base64,...",
-        cg_yolo: "Attempt YOLO detection",
-        cg_analyze: "📷 Analyze Frame",
-        cg_note: "YOLO requires ultralytics + weights. Motion detection works out of the box.",
-        cg_result: "Frame analysis",
-        sc_title: "ScanGuard — Code / Log Scanner",
-        sc_upload: "Upload file",
-        sc_type: "Hint type",
-        sc_auto: "Auto detect",
-        sc_code: "Code",
-        sc_log: "Log file",
-        sc_paste: "…or paste code / log text",
-        sc_placeholder: "Paste source code or log content…",
-        sc_audit: "🛡 Audit",
-        sc_report: "Audit report",
-        all_severities: "All severities",
-        critical: "Critical",
-        high: "High",
-        medium: "Medium",
-        info: "Info",
-        unread_only: "Unread only",
-        hist_title: "Scan history",
-        hist_all: "All modules",
-        min_risk: "Min risk",
-        signed_in: "Signed in"
-      },
-      ar: {
-        control_center: "مركز التحكم",
-        nav_main: "الرئيسية",
-        nav_overview: "نظرة عامة",
-        nav_modules: "الوحدات",
-        nav_activity: "النشاط",
-        nav_alerts: "التنبيهات",
-        nav_history: "السجل",
-        guest: "زائر",
-        not_signed: "غير مسجل الدخول",
-        sign_in: "تسجيل الدخول",
-        sign_out: "تسجيل الخروج",
-        create_account: "إنشاء حساب",
-        refresh: "↻ تحديث",
-        guest_title: "تصفح كزائر.",
-        guest_desc: "تقدر تجرّب كل الوحدات بدون حساب. سجّل الدخول لحفظ السجل واستقبال التنبيهات.",
-        st_scans: "الفحوصات (24 ساعة)",
-        st_today: "اليوم",
-        st_critical: "فحوصات حرجة",
-        st_risk70: "مخاطر ≥ 70",
-        st_high: "فحوصات عالية المخاطر",
-        st_risk40: "مخاطر ≥ 40",
-        st_unread: "تنبيهات غير مقروءة",
-        st_action: "يحتاج إجراء",
-        per_module: "أداء الوحدات",
-        click_refresh: "لا توجد بيانات بعد. ابدأ فحصاً من الوحدات على اليسار، أو اضغط ↻ تحديث.",
-        sys_snapshot: "لقطة النظام",
-        check_now: "فحص الآن",
-        run_sysguard: "اضغط «فحص الآن» لعرض المعالج / الذاكرة / القرص مباشرة.",
-        recent_scans: "أحدث الفحوصات",
-        recent_alerts: "أحدث التنبيهات",
-        dg_title: "DocGuard — ماسح المستندات",
-        dg_upload: "رفع PDF / TXT",
-        dg_paste: "…أو الصق النص مباشرة",
-        dg_placeholder: "الصق نص المستند هنا…",
-        dg_scan: "🔍 فحص المستند",
-        scan_result: "نتيجة الفحص",
-        mg_title: "MailGuard — مصنف البريد",
-        mg_from: "المرسل",
-        mg_from_ph: "sender@example.com",
-        mg_subject: "الموضوع",
-        mg_subject_ph: "موضوع البريد",
-        mg_body: "المحتوى",
-        mg_body_ph: "الصق محتوى البريد…",
-        mg_classify: "🎯 تصنيف البريد",
-        classification: "التصنيف",
-        sg_title: "SysGuard — مراقبة النظام المباشرة",
-        sg_once: "⟳ فحص مرة",
-        sg_auto: "▶ تلقائي (5 ث)",
-        sg_empty: "اضغط «فحص مرة» لتحميل الحالة الحالية.",
-        sg_history: "السجل (آخر 60 عينة)",
-        cg_title: "CamGuard — محلل الكاميرا / الإطارات",
-        cg_upload: "رفع صورة إطار",
-        cg_cam_id: "معرّف الكاميرا",
-        cg_base64: "…أو الصق base64",
-        cg_base64_ph: "data:image/jpeg;base64,...",
-        cg_yolo: "محاولة كشف YOLO",
-        cg_analyze: "📷 تحليل الإطار",
-        cg_note: "YOLO يحتاج ultralytics + الأوزان. كشف الحركة يعمل مباشرة.",
-        cg_result: "تحليل الإطار",
-        sc_title: "ScanGuard — ماسح الكود / السجلات",
-        sc_upload: "رفع ملف",
-        sc_type: "نوع التلميح",
-        sc_auto: "اكتشاف تلقائي",
-        sc_code: "كود",
-        sc_log: "ملف سجل",
-        sc_paste: "…أو الصق كود / سجل",
-        sc_placeholder: "الصق الكود أو محتوى السجل…",
-        sc_audit: "🛡 تدقيق",
-        sc_report: "تقرير التدقيق",
-        all_severities: "كل المستويات",
-        critical: "حرج",
-        high: "عالي",
-        medium: "متوسط",
-        info: "معلومة",
-        unread_only: "غير المقروء فقط",
-        hist_title: "سجل الفحوصات",
-        hist_all: "كل الوحدات",
-        min_risk: "أدنى مخاطر",
-        signed_in: "مسجل الدخول"
-      }
-    };
+<div id="toastArea" class="toast-area" aria-live="polite"></div>
 
-    let currentLang = localStorage.getItem('lang') || 'ar';
+<script>
+const titles = {
+  overview: { ar: 'نظرة عامة', en: 'Overview' },
+  docguard: { ar: 'DocGuard', en: 'DocGuard' },
+  mailguard: { ar: 'MailGuard', en: 'MailGuard' },
+  sysguard: { ar: 'SysGuard', en: 'SysGuard' },
+  camguard: { ar: 'CamGuard', en: 'CamGuard' },
+  scanguard: { ar: 'ScanGuard', en: 'ScanGuard' },
+  alerts: { ar: 'التنبيهات', en: 'Alerts' },
+  history: { ar: 'السجل', en: 'History' }
+};
 
-    function applyLanguage(lang) {
-      currentLang = lang;
-      localStorage.setItem('lang', lang);
-      const t = translations[lang];
-      document.documentElement.lang = lang;
-      document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+const i18n = {
+  ar: {
+    control_center: 'مركز التحكم', nav_main: 'الرئيسية', nav_overview: 'نظرة عامة',
+    nav_modules: 'الوحدات الأمنية', nav_ops: 'العمليات', nav_alerts: 'التنبيهات', nav_history: 'السجل',
+    login: 'تسجيل الدخول', register: 'إنشاء حساب', logout: 'تسجيل الخروج',
+    guest_title: 'تصفح كزائر.', guest_msg: 'تقدر تجرّب كل الوحدات بدون حساب. سجّل الدخول لحفظ السجل واستقبال التنبيهات.',
+    st_scans: 'الفحوصات (24 ساعة)', st_today: 'اليوم', st_critical: 'فحوصات حرجة', st_risk70: 'مخاطر ≥ 70',
+    st_high: 'فحوصات عالية المخاطر', st_risk40: 'مخاطر ≥ 40', st_unread: 'تنبيهات غير مقروءة', st_action: 'يحتاج إجراء',
+    quick_title: 'ابدأ فحصاً سريعاً', q_doc: 'فحص مستندات', q_mail: 'تصنيف بريد', q_sys: 'مراقبة نظام', q_cam: 'تحليل كاميرا', q_scan: 'تدقيق كود',
+    sys_snapshot: 'لقطة النظام', scan_now: 'فحص الآن', sys_empty_title: 'اضغط «فحص الآن»', sys_empty: 'لعرض المعالج / الذاكرة / القرص مباشرة.',
+    module_perf: 'أداء الوحدات', mod_empty_title: 'لا توجد فحوصات بعد', mod_empty: 'ابدأ من الوحدات أعلاه.',
+    recent_alerts: 'أحدث التنبيهات', recent_scans: 'أحدث الفحوصات', no_alerts: 'لا تنبيهات', no_scans: 'لا فحوصات',
+    doc_title: 'ماسح المستندات', doc_file: 'رفع PDF / TXT', doc_text: '…أو الصق النص مباشرة', doc_ph: 'الصق نص المستند هنا...',
+    doc_scan: 'فحص المستند', try_demo: 'جرّب مثالاً',
+    mail_title: 'مصنّف البريد', mail_sender: 'المرسل', mail_subject: 'الموضوع', mail_body: 'المحتوى', mail_scan: 'تصنيف البريد',
+    sys_title: 'مراقبة النظام المباشرة', sys_once: 'فحص مرة', sys_stream: 'تلقائي (5 ث)', sys_wait: 'اضغط فحص لعرض العمليات والسجل',
+    cam_title: 'تحليل الكاميرا', cam_file: 'رفع صورة / إطار', cam_id: 'معرّف الكاميرا (اختياري)', cam_scan: 'تحليل الإطار',
+    scan_title: 'تدقيق الأكواد والملفات', scan_file: 'رفع ملف', scan_text: '…أو الصق كود / نص', scan_btn: 'تدقيق',
+    alerts_title: 'التنبيهات', al_unread: 'غير مقروء فقط', hist_title: 'سجل الفحوصات', hist_all: 'كل الوحدات',
+    guest: 'زائر', not_signed: 'غير مسجّل', signed_in: 'مسجّل الدخول'
+  },
+  en: {
+    control_center: 'Control Center', nav_main: 'Main', nav_overview: 'Overview',
+    nav_modules: 'Security Modules', nav_ops: 'Operations', nav_alerts: 'Alerts', nav_history: 'History',
+    login: 'Sign in', register: 'Create account', logout: 'Sign out',
+    guest_title: 'Browsing as guest.', guest_msg: 'Try all modules without an account. Sign in to save history and receive alerts.',
+    st_scans: 'Scans (24h)', st_today: 'Today', st_critical: 'Critical scans', st_risk70: 'Risk ≥ 70',
+    st_high: 'High-risk scans', st_risk40: 'Risk ≥ 40', st_unread: 'Unread alerts', st_action: 'Needs action',
+    quick_title: 'Quick scan', q_doc: 'Scan docs', q_mail: 'Classify mail', q_sys: 'System monitor', q_cam: 'Camera analysis', q_scan: 'Code audit',
+    sys_snapshot: 'System snapshot', scan_now: 'Scan now', sys_empty_title: 'Click “Scan now”', sys_empty: 'to show CPU / memory / disk live.',
+    module_perf: 'Module performance', mod_empty_title: 'No scans yet', mod_empty: 'Start from the modules above.',
+    recent_alerts: 'Recent alerts', recent_scans: 'Recent scans', no_alerts: 'No alerts', no_scans: 'No scans',
+    doc_title: 'Document scanner', doc_file: 'Upload PDF / TXT', doc_text: '…or paste text', doc_ph: 'Paste document text here...',
+    doc_scan: 'Scan document', try_demo: 'Try demo',
+    mail_title: 'Email classifier', mail_sender: 'Sender', mail_subject: 'Subject', mail_body: 'Body', mail_scan: 'Classify email',
+    sys_title: 'Live system monitor', sys_once: 'Scan once', sys_stream: 'Auto (5s)', sys_wait: 'Click scan to show processes & history',
+    cam_title: 'Camera analysis', cam_file: 'Upload image / frame', cam_id: 'Camera ID (optional)', cam_scan: 'Analyze frame',
+    scan_title: 'Code & file audit', scan_file: 'Upload file', scan_text: '…or paste code / text', scan_btn: 'Audit',
+    alerts_title: 'Alerts', al_unread: 'Unread only', hist_title: 'Scan history', hist_all: 'All modules',
+    guest: 'Guest', not_signed: 'Not signed in', signed_in: 'Signed in'
+  }
+};
 
-      document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (t[key] !== undefined) el.textContent = t[key];
-      });
+let currentLang = 'ar';
+let sysTimer = null;
 
-      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-        const key = el.getAttribute('data-i18n-placeholder');
-        if (t[key] !== undefined) el.placeholder = t[key];
-      });
+function setLang(lang) {
+  currentLang = lang;
+  const html = document.documentElement;
+  html.lang = lang;
+  html.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  document.getElementById('btn-ar').classList.toggle('active', lang === 'ar');
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  const dict = i18n[lang];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.getAttribute('data-i18n');
+    if (dict[k]) el.textContent = dict[k];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const k = el.getAttribute('data-i18n-placeholder');
+    if (dict[k]) el.placeholder = dict[k];
+  });
+  const active = document.querySelector('.nav-link.active');
+  if (active) {
+    const nav = active.getAttribute('data-nav');
+    document.getElementById('pageTitle').textContent = titles[nav]?.[lang] || nav;
+  }
+  // update guest labels if guest
+  if (!localStorage.getItem('token')) {
+    document.getElementById('authLabel').textContent = dict.guest;
+    document.getElementById('authRole').textContent = dict.not_signed;
+  }
+}
 
-      const activeNav = document.querySelector('.nav-link.active');
-      if (activeNav) {
-        const span = activeNav.querySelector('[data-i18n]');
-        document.getElementById('pageTitle').textContent = span ? span.textContent : activeNav.textContent.trim();
-      }
+function showToast(msg, type = 'ok') {
+  const area = document.getElementById('toastArea');
+  const t = document.createElement('div');
+  t.className = 'toast ' + type;
+  t.textContent = msg;
+  area.appendChild(t);
+  setTimeout(() => t.remove(), 3500);
+}
 
-      document.getElementById('btn-en').classList.toggle('active-lang', lang === 'en');
-      document.getElementById('btn-ar').classList.toggle('active-lang', lang === 'ar');
+function authHeaders() {
+  const h = {};
+  const token = localStorage.getItem('token');
+  if (token) h['Authorization'] = 'Bearer ' + token;
+  return h;
+}
+
+function esc(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function riskLabel(score, level) {
+  const s = Number(score) || 0;
+  const lv = (level || '').toLowerCase();
+  if (lv.includes('critical') || s >= 85) return currentLang === 'ar' ? 'حرج' : 'Critical';
+  if (lv.includes('high') || s >= 70) return currentLang === 'ar' ? 'عالٍ' : 'High';
+  if (lv.includes('medium') || s >= 40) return currentLang === 'ar' ? 'متوسط' : 'Medium';
+  if (lv.includes('spam')) return 'Spam';
+  if (lv.includes('phish')) return currentLang === 'ar' ? 'تصيّد' : 'Phishing';
+  return currentLang === 'ar' ? 'منخفض' : 'Low';
+}
+
+function chipClass(score, level) {
+  const s = Number(score) || 0;
+  const lv = (level || '').toLowerCase();
+  if (lv.includes('phish') || s >= 70 || lv.includes('critical') || lv.includes('high')) return 'chip-critical';
+  if (lv.includes('spam') || s >= 40 || lv.includes('medium')) return 'chip-medium';
+  return 'chip-low';
+}
+
+function renderResult(box, title, score, level, rows, lists) {
+  const chip = `<span class="chip ${chipClass(score, level)}">${esc(riskLabel(score, level))} · ${esc(score)}</span>`;
+  let kv = '<div class="kv-grid">';
+  (rows || []).forEach(([k, v]) => { kv += `<div class="kv"><div class="k">${esc(k)}</div><div class="v">${esc(v)}</div></div>`; });
+  kv += '</div>';
+  let extra = '';
+  (lists || []).forEach(([label, items]) => {
+    if (!items || !items.length) return;
+    extra += `<div style="margin-top:10px"><div class="tag" style="font-size:0.78rem;font-weight:600;color:#FCA5A5;margin-bottom:4px">${esc(label)}</div><ul class="issue-list">`;
+    items.forEach(it => { extra += `<li>${typeof it === 'string' ? esc(it) : esc(JSON.stringify(it))}</li>`; });
+    extra += '</ul></div>';
+  });
+  box.innerHTML = `<div class="result-head"><strong>${esc(title)}</strong>${chip}</div><div class="result-body">${kv}${extra}</div>`;
+  box.classList.add('show');
+}
+
+function closeSidebar() {
+  const sb = document.getElementById('sidebar');
+  sb.classList.remove('open');
+  if (window.innerWidth <= 900) sb.classList.add('closed');
+  document.getElementById('overlay').classList.remove('show');
+}
+
+function openSidebar() {
+  const sb = document.getElementById('sidebar');
+  sb.classList.remove('closed');
+  sb.classList.add('open');
+  if (window.innerWidth <= 900) document.getElementById('overlay').classList.add('show');
+}
+
+function toggleSidebar() {
+  const sb = document.getElementById('sidebar');
+  if (window.innerWidth <= 900) {
+    if (sb.classList.contains('open')) closeSidebar();
+    else openSidebar();
+  } else {
+    sb.classList.toggle('closed');
+    document.getElementById('main').classList.toggle('full', sb.classList.contains('closed'));
+  }
+}
+
+function showView(target) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  const view = document.getElementById('view-' + target);
+  if (view) view.classList.add('active');
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  const link = document.querySelector(`.nav-link[data-nav="${target}"]`);
+  if (link) link.classList.add('active');
+  document.getElementById('pageTitle').textContent = titles[target]?.[currentLang] || target;
+  if (window.innerWidth <= 900) closeSidebar();
+  if (target === 'overview') loadOverview();
+  if (target === 'alerts') loadAlerts();
+  if (target === 'history') loadHistory();
+  if (target === 'sysguard') fetchSysStatus();
+}
+
+document.querySelectorAll('.nav-link[data-nav]').forEach(el => {
+  el.addEventListener('click', e => {
+    e.preventDefault();
+    showView(el.getAttribute('data-nav'));
+  });
+});
+document.getElementById('toggleSidebar').addEventListener('click', toggleSidebar);
+document.getElementById('refreshBtn').addEventListener('click', () => {
+  const active = document.querySelector('.nav-link.active')?.getAttribute('data-nav') || 'overview';
+  showView(active);
+  showToast(currentLang === 'ar' ? 'تم التحديث' : 'Refreshed', 'ok');
+});
+
+function setLoggedIn(user) {
+  document.querySelectorAll('.guest-only').forEach(el => el.classList.add('hidden'));
+  document.querySelectorAll('.auth-only').forEach(el => el.classList.remove('hidden'));
+  document.getElementById('authDot').classList.add('on');
+  document.getElementById('authDot').classList.remove('off');
+  document.getElementById('authLabel').textContent = user?.username || user?.email || 'User';
+  document.getElementById('authRole').textContent = i18n[currentLang].signed_in;
+  document.getElementById('userAvatar').textContent = (user?.username || user?.email || 'U')[0].toUpperCase();
+}
+function setGuest() {
+  document.querySelectorAll('.guest-only').forEach(el => el.classList.remove('hidden'));
+  document.querySelectorAll('.auth-only').forEach(el => el.classList.add('hidden'));
+  document.getElementById('authDot').classList.remove('on');
+  document.getElementById('authDot').classList.add('off');
+  document.getElementById('authLabel').textContent = i18n[currentLang].guest;
+  document.getElementById('authRole').textContent = i18n[currentLang].not_signed;
+  document.getElementById('userAvatar').textContent = currentLang === 'ar' ? 'ز' : 'G';
+}
+
+document.getElementById('logoutBtn')?.addEventListener('click', () => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+  setGuest();
+  window.location.href = 'login.html';
+});
+
+async function loadOverview() {
+  try {
+    const res = await fetch('/api/dashboard/summary', { headers: authHeaders() });
+    if (!res.ok) throw new Error('summary');
+    const data = await res.json();
+    document.getElementById('statScans').textContent = data.scans_24h ?? data.total_scans ?? 0;
+    document.getElementById('statCritical').textContent = data.critical_scans ?? data.critical ?? 0;
+    document.getElementById('statHigh').textContent = data.high_risk_scans ?? data.high ?? 0;
+    document.getElementById('statUnread').textContent = data.unread_alerts ?? data.unread ?? 0;
+    updateAlertsBadge(data.unread_alerts ?? data.unread ?? 0);
+  } catch {
+    // keep zeros — fine for guest / missing endpoint
+  }
+}
+
+function updateAlertsBadge(n) {
+  const b = document.getElementById('alertsBadge');
+  if (n > 0) b.classList.add('show'); else b.classList.remove('show');
+}
+
+async function loadAlerts() {
+  const wrap = document.getElementById('alertsTableWrap');
+  try {
+    const res = await fetch('/api/alerts', { headers: authHeaders() });
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    const items = data.alerts || data.items || data || [];
+    if (!items.length) {
+      wrap.className = 'empty-state';
+      wrap.textContent = i18n[currentLang].no_alerts;
+      return;
     }
+    wrap.className = 'overflow-x';
+    wrap.innerHTML = `<table class="data-table"><thead><tr><th>Source</th><th>Severity</th><th>Title</th><th>Time</th></tr></thead><tbody>${
+      items.slice(0, 50).map(a => `<tr><td>${esc(a.source||'')}</td><td>${esc(a.severity||'')}</td><td>${esc(a.title||a.message||'')}</td><td>${esc(a.created_at||a.time||'')}</td></tr>`).join('')
+    }</tbody></table>`;
+  } catch {
+    wrap.className = 'empty-state';
+    wrap.textContent = i18n[currentLang].no_alerts;
+  }
+}
 
-    document.getElementById('btn-en').addEventListener('click', () => applyLanguage('en'));
-    document.getElementById('btn-ar').addEventListener('click', () => applyLanguage('ar'));
-
-    // ========== Toast ==========
-    function showToast(msg, type) {
-      const area = document.getElementById('toastArea');
-      if (!area) return;
-      const el = document.createElement('div');
-      el.style.cssText = 'padding:12px 16px;border-radius:10px;font-size:0.85rem;background:' +
-        (type==='danger' ? 'rgba(239,68,68,0.95)' : type==='success' ? 'rgba(16,185,129,0.95)' : 'rgba(99,102,241,0.95)') +
-        ';color:#fff;box-shadow:0 8px 24px rgba(0,0,0,0.35);max-width:320px';
-      el.textContent = msg;
-      area.appendChild(el);
-      setTimeout(() => el.remove(), 4200);
+async function loadHistory() {
+  const wrap = document.getElementById('historyTableWrap');
+  try {
+    let url = '/api/scans?per_page=50';
+    const mod = document.getElementById('scanModuleFilter')?.value;
+    const minR = document.getElementById('scanMinRisk')?.value;
+    if (mod) url += '&module=' + encodeURIComponent(mod);
+    if (minR) url += '&min_risk=' + encodeURIComponent(minR);
+    const res = await fetch(url, { headers: authHeaders() });
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    const items = data.scans || data.items || data || [];
+    if (!items.length) {
+      wrap.className = 'empty-state';
+      wrap.textContent = i18n[currentLang].no_scans;
+      return;
     }
+    wrap.className = 'overflow-x';
+    wrap.innerHTML = `<table class="data-table"><thead><tr><th>Module</th><th>Target</th><th>Risk</th><th>Time</th></tr></thead><tbody>${
+      items.slice(0, 50).map(s => `<tr><td>${esc(s.module||'')}</td><td>${esc(s.target||s.filename||'')}</td><td>${esc(s.risk_score??'')}</td><td>${esc(s.created_at||'')}</td></tr>`).join('')
+    }</tbody></table>`;
+  } catch {
+    wrap.className = 'empty-state';
+    wrap.textContent = i18n[currentLang].no_scans;
+  }
+}
 
-    function authHeaders() {
-      const h = {};
-      const t = localStorage.getItem('token');
-      if (t) h['Authorization'] = 'Bearer ' + t;
-      return h;
-    }
+document.getElementById('scanModuleFilter')?.addEventListener('change', loadHistory);
+document.getElementById('scanMinRisk')?.addEventListener('change', loadHistory);
+document.getElementById('alertUnreadOnly')?.addEventListener('change', loadAlerts);
 
-    function esc(s) {
-      return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-    }
-
-    function fmtTime(iso) {
-      if (!iso) return '—';
-      try { return new Date(iso).toLocaleString(currentLang === 'ar' ? 'ar-SA' : 'en-GB', { hour12: false }); }
-      catch { return iso; }
-    }
-
-    function updateAlertsBadge(n) {
-      const badge = document.getElementById('alertsBadge');
-      if (!badge) return;
-      if (n > 0) {
-        badge.textContent = n > 99 ? '99+' : String(n);
-        badge.style.display = 'inline-flex';
-      } else {
-        badge.textContent = '';
-        badge.style.display = 'none';
-      }
-    }
-
-    // ========== Sidebar toggle (mobile) ==========
-    function closeSidebar() {
-      document.getElementById('sidebar')?.classList.remove('open');
-      document.getElementById('sidebarOverlay')?.classList.remove('show');
-    }
-    function toggleSidebar() {
-      const sb = document.getElementById('sidebar');
-      const ov = document.getElementById('sidebarOverlay');
-      if (!sb) return;
-      const open = sb.classList.toggle('open');
-      ov?.classList.toggle('show', open);
-    }
-    document.getElementById('toggleSidebar')?.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      toggleSidebar();
-    });
-    document.getElementById('sidebarOverlay')?.addEventListener('click', closeSidebar);
-
-    // ========== Overview / Alerts / History loaders ==========
-    async function loadOverview() {
-      try {
-        const res = await fetch('/api/dashboard/summary', { headers: authHeaders() });
-        if (!res.ok) throw new Error('summary ' + res.status);
-        const data = await res.json();
-        const scans = data.scans || {};
-        const alerts = data.alerts || {};
-        const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = (v === 0 || v) ? v : '—'; };
-        set('st-scans-24', scans.last_24h ?? scans.total ?? 0);
-        set('st-critical', scans.critical ?? 0);
-        set('st-high', scans.high_risk ?? 0);
-        set('st-unread', alerts.unread ?? 0);
-        updateAlertsBadge(alerts.unread ?? 0);
-
-        const bars = document.getElementById('moduleBars');
-        if (bars) {
-          const mods = data.by_module || [];
-          if (!mods.length) {
-            bars.innerHTML = '<p class="empty">' + (currentLang==='ar' ? 'لا توجد فحوصات بعد. ابدأ من الوحدات.' : 'No scans yet. Start from modules.') + '</p>';
-          } else {
-            bars.innerHTML = mods.map(m => {
-              const risk = Math.round(m.avg_risk || 0);
-              const color = risk >= 70 ? '#EF4444' : risk >= 40 ? '#F59E0B' : '#10B981';
-              return `<div style="margin-bottom:12px">
-                <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:4px">
-                  <strong>${esc(m.module)}</strong>
-                  <span style="color:var(--text-secondary)">${m.scan_count||0} scans · avg ${risk}</span>
-                </div>
-                <div style="height:6px;background:rgba(255,255,255,0.06);border-radius:99px;overflow:hidden">
-                  <div style="height:100%;width:${Math.min(100,risk)}%;background:${color};border-radius:99px"></div>
-                </div>
-              </div>`;
-            }).join('');
-          }
-        }
-
-        const rs = document.getElementById('recentScansTbl');
-        if (rs) {
-          const list = data.recent_scans || [];
-          if (!list.length) rs.innerHTML = '<tr><td class="empty">' + (currentLang==='ar'?'لا فحوصات':'No scans') + '</td></tr>';
-          else {
-            rs.innerHTML = '<thead><tr><th>'+tLabel('Module','الوحدة')+'</th><th>'+tLabel('Target','الهدف')+'</th><th>'+tLabel('Risk','المخاطر')+'</th><th>'+tLabel('Time','الوقت')+'</th></tr></thead><tbody>' +
-              list.slice(0,8).map(s => `<tr>
-                <td>${esc(s.module)}</td>
-                <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis">${esc(s.target||'—')}</td>
-                <td><span style="color:${(s.risk_score||0)>=70?'#FCA5A5':(s.risk_score||0)>=40?'#FCD34D':'#6EE7B7'}">${esc(s.risk_score)}</span></td>
-                <td style="white-space:nowrap;font-size:0.75rem">${fmtTime(s.created_at)}</td>
-              </tr>`).join('') + '</tbody>';
-          }
-        }
-
-        const ra = document.getElementById('recentAlertsTbl');
-        if (ra) {
-          const list = data.recent_alerts || [];
-          if (!list.length) ra.innerHTML = '<tr><td class="empty">' + (currentLang==='ar'?'لا تنبيهات':'No alerts') + '</td></tr>';
-          else {
-            ra.innerHTML = '<thead><tr><th>'+tLabel('Source','المصدر')+'</th><th>'+tLabel('Title','العنوان')+'</th><th>'+tLabel('Sev','الخطورة')+'</th><th>'+tLabel('Time','الوقت')+'</th></tr></thead><tbody>' +
-              list.slice(0,8).map(a => `<tr>
-                <td>${esc(a.source)}</td>
-                <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis">${esc(a.title||a.message)}</td>
-                <td>${esc(a.severity)}</td>
-                <td style="white-space:nowrap;font-size:0.75rem">${fmtTime(a.created_at)}</td>
-              </tr>`).join('') + '</tbody>';
-          }
-        }
-      } catch (err) {
-        console.warn('loadOverview', err);
-      }
-    }
-
-    async function loadAlerts() {
-      const table = document.getElementById('alertsTable');
-      if (!table) return;
-      try {
-        const res = await fetch('/api/alerts', { headers: authHeaders() });
-        if (!res.ok) throw new Error('alerts ' + res.status);
-        const data = await res.json();
-        let list = data.alerts || data || [];
-        if (!Array.isArray(list)) list = [];
-        const sev = document.getElementById('alertSeverityFilter')?.value || '';
-        const unreadOnly = document.getElementById('alertUnreadOnly')?.checked;
-        if (sev) list = list.filter(a => (a.severity||'').toLowerCase() === sev.toLowerCase());
-        if (unreadOnly) list = list.filter(a => !a.is_read);
-        updateAlertsBadge(list.filter(a => !a.is_read).length || (data.alerts||[]).filter(a=>!a.is_read).length);
-        if (!list.length) {
-          table.innerHTML = '<tr><td class="empty">' + (currentLang==='ar'?'لا تنبيهات مطابقة':'No matching alerts') + '</td></tr>';
-          return;
-        }
-        table.innerHTML = '<thead><tr><th>#</th><th>'+tLabel('Source','المصدر')+'</th><th>'+tLabel('Title','العنوان')+'</th><th>'+tLabel('Severity','الخطورة')+'</th><th>'+tLabel('Message','الرسالة')+'</th><th>'+tLabel('Time','الوقت')+'</th><th>'+tLabel('Read','مقروء')+'</th></tr></thead><tbody>' +
-          list.map(a => `<tr style="${a.is_read?'opacity:0.65':''}">
-            <td>${a.id??''}</td>
-            <td>${esc(a.source)}</td>
-            <td>${esc(a.title||'')}</td>
-            <td><span style="color:${['critical','high'].includes((a.severity||'').toLowerCase())?'#FCA5A5':'#FCD34D'}">${esc(a.severity)}</span></td>
-            <td style="max-width:220px;font-size:0.8rem">${esc(a.message||'')}</td>
-            <td style="white-space:nowrap;font-size:0.75rem">${fmtTime(a.created_at)}</td>
-            <td>${a.is_read ? '✓' : '•'}</td>
-          </tr>`).join('') + '</tbody>';
-      } catch (err) {
-        table.innerHTML = '<tr><td class="empty">Failed to load alerts</td></tr>';
-        console.warn(err);
-      }
-    }
-
-    async function loadHistory() {
-      const table = document.getElementById('historyTable');
-      if (!table) return;
-      try {
-        const mod = document.getElementById('scanModuleFilter')?.value || '';
-        const minRisk = document.getElementById('scanMinRisk')?.value || '';
-        let url = '/api/scans?per_page=50';
-        if (mod) url += '&module=' + encodeURIComponent(mod);
-        const res = await fetch(url, { headers: authHeaders() });
-        if (!res.ok) throw new Error('scans ' + res.status);
-        const data = await res.json();
-        let list = data.scans || [];
-        if (minRisk !== '') list = list.filter(s => (s.risk_score||0) >= Number(minRisk));
-        if (!list.length) {
-          table.innerHTML = '<tr><td class="empty">' + (currentLang==='ar'?'لا سجل فحوصات':'No scan history') + '</td></tr>';
-          return;
-        }
-        table.innerHTML = '<thead><tr><th>ID</th><th>'+tLabel('Module','الوحدة')+'</th><th>'+tLabel('Target','الهدف')+'</th><th>'+tLabel('Risk','المخاطر')+'</th><th>'+tLabel('Status','الحالة')+'</th><th>'+tLabel('Time','الوقت')+'</th></tr></thead><tbody>' +
-          list.map(s => `<tr>
-            <td>${s.id??''}</td>
-            <td>${esc(s.module)}</td>
-            <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis">${esc(s.target||'—')}</td>
-            <td style="color:${(s.risk_score||0)>=70?'#FCA5A5':(s.risk_score||0)>=40?'#FCD34D':'#6EE7B7'}">${esc(s.risk_score)}</td>
-            <td>${esc(s.status||'—')}</td>
-            <td style="white-space:nowrap;font-size:0.75rem">${fmtTime(s.created_at)}</td>
-          </tr>`).join('') + '</tbody>';
-      } catch (err) {
-        table.innerHTML = '<tr><td class="empty">Failed to load history</td></tr>';
-        console.warn(err);
-      }
-    }
-
-    function afterScan(score, moduleName) {
-      if (score >= 70) showToast((currentLang==='ar'?'تنبيه: مخاطر مرتفعة في ':'High risk in ') + (moduleName||''), 'danger');
-      else if (score >= 40) showToast((currentLang==='ar'?'تم الفحص — مخاطر متوسطة':'Scan done — medium risk'), 'default');
-      else showToast((currentLang==='ar'?'تم الفحص بنجاح':'Scan completed'), 'success');
-      loadOverview();
-    }
-
-    // ========== Navigation ==========
-    function showView(target) {
-      document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
-      const viewEl = document.getElementById('view-' + target);
-      if (viewEl) {
-        viewEl.classList.remove('hidden');
-      } else {
-        document.getElementById('view-overview')?.classList.remove('hidden');
-        target = 'overview';
-      }
-      document.querySelectorAll('.nav-link').forEach(l => {
-        l.classList.toggle('active', l.dataset.nav === target);
-      });
-      const activeLink = document.querySelector(`.nav-link[data-nav="${target}"]`);
-      if (activeLink) {
-        const span = activeLink.querySelector('[data-i18n]');
-        document.getElementById('pageTitle').textContent = span ? span.textContent : activeLink.textContent.trim();
-      }
-      closeSidebar();
-      if (target === 'overview') loadOverview();
-      if (target === 'alerts') loadAlerts();
-      if (target === 'history') loadHistory();
-    }
-
-    document.querySelectorAll('.nav-link').forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        const target = link.dataset.nav;
-        if (target) showView(target);
-      });
-    });
-
-    document.getElementById('refreshBtn')?.addEventListener('click', () => {
-      loadOverview();
-      const active = document.querySelector('.nav-link.active')?.dataset?.nav;
-      if (active === 'alerts') loadAlerts();
-      if (active === 'history') loadHistory();
-      showToast(currentLang==='ar' ? 'تم التحديث' : 'Refreshed', 'success');
-    });
-
-    document.getElementById('alertSeverityFilter')?.addEventListener('change', loadAlerts);
-    document.getElementById('alertUnreadOnly')?.addEventListener('change', loadAlerts);
-    document.getElementById('scanModuleFilter')?.addEventListener('change', loadHistory);
-    document.getElementById('scanMinRisk')?.addEventListener('change', loadHistory);
-
-    // ========== Auth helpers ==========
-    function setLoggedIn(user) {
-      document.querySelectorAll('.guest-only').forEach(el => el.classList.add('hidden'));
-      document.querySelectorAll('.auth-only').forEach(el => el.classList.remove('hidden'));
-      document.getElementById('authDot').classList.add('on');
-      document.getElementById('authDot').classList.remove('off');
-      document.getElementById('authLabel').textContent = user?.username || 'User';
-      document.getElementById('authRole').textContent = translations[currentLang].signed_in;
-      document.getElementById('userAvatar').textContent = (user?.username || 'U')[0].toUpperCase();
-    }
-
-    function setGuest() {
-      document.querySelectorAll('.guest-only').forEach(el => el.classList.remove('hidden'));
-      document.querySelectorAll('.auth-only').forEach(el => el.classList.add('hidden'));
-      document.getElementById('authDot').classList.remove('on');
-      document.getElementById('authDot').classList.add('off');
-      document.getElementById('authLabel').textContent = translations[currentLang].guest;
-      document.getElementById('authRole').textContent = translations[currentLang].not_signed;
-      document.getElementById('userAvatar').textContent = 'G';
-    }
-
-    document.getElementById('logoutBtn')?.addEventListener('click', () => {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      setGuest();
-      window.location.href = 'login.html';
-    });
-
-    // ========== Helper: risk chip style ==========
-    
-    function tLabel(en, ar) {
-      return currentLang === 'ar' ? ar : en;
-    }
-
-    function resultGrid(items) {
-      // items: [{en, ar, val}]
-      return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">` +
-        items.map(it => `<div><strong>${tLabel(it.en, it.ar)}:</strong> ${it.val}</div>`).join('') +
-        `</div>`;
-    }
-
-    function styleRiskChip(chip, score, label) {
-      if (!chip) return;
-      chip.textContent = `${score} · ${label}`;
-      chip.style.background = score >= 70 ? 'rgba(239,68,68,0.15)' :
-                              score >= 40 ? 'rgba(245,158,11,0.15)' :
-                              'rgba(16,185,129,0.15)';
-      chip.style.color = score >= 70 ? '#FCA5A5' :
-                         score >= 40 ? '#FCD34D' : '#6EE7B7';
-    }
-
-    // ========== DocGuard ==========
-    document.getElementById('docguardForm')?.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const form = e.target;
-      const errorEl = document.getElementById('dgError');
-      const resultCard = document.getElementById('dgResultCard');
-      const resultEl = document.getElementById('dgResult');
-      const riskChip = document.getElementById('dgRiskChip');
-      errorEl.textContent = '';
-      resultCard.style.display = 'none';
-
-      const fileInput = form.querySelector('input[name="file"]');
-      const textInput = form.querySelector('textarea[name="text"]')?.value?.trim();
-      const submitBtn = form.querySelector('button[type="submit"]');
-      const originalText = submitBtn.innerHTML;
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = 'Scanning...';
-
-      try {
-        let res;
-        if (fileInput?.files?.length > 0) {
-          const formData = new FormData();
-          formData.append('file', fileInput.files[0]);
-          res = await fetch('/api/docguard/scan', { method: 'POST', body: formData });
-        } else if (textInput) {
-          res = await fetch('/api/docguard/scan', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text: textInput, filename: 'pasted_text' })
-          });
-        } else {
-          errorEl.textContent = 'Please upload a PDF/TXT file or paste text.';
-          return;
-        }
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Scan failed');
-
-        styleRiskChip(riskChip, data.risk_score, data.risk_level);
-        let html = `
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
-            <div><strong>${tLabel("Risk Score","درجة المخاطر")}:</strong> ${data.risk_score}</div>
-            <div><strong>${tLabel("Level","المستوى")}:</strong> ${data.risk_level}</div>
-            <div><strong>${tLabel("Text Length","طول النص")}:</strong> ${data.text_length || 0}</div>
-            <div><strong>${tLabel("Issues Found","المشاكل المكتشفة")}:</strong> ${data.issues_found || 0}</div>
-          </div>`;
-        if (data.issues?.suspicious_urls?.length) {
-          html += `<h4 style="margin:12px 0 6px;font-size:0.85rem;color:#FCA5A5">${tLabel("Suspicious URLs","روابط مشبوهة")}</h4><ul style="padding-left:18px;color:var(--text-secondary)">`;
-          data.issues.suspicious_urls.forEach(u => { html += `<li>${u.url} <span style="opacity:0.7">(risk ${u.risk})</span></li>`; });
-          html += `</ul>`;
-        }
-        if (data.issues?.credit_cards?.length) {
-          html += `<h4 style="margin:12px 0 6px;font-size:0.85rem;color:#FCA5A5">${tLabel("Credit Cards Detected","بطاقات ائتمان مكتشفة")}</h4><ul style="padding-left:18px;color:var(--text-secondary)">`;
-          data.issues.credit_cards.forEach(c => { html += `<li>${c.card_number_masked} (risk ${c.risk})</li>`; });
-          html += `</ul>`;
-        }
-        if (data.issues?.dangerous_keywords?.length) {
-          html += `<h4 style="margin:12px 0 6px;font-size:0.85rem;color:#FCD34D">${tLabel("Dangerous Keywords","كلمات خطرة")}</h4><ul style="padding-left:18px;color:var(--text-secondary)">`;
-          data.issues.dangerous_keywords.slice(0, 10).forEach(k => { html += `<li>${k.keyword} × ${k.count}</li>`; });
-          html += `</ul>`;
-        }
-        if (data.issues_found === 0) html += `<p style="color:var(--success);margin-top:10px">${tLabel("No major issues detected.","لم يتم اكتشاف مشاكل كبيرة.")}</p>`;
-        resultEl.innerHTML = html;
-        resultCard.style.display = 'block';
-        afterScan(data.risk_score || 0, 'DocGuard');
-      } catch (err) {
-        errorEl.textContent = err.message || tLabel('Something went wrong','حدث خطأ');
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = originalText;
-      }
-    });
-
-    // ========== MailGuard ==========
-    document.getElementById('mailguardForm')?.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const form = e.target;
-      const errorEl = document.getElementById('mgError');
-      const resultCard = document.getElementById('mgResultCard');
-      const resultEl = document.getElementById('mgResult');
-      const riskChip = document.getElementById('mgRiskChip');
-      errorEl.textContent = '';
-      resultCard.style.display = 'none';
-
-      const sender = form.querySelector('input[name="sender"]')?.value?.trim() || '';
-      const subject = form.querySelector('input[name="subject"]')?.value?.trim() || '';
-      const body = form.querySelector('textarea[name="body"]')?.value?.trim() || '';
-      if (!body && !subject) {
-        errorEl.textContent = 'Please provide at least the email body or subject.';
-        return;
-      }
-
-      const submitBtn = form.querySelector('button[type="submit"]');
-      const originalText = submitBtn.innerHTML;
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = 'Classifying...';
-
-      try {
-        const res = await fetch('/api/mailguard/classify', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ sender, subject, body })
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Classification failed');
-
-        styleRiskChip(riskChip, data.risk_score, data.classification);
-        let html = `
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
-            <div><strong>${tLabel("Classification","التصنيف")}:</strong> ${data.classification}</div>
-            <div><strong>${tLabel("Risk Score","درجة المخاطر")}:</strong> ${data.risk_score}</div>
-            <div><strong>${tLabel("Level","المستوى")}:</strong> ${data.risk_level}</div>
-            <div><strong>${tLabel("Text Length","طول النص")}:</strong> ${data.text_length || 0}</div>
-          </div>`;
-        if (data.ai_reasoning) {
-          html += `<p style="margin:10px 0;padding:10px;background:rgba(99,102,241,0.08);border-radius:8px;font-size:0.85rem"><strong>AI Reasoning:</strong> ${data.ai_reasoning}</p>`;
-        }
-        if (data.category_scores) {
-          html += `<h4 style="margin:12px 0 6px;font-size:0.85rem">${tLabel("Category Scores","درجات التصنيف")}</h4><ul style="padding-left:18px;color:var(--text-secondary)">`;
-          for (const [key, val] of Object.entries(data.category_scores)) {
-            html += `<li>${key}: ${Number(val).toFixed(1)}</li>`;
-          }
-          html += `</ul>`;
-        }
-        if (data.link_issues?.length) {
-          html += `<h4 style="margin:12px 0 6px;font-size:0.85rem;color:#FCA5A5">${tLabel("Link Issues","مشاكل الروابط")}</h4><ul style="padding-left:18px;color:var(--text-secondary)">`;
-          data.link_issues.forEach(l => { html += `<li>${l.issue}${l.url ? ' → ' + l.url : ''}</li>`; });
-          html += `</ul>`;
-        }
-        if (data.header_notes?.length) {
-          html += `<h4 style="margin:12px 0 6px;font-size:0.85rem">Header Notes</h4><ul style="padding-left:18px;color:var(--text-secondary)">`;
-          data.header_notes.forEach(n => html += `<li>${n}</li>`);
-          html += `</ul>`;
-        }
-        resultEl.innerHTML = html;
-        resultCard.style.display = 'block';
-        afterScan(data.risk_score || 0, 'MailGuard');
-      } catch (err) {
-        errorEl.textContent = err.message || tLabel('Something went wrong','حدث خطأ');
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = originalText;
-      }
-    });
-
-    // ========== SysGuard ==========
-    let sysStreamInterval = null;
-
-    async function fetchSysStatus() {
-      const bodyEl = document.getElementById('sgBody');
-      const snapshotEl = document.getElementById('sysSnapshot');
-      try {
-        const res = await fetch('/api/sysguard/status');
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Failed to get system status');
-
-        const html = `
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:16px">
-            <div style="background:rgba(255,255,255,0.03);padding:12px;border-radius:8px;text-align:center">
-              <div style="font-size:0.7rem;color:var(--text-muted)">CPU</div>
-              <div style="font-size:1.4rem;font-weight:700;color:${(data.cpu?.percent||0) > 80 ? '#FCA5A5' : '#A5B4FC'}">${data.cpu?.percent ?? '—'}%</div>
-            </div>
-            <div style="background:rgba(255,255,255,0.03);padding:12px;border-radius:8px;text-align:center">
-              <div style="font-size:0.7rem;color:var(--text-muted)">Memory</div>
-              <div style="font-size:1.4rem;font-weight:700;color:${(data.memory?.percent||0) > 85 ? '#FCA5A5' : '#A5B4FC'}">${data.memory?.percent ?? '—'}%</div>
-            </div>
-            <div style="background:rgba(255,255,255,0.03);padding:12px;border-radius:8px;text-align:center">
-              <div style="font-size:0.7rem;color:var(--text-muted)">Disk</div>
-              <div style="font-size:1.4rem;font-weight:700;color:${(data.disk?.max_used_percent||0) > 90 ? '#FCA5A5' : '#A5B4FC'}">${data.disk?.max_used_percent ?? '—'}%</div>
-            </div>
-            <div style="background:rgba(255,255,255,0.03);padding:12px;border-radius:8px;text-align:center">
-              <div style="font-size:0.7rem;color:var(--text-muted)">Risk</div>
-              <div style="font-size:1.4rem;font-weight:700">${data.risk_score ?? '—'} · ${data.risk_level || ''}</div>
-            </div>
-          </div>
-          ${data.anomalies?.length ? `<p style="color:#FCD34D;font-size:0.85rem;margin-bottom:10px">⚠ ${data.anomalies.map(a => a.message).join(' · ')}</p>` : ''}
-          ${data.top_processes?.length ? `
-            <h4 style="font-size:0.8rem;margin-bottom:6px">Top Processes</h4>
-            <ul style="padding-left:18px;color:var(--text-secondary);font-size:0.8rem">
-              ${data.top_processes.slice(0,5).map(p => `<li>${p.name} (CPU ${p.cpu_percent}% · RAM ${p.memory_percent}%)</li>`).join('')}
-            </ul>` : ''}`;
-        if (bodyEl) bodyEl.innerHTML = html;
-        if (snapshotEl) snapshotEl.innerHTML = html;
-        return data;
-      } catch (err) {
-        const msg = `<p class="empty" style="color:#FCA5A5">${err.message}</p>`;
-        if (bodyEl) bodyEl.innerHTML = msg;
-        if (snapshotEl) snapshotEl.innerHTML = msg;
-      }
-    }
-
-    async function fetchSysHistory() {
-      const histEl = document.getElementById('sgHistory');
-      if (!histEl) return;
-      try {
-        const res = await fetch('/api/sysguard/history?limit=30');
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Failed to load history');
-        if (!data.count) {
-          histEl.innerHTML = `<p class="empty">No history yet. Run a few checks.</p>`;
-          return;
-        }
-        histEl.innerHTML = `
-          <div style="font-size:0.8rem;color:var(--text-secondary)">
-            <p>Samples: ${data.count}</p>
-            <p>CPU (last): ${data.cpu?.slice(-1)[0] ?? '—'}%</p>
-            <p>Memory (last): ${data.memory?.slice(-1)[0] ?? '—'}%</p>
-            <p>Disk (last): ${data.disk?.slice(-1)[0] ?? '—'}%</p>
-          </div>`;
-      } catch (err) {
-        histEl.innerHTML = `<p class="empty" style="color:#FCA5A5">${err.message}</p>`;
-      }
-    }
-
-    document.getElementById('sgOnce')?.addEventListener('click', async () => {
-      await fetchSysStatus();
-      await fetchSysHistory();
-    });
-
-    document.getElementById('sgStream')?.addEventListener('click', function () {
-      if (sysStreamInterval) {
-        clearInterval(sysStreamInterval);
-        sysStreamInterval = null;
-        this.textContent = '▶ Auto (5s)';
-        return;
-      }
-      this.textContent = '■ Stop';
-      fetchSysStatus();
-      fetchSysHistory();
-      sysStreamInterval = setInterval(async () => {
-        await fetchSysStatus();
-        await fetchSysHistory();
-      }, 5000);
-    });
-
-    document.querySelector('[data-action="sysguard-quick"]')?.addEventListener('click', async () => {
-      await fetchSysStatus();
-    });
-
-    // ========== CamGuard ==========
-    document.getElementById('camguardForm')?.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const form = e.target;
-      const errorEl = document.getElementById('cgError');
-      const resultCard = document.getElementById('cgResultCard');
-      const resultEl = document.getElementById('cgResult');
-      const riskChip = document.getElementById('cgRiskChip');
-      errorEl.textContent = '';
-      resultCard.style.display = 'none';
-
-      const formData = new FormData();
-      const fileInput = form.querySelector('input[name="frame"]');
-      const cameraId = form.querySelector('input[name="camera_id"]')?.value || 'default';
-      const base64Input = form.querySelector('textarea[name="base64"]')?.value?.trim();
-      const yoloChecked = form.querySelector('input[name="yolo"]')?.checked ?? true;
-
-      if (fileInput?.files?.length > 0) {
-        formData.append('frame', fileInput.files[0]);
-      } else if (base64Input) {
-        formData.append('base64', base64Input);
-      } else {
-        errorEl.textContent = 'Please upload an image or paste base64.';
-        return;
-      }
-      formData.append('camera_id', cameraId);
-      formData.append('yolo', yoloChecked ? 'true' : 'false');
-
-      const submitBtn = form.querySelector('button[type="submit"]');
-      const originalText = submitBtn.innerHTML;
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = 'Analyzing...';
-
-      try {
-        const res = await fetch('/api/camguard/analyze', { method: 'POST', body: formData });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Analysis failed');
-
-        styleRiskChip(riskChip, data.risk_score, data.risk_level);
-        let html = `
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
-            <div><strong>${tLabel("Risk Score","درجة المخاطر")}:</strong> ${data.risk_score}</div>
-            <div><strong>${tLabel("Level","المستوى")}:</strong> ${data.risk_level}</div>
-            <div><strong>${tLabel("Objects","الأجسام")}:</strong> ${data.yolo?.detection_count || 0}</div>
-            <div><strong>${tLabel("Motion Score","درجة الحركة")}:</strong> ${data.motion?.motion_score || 0}</div>
-          </div>
-          <p style="margin-bottom:10px;color:var(--text-secondary)">${data.detection_status_message || ''}</p>`;
-        if (data.yolo?.detections?.length) {
-          html += `<h4 style="margin:12px 0 8px;font-size:0.85rem">${tLabel("Detected Objects","أجسام مكتشفة")}</h4><ul style="padding-left:18px;color:var(--text-secondary)">`;
-          data.yolo.detections.forEach(d => { html += `<li>${d.class} (${(d.confidence * 100).toFixed(1)}%)</li>`; });
-          html += `</ul>`;
-        }
-        if (data.scene?.tags?.length) {
-          html += `<p style="margin-top:12px"><strong>Tags:</strong> ${data.scene.tags.join(', ')}</p>`;
-        }
-        resultEl.innerHTML = html;
-        resultCard.style.display = 'block';
-        afterScan(data.risk_score || 0, 'CamGuard');
-      } catch (err) {
-        errorEl.textContent = err.message || tLabel('Something went wrong','حدث خطأ');
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = originalText;
-      }
-    });
-
-    // ========== ScanGuard ==========
-    document.getElementById('scanguardForm')?.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const form = e.target;
-      const errorEl = document.getElementById('scanGError');
-      const resultCard = document.getElementById('scanGResultCard');
-      const resultEl = document.getElementById('scanGResult');
-      const riskChip = document.getElementById('scanGRiskChip');
-      errorEl.textContent = '';
-      resultCard.style.display = 'none';
-
-      const fileInput = form.querySelector('input[name="file"]');
-      const typeSelect = form.querySelector('select[name="type"]')?.value || 'auto';
-      const codeText = form.querySelector('textarea[name="code"]')?.value?.trim() || '';
-      const submitBtn = form.querySelector('button[type="submit"]');
-      const originalText = submitBtn.innerHTML;
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = 'Auditing...';
-
-      try {
-        let res;
-        if (fileInput?.files?.length > 0) {
-          const formData = new FormData();
-          formData.append('file', fileInput.files[0]);
-          res = await fetch('/api/scanguard/analyze', { method: 'POST', body: formData });
-        } else if (codeText) {
-          res = await fetch('/api/scanguard/analyze', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ code: codeText, type: typeSelect, filename: 'pasted_input' })
-          });
-        } else {
-          errorEl.textContent = 'Please upload a file or paste code/log text.';
-          return;
-        }
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Audit failed');
-
-        styleRiskChip(riskChip, data.risk_score, data.risk_level);
-        let html = `
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
-            <div><strong>${tLabel("Risk Score","درجة المخاطر")}:</strong> ${data.risk_score}</div>
-            <div><strong>${tLabel("Level","المستوى")}:</strong> ${data.risk_level}</div>
-            <div><strong>${tLabel("Issues Found","المشاكل المكتشفة")}:</strong> ${data.total_issues_found || 0}</div>
-            <div><strong>${tLabel("Type","النوع")}:</strong> ${data.detected_input_type || '—'}</div>
-          </div>`;
-        if (data.ai_summary) {
-          html += `<p style="margin:10px 0;padding:10px;background:rgba(99,102,241,0.08);border-radius:8px;font-size:0.85rem"><strong>AI Summary:</strong> ${data.ai_summary}</p>`;
-        }
-        if (data.category_summary) {
-          html += `<h4 style="margin:12px 0 6px;font-size:0.85rem">Category Summary</h4><ul style="padding-left:18px;color:var(--text-secondary)">`;
-          for (const [cat, info] of Object.entries(data.category_summary)) {
-            if (info.count > 0) html += `<li><strong>${cat}</strong>: ${info.count} issue(s)${info.top_issue ? ' — ' + info.top_issue : ''}</li>`;
-          }
-          html += `</ul>`;
-        }
-        if (data.vulnerabilities?.length) {
-          html += `<h4 style="margin:12px 0 6px;font-size:0.85rem;color:#FCA5A5">${tLabel("Vulnerabilities","ثغرات")}</h4><ul style="padding-left:18px;color:var(--text-secondary)">`;
-          data.vulnerabilities.slice(0, 8).forEach(v => { html += `<li><strong>${v.type || v.severity}</strong>: ${v.description || ''}</li>`; });
-          html += `</ul>`;
-        }
-        if (data.findings) {
-          ['sqli', 'xss', 'secrets'].forEach(cat => {
-            const items = data.findings[cat] || [];
-            if (items.length) {
-              html += `<h4 style="margin:12px 0 6px;font-size:0.85rem;color:#FCA5A5">${cat.toUpperCase()}</h4><ul style="padding-left:18px;color:var(--text-secondary)">`;
-              items.slice(0, 5).forEach(f => { html += `<li>Line ${f.line}: ${f.rule}</li>`; });
-              html += `</ul>`;
-            }
-          });
-        }
-        if ((data.total_issues_found || 0) === 0) html += `<p style="color:var(--success);margin-top:10px">${tLabel("No major issues detected.","لم يتم اكتشاف مشاكل كبيرة.")}</p>`;
-        resultEl.innerHTML = html;
-        resultCard.style.display = 'block';
-        afterScan(data.risk_score || 0, 'ScanGuard');
-      } catch (err) {
-        errorEl.textContent = err.message || tLabel('Something went wrong','حدث خطأ');
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = originalText;
-      }
-    });
-
-
-    document.querySelector('[data-action="sysguard-quick"]')?.addEventListener('click', async () => {
-      showView('sysguard');
-      document.getElementById('sgOnce')?.click();
-    });
-
-    // ========== Init ==========
-    applyLanguage(currentLang);
-    showView('overview');
-    loadOverview();
-
-    const token = localStorage.getItem('token');
-    const userStr = localStorage.getItem('user');
-    if (token && userStr) {
-      try { setLoggedIn(JSON.parse(userStr)); }
-      catch { setGuest(); }
+// ===== DocGuard =====
+document.getElementById('docDemo')?.addEventListener('click', () => {
+  document.getElementById('docText').value = 'Urgent: verify your account at http://paypal-login.bit.ly/secure password reset. Card 4111111111111111';
+  document.getElementById('docFile').value = '';
+  showToast(currentLang === 'ar' ? 'تشغيل مثال تصيّد…' : 'Running phishing demo…', 'ok');
+  setTimeout(() => document.getElementById('docScanBtn')?.click(), 250);
+});
+document.getElementById('docScanBtn')?.addEventListener('click', async () => {
+  const btn = document.getElementById('docScanBtn');
+  const file = document.getElementById('docFile').files[0];
+  const text = document.getElementById('docText').value.trim();
+  if (!file && !text) { showToast(currentLang === 'ar' ? 'ارفع ملفاً أو الصق نصاً' : 'Upload a file or paste text', 'warn'); return; }
+  btn.disabled = true; btn.classList.add('loading');
+  try {
+    let res;
+    if (file) {
+      const fd = new FormData();
+      fd.append('file', file);
+      res = await fetch('/api/docguard/scan', { method: 'POST', body: fd, headers: authHeaders() });
     } else {
-      setGuest();
+      res = await fetch('/api/docguard/scan', {
+        method: 'POST',
+        headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, filename: 'pasted_text.txt' })
+      });
     }
-  </script>
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Scan failed');
+    const lists = [];
+    if (data.suspicious_urls?.length) lists.push([currentLang==='ar'?'روابط مشبوهة':'Suspicious URLs', data.suspicious_urls.map(u => typeof u === 'string' ? u : (u.url || JSON.stringify(u)))]);
+    if (data.credit_cards?.length) lists.push([currentLang==='ar'?'بطاقات ائتمان':'Credit cards', data.credit_cards.map(c => typeof c === 'string' ? c : (c.masked || c.number || JSON.stringify(c)))]);
+    if (data.danger_keywords?.length) lists.push([currentLang==='ar'?'كلمات خطرة':'Danger keywords', data.danger_keywords]);
+    if (data.findings?.length) lists.push([currentLang==='ar'?'نتائج':'Findings', data.findings]);
+    renderResult(document.getElementById('docResult'), currentLang==='ar'?'نتيجة الفحص':'Scan result', data.risk_score, data.risk_level || data.level,
+      [
+        [currentLang==='ar'?'درجة المخاطر':'Risk score', data.risk_score],
+        [currentLang==='ar'?'المستوى':'Level', riskLabel(data.risk_score, data.risk_level)],
+        [currentLang==='ar'?'طول النص':'Text length', data.text_length || data.length || '—'],
+        [currentLang==='ar'?'المشاكل':'Issues', data.total_issues || data.issues_count || (data.findings?.length ?? '—')]
+      ], lists);
+    showToast(currentLang==='ar' ? 'تم الفحص بنجاح' : 'Scan complete', Number(data.risk_score)>=70 ? 'warn' : 'ok');
+  } catch (e) {
+    showToast(e.message || (currentLang==='ar'?'فشل الفحص — حاول مرة أخرى':'Scan failed — try again'), 'err');
+  } finally { btn.disabled = false; btn.classList.remove('loading'); }
+});
+
+// ===== MailGuard =====
+document.getElementById('mailDemo')?.addEventListener('click', () => {
+  document.getElementById('mailSender').value = 'security@paypal-verify.com';
+  document.getElementById('mailSubject').value = 'Urgent: verify your account now';
+  document.getElementById('mailBody').value = 'Click here to claim your prize and update password immediately. Limited offer. http://bit.ly/verify-now';
+  showToast(currentLang === 'ar' ? 'تشغيل مثال بريد…' : 'Running mail demo…', 'ok');
+  setTimeout(() => document.getElementById('mailScanBtn')?.click(), 250);
+});
+document.getElementById('mailScanBtn')?.addEventListener('click', async () => {
+  const btn = document.getElementById('mailScanBtn');
+  const sender = document.getElementById('mailSender').value.trim();
+  const subject = document.getElementById('mailSubject').value.trim();
+  const body = document.getElementById('mailBody').value.trim();
+  if (!sender && !subject && !body) { showToast(currentLang==='ar'?'أدخل بيانات البريد':'Enter email fields', 'warn'); return; }
+  btn.disabled = true; btn.classList.add('loading');
+  try {
+    const res = await fetch('/api/mailguard/classify', {
+      method: 'POST',
+      headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sender, subject, body, content_type: 'text/plain' })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed');
+    const scores = data.scores || {};
+    const scoreRows = Object.entries(scores).map(([k,v]) => [k, v]);
+    renderResult(document.getElementById('mailResult'), currentLang==='ar'?'التصنيف':'Classification',
+      data.risk_score ?? data.score, data.classification || data.risk_level,
+      [
+        [currentLang==='ar'?'التصنيف':'Class', data.classification || '—'],
+        [currentLang==='ar'?'درجة المخاطر':'Risk', data.risk_score ?? data.score ?? '—'],
+        [currentLang==='ar'?'المستوى':'Level', riskLabel(data.risk_score, data.classification)],
+        [currentLang==='ar'?'طول النص':'Length', data.text_length || body.length]
+      ].concat(scoreRows));
+    showToast(currentLang==='ar'?'تم التصنيف':'Classified', 'ok');
+  } catch (e) { showToast(e.message || (currentLang==='ar'?'فشل التصنيف':'Classify failed'), 'err'); }
+  finally { btn.disabled = false; btn.classList.remove('loading'); }
+});
+
+// ===== SysGuard =====
+async function fetchSysStatus() {
+  try {
+    const res = await fetch('/api/sysguard/status', { headers: authHeaders() });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed');
+    const cpu = data.cpu_percent ?? data.cpu ?? '—';
+    const mem = data.memory_percent ?? data.memory ?? '—';
+    const disk = data.disk_percent ?? data.disk ?? '—';
+    const risk = data.risk_score ?? data.risk ?? '—';
+    document.getElementById('sysCpu').textContent = typeof cpu === 'number' ? cpu.toFixed(1) + '%' : cpu;
+    document.getElementById('sysMem').textContent = typeof mem === 'number' ? mem.toFixed(1) + '%' : mem;
+    document.getElementById('sysDisk').textContent = typeof disk === 'number' ? disk.toFixed(1) + '%' : disk;
+    document.getElementById('sysRisk').textContent = typeof risk === 'number' ? risk.toFixed(1) : risk;
+    const procs = data.top_processes || data.processes || [];
+    let html = '';
+    if (procs.length) {
+      html += '<div style="margin-top:8px;font-size:0.85rem"><strong>Top Processes</strong><ul class="issue-list">';
+      procs.slice(0, 8).forEach(p => {
+        html += `<li>${esc(p.name || p.pid)} — CPU ${esc(p.cpu_percent ?? 0)}% · RAM ${esc(p.memory_percent ?? 0)}%</li>`;
+      });
+      html += '</ul></div>';
+    }
+    document.getElementById('sysExtra').innerHTML = html || `<div class="empty-state">${i18n[currentLang].sys_wait}</div>`;
+    // overview snapshot
+    const ov = document.getElementById('overviewSys');
+    if (ov) {
+      ov.className = '';
+      ov.innerHTML = `<div class="metric-row" style="margin:0">
+        <div class="metric"><div class="val">${typeof cpu==='number'?cpu.toFixed(0)+'%':cpu}</div><div class="lbl">CPU</div></div>
+        <div class="metric"><div class="val">${typeof mem==='number'?mem.toFixed(0)+'%':mem}</div><div class="lbl">RAM</div></div>
+        <div class="metric"><div class="val">${typeof disk==='number'?disk.toFixed(0)+'%':disk}</div><div class="lbl">Disk</div></div>
+        <div class="metric"><div class="val">${typeof risk==='number'?risk.toFixed(0):risk}</div><div class="lbl">Risk</div></div>
+      </div>`;
+    }
+  } catch (e) {
+    showToast(e.message || 'SysGuard error', 'err');
+  }
+}
+document.getElementById('sgOnce')?.addEventListener('click', fetchSysStatus);
+document.getElementById('sgStream')?.addEventListener('click', function () {
+  if (sysTimer) {
+    clearInterval(sysTimer); sysTimer = null;
+    this.textContent = '▶ ' + i18n[currentLang].sys_stream;
+    return;
+  }
+  fetchSysStatus();
+  sysTimer = setInterval(fetchSysStatus, 5000);
+  this.textContent = '⏹ ' + (currentLang === 'ar' ? 'إيقاف' : 'Stop');
+});
+
+// ===== CamGuard =====
+document.getElementById('camScanBtn')?.addEventListener('click', async () => {
+  const btn = document.getElementById('camScanBtn');
+  const file = document.getElementById('camFile').files[0];
+  if (!file) { showToast(currentLang==='ar'?'ارفع صورة':'Upload an image', 'warn'); return; }
+  btn.disabled = true; btn.classList.add('loading');
+  try {
+    const fd = new FormData();
+    fd.append('frame', file);
+    fd.append('image', file);
+    fd.append('camera_id', document.getElementById('camId').value || 'default');
+    const res = await fetch('/api/camguard/analyze', { method: 'POST', body: fd, headers: authHeaders() });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed');
+    const tags = data.scene?.tags || data.tags || [];
+    const dets = data.detections || data.yolo_detections || [];
+    renderResult(document.getElementById('camResult'), currentLang==='ar'?'نتيجة التحليل':'Analysis',
+      data.risk_score, data.risk_level,
+      [
+        [currentLang==='ar'?'المخاطر':'Risk', data.risk_score],
+        [currentLang==='ar'?'الأجسام':'Objects', dets.length],
+        [currentLang==='ar'?'الحركة':'Motion', data.motion_score ?? data.motion ?? '—']
+      ],
+      tags.length ? [[currentLang==='ar'?'الوسوم':'Tags', tags]] : []);
+    showToast(currentLang==='ar'?'تم التحليل':'Analyzed', 'ok');
+  } catch (e) { showToast(e.message || (currentLang==='ar'?'فشل التحليل':'Analysis failed'), 'err'); }
+  finally { btn.disabled = false; btn.classList.remove('loading'); }
+});
+
+// ===== ScanGuard =====
+document.getElementById('scanDemo')?.addEventListener('click', () => {
+  document.getElementById('scanText').value =
+    "SELECT * FROM users WHERE id = 1 OR 1=1; --\n" +
+    "<scr" + "ipt>alert('xss')</scr" + "ipt>\n" +
+    "AWS_SECRET_ACCESS_KEY=AKIA1234567890EXAMPLE";
+  document.getElementById('scanFile').value = '';
+  showToast(currentLang === 'ar' ? 'تشغيل مثال ثغرات…' : 'Running audit demo…', 'ok');
+  setTimeout(() => document.getElementById('scanScanBtn')?.click(), 250);
+});
+document.getElementById('scanScanBtn')?.addEventListener('click', async () => {
+  const btn = document.getElementById('scanScanBtn');
+  const file = document.getElementById('scanFile').files[0];
+  const text = document.getElementById('scanText').value.trim();
+  if (!file && !text) { showToast(currentLang==='ar'?'ارفع ملفاً أو الصق نصاً':'Upload or paste content', 'warn'); return; }
+  btn.disabled = true; btn.classList.add('loading');
+  try {
+    let res;
+    if (file) {
+      const fd = new FormData();
+      fd.append('file', file);
+      res = await fetch('/api/scanguard/analyze', { method: 'POST', body: fd, headers: authHeaders() });
+    } else {
+      res = await fetch('/api/scanguard/analyze', {
+        method: 'POST',
+        headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: text, text, filename: 'pasted.txt' })
+      });
+    }
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed');
+    const issues = data.issues || data.findings || [];
+    renderResult(document.getElementById('scanResult'), currentLang==='ar'?'نتيجة التدقيق':'Audit result',
+      data.risk_score, data.risk_level,
+      [
+        [currentLang==='ar'?'المخاطر':'Risk', data.risk_score],
+        [currentLang==='ar'?'المستوى':'Level', riskLabel(data.risk_score, data.risk_level)],
+        [currentLang==='ar'?'المشاكل':'Issues', data.total_issues_found ?? issues.length]
+      ],
+      issues.length ? [[currentLang==='ar'?'التفاصيل':'Details', issues.slice(0, 20).map(i => i.description || i.rule || i.type || JSON.stringify(i))]] : []);
+    showToast(currentLang==='ar'?'تم التدقيق':'Audit complete', Number(data.risk_score)>=70?'warn':'ok');
+  } catch (e) { showToast(e.message || (currentLang==='ar'?'فشل التدقيق':'Audit failed'), 'err'); }
+  finally { btn.disabled = false; btn.classList.remove('loading'); }
+});
+
+// Init
+setLang('ar');
+const token = localStorage.getItem('token');
+const userStr = localStorage.getItem('user');
+if (token && userStr) {
+  try { setLoggedIn(JSON.parse(userStr)); } catch { setGuest(); }
+} else {
+  setGuest();
+}
+
+// Desktop: sidebar open by default
+if (window.innerWidth > 900) {
+  document.getElementById('sidebar').classList.remove('closed');
+  document.getElementById('main').classList.remove('full');
+} else {
+  document.getElementById('sidebar').classList.add('closed');
+}
+
+showView('overview');
+loadOverview();
+
+async function checkApiHealth() {
+  const el = document.getElementById('apiStatus');
+  const tx = document.getElementById('apiStatusText');
+  if (!el) return;
+  try {
+    const res = await fetch('/api/health', { cache: 'no-store' });
+    if (!res.ok) throw new Error();
+    el.classList.add('ok'); el.classList.remove('bad');
+    tx.textContent = currentLang === 'ar' ? 'متصل' : 'Online';
+  } catch {
+    el.classList.add('bad'); el.classList.remove('ok');
+    tx.textContent = currentLang === 'ar' ? 'غير متصل' : 'Offline';
+  }
+}
+checkApiHealth();
+setInterval(checkApiHealth, 60000);
+
+(function bootDemo() {
+  const q = new URLSearchParams(location.search).get('demo');
+  if (!q) return;
+  const map = { doc: 'docguard', mail: 'mailguard', sys: 'sysguard', cam: 'camguard', scan: 'scanguard' };
+  const view = map[q] || q;
+  setTimeout(() => {
+    showView(view);
+    if (view === 'docguard') document.getElementById('docDemo')?.click();
+    if (view === 'mailguard') document.getElementById('mailDemo')?.click();
+    if (view === 'scanguard') document.getElementById('scanDemo')?.click();
+    if (view === 'sysguard') fetchSysStatus();
+  }, 400);
+})();
+
+
+</script>
 </body>
 </html>

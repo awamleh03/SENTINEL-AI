@@ -1,294 +1,190 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sign in | SENTINEL-AI</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>تسجيل الدخول | SENTINEL-AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg: #070B14;
-      --card: #0F1629;
-      --border: rgba(255,255,255,0.08);
-      --primary: #6366F1;
-      --primary-hover: #818CF8;
-      --text: #F8FAFC;
-      --muted: #94A3B8;
-      --danger: #F87171;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Inter', system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      -webkit-font-smoothing: antialiased;
-    }
-    .auth-wrap { width: 100%; max-width: 400px; position: relative; }
-    .lang-switch {
-      position: absolute;
-      top: -8px;
-      right: 0;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid var(--border);
-      color: var(--muted);
-      font-size: 0.8rem;
-      font-weight: 600;
-      padding: 6px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-    .lang-switch:hover {
-      background: rgba(255,255,255,0.1);
-      color: var(--text);
-    }
-    [dir="rtl"] .lang-switch {
-      right: auto;
-      left: 0;
-    }
-    .brand {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      margin-bottom: 32px;
-    }
-    .brand-icon {
-      width: 42px; height: 42px;
-      background: linear-gradient(135deg, #6366F1, #4F46E5);
-      border-radius: 12px;
-      display: grid;
-      place-items: center;
-      font-size: 1.2rem;
-      box-shadow: 0 4px 14px rgba(99,102,241,0.4);
-    }
-    .brand strong { display: block; font-size: 1rem; font-weight: 700; }
-    .brand span { font-size: 0.7rem; color: var(--muted); }
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 32px;
-    }
-    h1 { font-size: 1.35rem; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.02em; }
-    .sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 28px; }
-    label {
-      display: block;
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: var(--muted);
-      margin-bottom: 6px;
-    }
-    input {
-      width: 100%;
-      padding: 12px 14px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: #0A0F1A;
-      color: var(--text);
-      font-family: inherit;
-      font-size: 0.9rem;
-      margin-bottom: 16px;
-      transition: border-color 0.15s;
-    }
-    input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
-    }
-    .forgot-row {
-      text-align: right;
-      margin: -8px 0 20px;
-    }
-    [dir="rtl"] .forgot-row { text-align: left; }
-    .forgot-row a {
-      font-size: 0.8rem;
-      color: #818CF8;
-      text-decoration: none;
-    }
-    .forgot-row a:hover { text-decoration: underline; }
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      padding: 12px;
-      border-radius: 10px;
-      border: none;
-      font-family: inherit;
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.15s;
-      text-decoration: none;
-    }
-    .btn-primary {
-      background: var(--primary);
-      color: #fff;
-      margin-bottom: 10px;
-      box-shadow: 0 2px 8px rgba(99,102,241,0.3);
-    }
-    .btn-primary:hover { background: var(--primary-hover); }
-    .btn-ghost {
-      background: transparent;
-      color: var(--muted);
-      border: 1px solid var(--border);
-    }
-    .btn-ghost:hover { background: rgba(255,255,255,0.04); color: var(--text); }
-    .error {
-      color: var(--danger);
-      font-size: 0.85rem;
-      margin-top: 12px;
-      min-height: 20px;
-      text-align: center;
-    }
-    .footer {
-      margin-top: 24px;
-      text-align: center;
-      font-size: 0.85rem;
-      color: var(--muted);
-    }
-    .footer a { color: #818CF8; text-decoration: none; font-weight: 500; }
-    .footer a:hover { text-decoration: underline; }
-  </style>
+:root {
+  --bg:#070B14; --card:#0F1629; --elevated:#0C1220;
+  --border:rgba(255,255,255,0.08); --border-strong:rgba(255,255,255,0.14);
+  --primary:#6366F1; --primary-hover:#818CF8; --primary-soft:rgba(99,102,241,0.14);
+  --text:#F8FAFC; --muted:#94A3B8; --dim:#64748B;
+  --success:#10B981; --danger:#EF4444; --warning:#F59E0B;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'IBM Plex Sans Arabic','Inter',system-ui,sans-serif;
+  background:radial-gradient(ellipse 80% 50% at 50% -20%,rgba(99,102,241,0.12),transparent),var(--bg);
+  color:var(--text); min-height:100vh; line-height:1.55;
+  display:flex; align-items:center; justify-content:center; padding:24px;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none}
+.card{
+  width:100%; max-width:420px;
+  background:var(--card); border:1px solid var(--border);
+  border-radius:18px; padding:28px 26px 24px;
+  box-shadow:0 20px 50px rgba(0,0,0,0.35);
+}
+.brand{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:18px}
+.brand-icon{
+  width:40px;height:40px;border-radius:12px;
+  background:linear-gradient(135deg,#6366F1,#4F46E5);
+  display:grid;place-items:center;
+  box-shadow:0 4px 14px rgba(99,102,241,0.4);
+}
+.brand-icon svg{width:20px;height:20px;color:#fff}
+.brand-text{text-align:start}
+.brand-text strong{display:block;font-size:0.95rem}
+.brand-text span{font-size:0.7rem;color:var(--dim)}
+h1{font-size:1.35rem;font-weight:700;text-align:center;margin-bottom:6px}
+.sub{text-align:center;color:var(--muted);font-size:0.88rem;margin-bottom:22px}
+.form-group{margin-bottom:14px}
+label{display:block;font-size:0.78rem;font-weight:500;color:var(--muted);margin-bottom:6px}
+.form-control{
+  width:100%; background:var(--elevated); border:1px solid var(--border-strong);
+  border-radius:10px; padding:11px 13px; color:var(--text); font-size:0.9rem;
+  outline:none; transition:border-color .15s; font-family:inherit;
+}
+.form-control:focus{border-color:rgba(99,102,241,.55);box-shadow:0 0 0 3px rgba(99,102,241,.12)}
+.btn{
+  width:100%; padding:12px; border:none; border-radius:10px;
+  background:var(--primary); color:#fff; font-weight:600; font-size:0.92rem;
+  cursor:pointer; transition:.15s; font-family:inherit;
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  box-shadow:0 6px 18px rgba(99,102,241,0.28);
+}
+.btn:hover{background:var(--primary-hover);box-shadow:0 8px 22px rgba(99,102,241,0.35)}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.btn-ghost{
+  width:100%; margin-top:10px; padding:11px; border-radius:10px;
+  border:1px solid var(--border-strong); background:transparent; color:var(--muted);
+  font-weight:600; font-size:0.88rem; cursor:pointer; font-family:inherit;
+}
+.btn-ghost:hover{background:rgba(255,255,255,0.04);color:var(--text)}
+.links{margin-top:18px;text-align:center;font-size:0.84rem;color:var(--muted)}
+.links a{color:#A5B4FC;font-weight:500}
+.links a:hover{text-decoration:underline}
+.err{
+  display:none; background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.35);
+  color:#FCA5A5; border-radius:10px; padding:10px 12px; font-size:0.84rem; margin-bottom:14px;
+}
+.err.show{display:block}
+.ok{
+  display:none; background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.35);
+  color:#6EE7B7; border-radius:10px; padding:10px 12px; font-size:0.84rem; margin-bottom:14px;
+}
+.ok.show{display:block}
+.hint{font-size:0.75rem;color:var(--dim);margin-top:6px}
+.row-between{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.row-between a{font-size:0.8rem;color:#A5B4FC}
+.lang{position:fixed;top:16px;left:16px}
+html[dir=ltr] .lang{left:auto;right:16px}
+.lang button{
+  background:rgba(255,255,255,0.04); border:1px solid var(--border);
+  color:var(--muted); border-radius:8px; padding:6px 10px; font-size:0.75rem;
+  cursor:pointer; font-weight:600;
+}
+.spinner{
+  width:16px;height:16px;border:2px solid rgba(255,255,255,0.25);
+  border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;
+  display:none;
+}
+.btn.loading .spinner{display:block}
+.btn.loading .btn-text{opacity:.85}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
 </head>
 <body>
-  <div class="auth-wrap">
-    <button type="button" class="lang-switch" id="langSwitch">العربية</button>
-
+  <div class="lang"><button type="button" id="langBtn" onclick="toggleLang()">English</button></div>
+  <div class="card">
     <div class="brand">
-      <div class="brand-icon">🛡</div>
-      <div>
+      <div class="brand-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg></div>
+      <div class="brand-text">
         <strong>SENTINEL-AI</strong>
-        <span data-i18n="brand_sub">Control Center</span>
+        <span id="brandSub">مركز التحكم</span>
       </div>
     </div>
-
-    <div class="card">
-      <h1 data-i18n="title">Welcome back</h1>
-      <p class="sub" data-i18n="sub">Sign in to continue to your dashboard</p>
-
-      <form id="loginForm">
-        <label data-i18n="label_id">Username or email</label>
-        <input type="text" name="identifier" autocomplete="username" required data-i18n-placeholder="ph_id" placeholder="you@example.com or username" />
-
-        <label data-i18n="label_pass">Password</label>
-        <input type="password" name="password" autocomplete="current-password" required minlength="8" placeholder="••••••••" />
-
-        <div class="forgot-row">
-          <a href="forgot-password.html" data-i18n="forgot">Forgot password?</a>
-        </div>
-
-        <button type="submit" class="btn btn-primary" data-i18n="btn_login">Sign in</button>
-        <a href="dashboard.html" class="btn btn-ghost" data-i18n="btn_guest">Continue as guest</a>
-        <p class="error" id="loginError"></p>
-      </form>
-    </div>
-
-    <div class="footer">
-      <span data-i18n="no_account">Don't have an account?</span>
-      <a href="register.html" data-i18n="create">Create one</a>
-    </div>
+    <h1 id="title">مرحباً بعودتك</h1>
+    <p class="sub" id="subtitle">سجّل الدخول للمتابعة إلى لوحة التحكم</p>
+    <div class="err" id="errBox"></div>
+    <form id="loginForm" autocomplete="on">
+      <div class="form-group">
+        <label id="lblUser">اسم المستخدم أو البريد</label>
+        <input class="form-control" id="username" name="username" required placeholder="you@example.com أو اسم المستخدم" autocomplete="username" />
+      </div>
+      <div class="form-group">
+        <label id="lblPass">كلمة المرور</label>
+        <input class="form-control" id="password" name="password" type="password" required placeholder="••••••••" autocomplete="current-password" />
+      </div>
+      <div class="row-between">
+        <a href="forgot-password.html" id="forgotLink">نسيت كلمة المرور؟</a>
+      </div>
+      <button class="btn" id="submitBtn" type="submit">
+        <span class="spinner"></span>
+        <span class="btn-text" id="btnText">تسجيل الدخول</span>
+      </button>
+    </form>
+    <button type="button" class="btn-ghost" id="guestBtn" onclick="location.href='dashboard.html'">المتابعة كزائر</button>
+    <div class="links" id="regLine">ما عندك حساب؟ <a href="register.html">أنشئ حساب</a></div>
   </div>
-
-  <script>
-    const translations = {
-      en: {
-        brand_sub: "Control Center",
-        title: "Welcome back",
-        sub: "Sign in to continue to your dashboard",
-        label_id: "Username or email",
-        ph_id: "you@example.com or username",
-        label_pass: "Password",
-        forgot: "Forgot password?",
-        btn_login: "Sign in",
-        btn_guest: "Continue as guest",
-        no_account: "Don't have an account?",
-        create: "Create one",
-        switch_btn: "العربية"
-      },
-      ar: {
-        brand_sub: "مركز التحكم",
-        title: "مرحباً بعودتك",
-        sub: "سجّل الدخول للمتابعة إلى لوحة التحكم",
-        label_id: "اسم المستخدم أو البريد",
-        ph_id: "you@example.com أو اسم المستخدم",
-        label_pass: "كلمة المرور",
-        forgot: "نسيت كلمة المرور؟",
-        btn_login: "تسجيل الدخول",
-        btn_guest: "المتابعة كزائر",
-        no_account: "ما عندك حساب؟",
-        create: "أنشئ حساب",
-        switch_btn: "English"
-      }
-    };
-
-    let currentLang = localStorage.getItem('lang') || 'en';
-
-    function applyLang(lang) {
-      currentLang = lang;
-      localStorage.setItem('lang', lang);
-
-      const html = document.documentElement;
-      html.lang = lang;
-      html.dir = lang === 'ar' ? 'rtl' : 'ltr';
-
-      const t = translations[lang];
-
-      document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (t[key]) el.textContent = t[key];
-      });
-
-      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-        const key = el.getAttribute('data-i18n-placeholder');
-        if (t[key]) el.placeholder = t[key];
-      });
-
-      document.getElementById('langSwitch').textContent = t.switch_btn;
+<script>
+let lang='ar';
+const t={
+  ar:{title:'مرحباً بعودتك',sub:'سجّل الدخول للمتابعة إلى لوحة التحكم',user:'اسم المستخدم أو البريد',pass:'كلمة المرور',btn:'تسجيل الدخول',forgot:'نسيت كلمة المرور؟',guest:'المتابعة كزائر',reg:'ما عندك حساب؟ ',regA:'أنشئ حساب',brand:'مركز التحكم',err:'بيانات الدخول غير صحيحة',net:'تعذر الاتصال بالخادم'},
+  en:{title:'Welcome back',sub:'Sign in to continue to the control center',user:'Username or email',pass:'Password',btn:'Sign in',forgot:'Forgot password?',guest:'Continue as guest',reg:"Don't have an account? ",regA:'Create one',brand:'Control Center',err:'Invalid credentials',net:'Could not reach server'}
+};
+function toggleLang(){
+  lang=lang==='ar'?'en':'ar';
+  document.documentElement.lang=lang;
+  document.documentElement.dir=lang==='ar'?'rtl':'ltr';
+  document.getElementById('langBtn').textContent=lang==='ar'?'English':'العربية';
+  const d=t[lang];
+  document.getElementById('title').textContent=d.title;
+  document.getElementById('subtitle').textContent=d.sub;
+  document.getElementById('lblUser').textContent=d.user;
+  document.getElementById('lblPass').textContent=d.pass;
+  document.getElementById('btnText').textContent=d.btn;
+  document.getElementById('forgotLink').textContent=d.forgot;
+  document.getElementById('guestBtn').textContent=d.guest;
+  document.getElementById('brandSub').textContent=d.brand;
+  document.getElementById('regLine').innerHTML=d.reg+'<a href="register.html">'+d.regA+'</a>';
+}
+const errBox=document.getElementById('errBox');
+const btn=document.getElementById('submitBtn');
+document.getElementById('loginForm').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  errBox.classList.remove('show');
+  btn.disabled=true; btn.classList.add('loading');
+  const username=document.getElementById('username').value.trim();
+  const password=document.getElementById('password').value;
+  try{
+    const res=await fetch('/api/auth/login',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({username, password, email:username})
+    });
+    const data=await res.json().catch(()=>({}));
+    if(!res.ok){
+      errBox.textContent=data.error||data.message||t[lang].err;
+      if(data.details) errBox.textContent+=(Array.isArray(data.details)?' — '+data.details.join(', '):'');
+      errBox.classList.add('show');
+      return;
     }
-
-    document.getElementById('langSwitch').addEventListener('click', () => {
-      applyLang(currentLang === 'en' ? 'ar' : 'en');
-    });
-
-    // تطبيق اللغة المحفوظة عند فتح الصفحة
-    applyLang(currentLang);
-
-    document.getElementById('loginForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const form = e.target;
-      const identifier = form.identifier.value.trim();
-      const password = form.password.value;
-      const errorEl = document.getElementById('loginError');
-      errorEl.textContent = '';
-
-      try {
-        // === اربط هنا API تسجيل الدخول تبعك ===
-        // مثال:
-        // const res = await fetch('/api/auth/login', {
-        //   method: 'POST',
-        //   headers: { 'Content-Type': 'application/json' },
-        //   body: JSON.stringify({ identifier, password })
-        // });
-        // const data = await res.json();
-        // if (!res.ok) throw new Error(data.message || 'Login failed');
-        // localStorage.setItem('token', data.token);
-
-        // مؤقتاً للتجربة:
-        console.log('Login:', identifier);
-        localStorage.setItem('token', 'demo-token');
-        localStorage.setItem('user', JSON.stringify({ username: identifier }));
-        window.location.href = 'dashboard.html';
-      } catch (err) {
-        errorEl.textContent = err.message || 'Something went wrong';
-      }
-    });
-  </script>
+    if(data.token) localStorage.setItem('token', data.token);
+    if(data.user) localStorage.setItem('user', JSON.stringify(data.user));
+    location.href='dashboard.html';
+  }catch(err){
+    errBox.textContent=t[lang].net;
+    errBox.classList.add('show');
+  }finally{
+    btn.disabled=false; btn.classList.remove('loading');
+  }
+});
+// if already logged in
+if(localStorage.getItem('token')) location.href='dashboard.html';
+</script>
 </body>
 </html>
