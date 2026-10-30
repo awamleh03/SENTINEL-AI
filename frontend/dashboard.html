@@ -1313,38 +1313,77 @@ document.getElementById('mailScanBtn')?.addEventListener('click', async () => {
 });
 
 // ===== SysGuard =====
+function _numMetric(v) {
+  if (v == null) return null;
+  if (typeof v === 'number' && !Number.isNaN(v)) return v;
+  if (typeof v === 'object') {
+    const n = v.percent ?? v.value ?? v.usage ?? v.pct;
+    if (typeof n === 'number' && !Number.isNaN(n)) return n;
+  }
+  const p = parseFloat(v);
+  return Number.isNaN(p) ? null : p;
+}
+function _fmtPct(n) {
+  return n == null ? '—' : (Math.round(n * 10) / 10) + '%';
+}
 async function fetchSysStatus() {
   try {
     const res = await fetch('/api/sysguard/status', { headers: authHeaders() });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Failed');
-    const cpu = data.cpu_percent ?? data.cpu ?? '—';
-    const mem = data.memory_percent ?? data.memory ?? '—';
-    const disk = data.disk_percent ?? data.disk ?? '—';
-    const risk = data.risk_score ?? data.risk ?? '—';
-    document.getElementById('sysCpu').textContent = typeof cpu === 'number' ? cpu.toFixed(1) + '%' : cpu;
-    document.getElementById('sysMem').textContent = typeof mem === 'number' ? mem.toFixed(1) + '%' : mem;
-    document.getElementById('sysDisk').textContent = typeof disk === 'number' ? disk.toFixed(1) + '%' : disk;
-    document.getElementById('sysRisk').textContent = typeof risk === 'number' ? risk.toFixed(1) : risk;
+
+    // API returns nested: cpu.percent / memory.percent / disk.percent
+    const cpu = _numMetric(data.cpu_percent ?? data.cpu);
+    const mem = _numMetric(data.memory_percent ?? data.memory);
+    const disk = _numMetric(data.disk_percent ?? data.disk);
+    const risk = _numMetric(data.risk_score ?? data.risk);
+
+    document.getElementById('sysCpu').textContent = _fmtPct(cpu);
+    document.getElementById('sysMem').textContent = _fmtPct(mem);
+    document.getElementById('sysDisk').textContent = _fmtPct(disk);
+    const riskEl = document.getElementById('sysRisk');
+    riskEl.textContent = risk == null ? '—' : (Math.round(risk * 10) / 10) + (data.risk_level ? ' · ' + data.risk_level : '');
+
+    const memInfo = (data.memory && typeof data.memory === 'object') ? data.memory : {};
+    const diskInfo = (data.disk && typeof data.disk === 'object') ? data.disk : {};
     const procs = data.top_processes || data.processes || [];
+    const anomalies = data.anomalies || [];
     let html = '';
+
+    if (memInfo.used_gb != null || diskInfo.used_gb != null) {
+      html += '<div style="margin-top:10px;font-size:0.82rem;color:var(--text-secondary);display:flex;flex-wrap:wrap;gap:14px">';
+      if (memInfo.used_gb != null) html += `<span>RAM: ${esc(memInfo.used_gb)} / ${esc(memInfo.total_gb)} GB</span>`;
+      if (diskInfo.used_gb != null) html += `<span>Disk: ${esc(diskInfo.used_gb)} / ${esc(diskInfo.total_gb)} GB</span>`;
+      if (data.history_samples != null) html += `<span>${currentLang==='ar'?'عينات':'Samples'}: ${esc(data.history_samples)}</span>`;
+      html += '</div>';
+    }
+
+    if (anomalies.length) {
+      html += `<div style="margin-top:12px;font-size:0.85rem"><strong>${currentLang==='ar'?'الشذوذ المكتشف':'Anomalies'}</strong><ul class="issue-list">`;
+      anomalies.slice(0, 8).forEach(a => {
+        html += `<li>${esc(a.title || a.type || 'anomaly')}${a.message ? ' — ' + esc(a.message) : ''}</li>`;
+      });
+      html += '</ul></div>';
+    }
+
     if (procs.length) {
-      html += '<div style="margin-top:8px;font-size:0.85rem"><strong>Top Processes</strong><ul class="issue-list">';
+      html += `<div style="margin-top:12px;font-size:0.85rem"><strong>${currentLang==='ar'?'أعلى العمليات':'Top Processes'}</strong><ul class="issue-list">`;
       procs.slice(0, 8).forEach(p => {
         html += `<li>${esc(p.name || p.pid)} — CPU ${esc(p.cpu_percent ?? 0)}% · RAM ${esc(p.memory_percent ?? 0)}%</li>`;
       });
       html += '</ul></div>';
     }
+
     document.getElementById('sysExtra').innerHTML = html || `<div class="empty-state">${i18n[currentLang].sys_wait}</div>`;
-    // overview snapshot
+
     const ov = document.getElementById('overviewSys');
     if (ov) {
       ov.className = '';
       ov.innerHTML = `<div class="metric-row" style="margin:0">
-        <div class="metric"><div class="val">${typeof cpu==='number'?cpu.toFixed(0)+'%':cpu}</div><div class="lbl">CPU</div></div>
-        <div class="metric"><div class="val">${typeof mem==='number'?mem.toFixed(0)+'%':mem}</div><div class="lbl">RAM</div></div>
-        <div class="metric"><div class="val">${typeof disk==='number'?disk.toFixed(0)+'%':disk}</div><div class="lbl">Disk</div></div>
-        <div class="metric"><div class="val">${typeof risk==='number'?risk.toFixed(0):risk}</div><div class="lbl">Risk</div></div>
+        <div class="metric"><div class="val">${_fmtPct(cpu)}</div><div class="lbl">CPU</div></div>
+        <div class="metric"><div class="val">${_fmtPct(mem)}</div><div class="lbl">RAM</div></div>
+        <div class="metric"><div class="val">${_fmtPct(disk)}</div><div class="lbl">Disk</div></div>
+        <div class="metric"><div class="val">${risk == null ? '—' : Math.round(risk)}</div><div class="lbl">Risk</div></div>
       </div>`;
     }
   } catch (e) {
@@ -1493,3 +1532,4 @@ setInterval(checkApiHealth, 60000);
 </script>
 </body>
 </html>
+
