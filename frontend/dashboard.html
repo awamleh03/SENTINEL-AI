@@ -570,6 +570,11 @@
       .sidebar.open { transform: translateX(0); }
       .main { margin-right: 0 !important; margin-left: 0 !important; }
     }
+    @media (min-width: 901px) {
+      .sidebar { transform: none !important; }
+      .sidebar.closed { transform: translateX(105%) !important; }
+      html[dir="ltr"] .sidebar.closed { transform: translateX(-105%) !important; }
+    }
   </style>
 </head>
 <body>
@@ -704,6 +709,7 @@
         <div class="card" style="margin-bottom:14px">
           <div class="card-head">
             <h3 data-i18n="quick_title">ابدأ فحصاً سريعاً</h3>
+            <button type="button" class="btn btn-sm btn-demo" id="overviewDemoBtn" data-i18n="run_demo_now">شغّل مثالاً الآن</button>
           </div>
           <div class="card-body">
             <div class="quick-actions">
@@ -855,6 +861,7 @@
             <h3>CamGuard — <span data-i18n="cam_title">تحليل الكاميرا</span></h3>
           </div>
           <div class="card-body">
+            <p class="empty-state" style="padding:12px 0 16px;text-align:start" data-i18n="cam_hint">ارفع صورة من كاميرا مراقبة أو إطار لقطة. النظام يحلل الحركة والأجسام ويعطي درجة مخاطر.</p>
             <div class="form-group">
               <label data-i18n="cam_file">رفع صورة / إطار</label>
               <input type="file" id="camFile" class="form-control" accept="image/*" />
@@ -960,10 +967,11 @@ const i18n = {
     module_perf: 'أداء الوحدات', mod_empty_title: 'لا توجد فحوصات بعد', mod_empty: 'ابدأ من الوحدات أعلاه.',
     recent_alerts: 'أحدث التنبيهات', recent_scans: 'أحدث الفحوصات', no_alerts: 'لا تنبيهات', no_scans: 'لا فحوصات',
     doc_title: 'ماسح المستندات', doc_file: 'رفع PDF / TXT', doc_text: '…أو الصق النص مباشرة', doc_ph: 'الصق نص المستند هنا...',
-    doc_scan: 'فحص المستند', try_demo: 'جرّب مثالاً',
+    doc_scan: 'فحص المستند', try_demo: 'جرّب مثالاً', run_demo_now: 'شغّل مثالاً الآن',
     mail_title: 'مصنّف البريد', mail_sender: 'المرسل', mail_subject: 'الموضوع', mail_body: 'المحتوى', mail_scan: 'تصنيف البريد',
     sys_title: 'مراقبة النظام المباشرة', sys_once: 'فحص مرة', sys_stream: 'تلقائي (5 ث)', sys_wait: 'اضغط فحص لعرض العمليات والسجل',
     cam_title: 'تحليل الكاميرا', cam_file: 'رفع صورة / إطار', cam_id: 'معرّف الكاميرا (اختياري)', cam_scan: 'تحليل الإطار',
+    cam_hint: 'ارفع صورة من كاميرا مراقبة أو إطار لقطة. النظام يحلل الحركة والأجسام ويعطي درجة مخاطر.',
     scan_title: 'تدقيق الأكواد والملفات', scan_file: 'رفع ملف', scan_text: '…أو الصق كود / نص', scan_btn: 'تدقيق',
     alerts_title: 'التنبيهات', al_unread: 'غير مقروء فقط', hist_title: 'سجل الفحوصات', hist_all: 'كل الوحدات',
     guest: 'زائر', not_signed: 'غير مسجّل', signed_in: 'مسجّل الدخول'
@@ -980,10 +988,11 @@ const i18n = {
     module_perf: 'Module performance', mod_empty_title: 'No scans yet', mod_empty: 'Start from the modules above.',
     recent_alerts: 'Recent alerts', recent_scans: 'Recent scans', no_alerts: 'No alerts', no_scans: 'No scans',
     doc_title: 'Document scanner', doc_file: 'Upload PDF / TXT', doc_text: '…or paste text', doc_ph: 'Paste document text here...',
-    doc_scan: 'Scan document', try_demo: 'Try demo',
+    doc_scan: 'Scan document', try_demo: 'Try demo', run_demo_now: 'Run a demo now',
     mail_title: 'Email classifier', mail_sender: 'Sender', mail_subject: 'Subject', mail_body: 'Body', mail_scan: 'Classify email',
     sys_title: 'Live system monitor', sys_once: 'Scan once', sys_stream: 'Auto (5s)', sys_wait: 'Click scan to show processes & history',
     cam_title: 'Camera analysis', cam_file: 'Upload image / frame', cam_id: 'Camera ID (optional)', cam_scan: 'Analyze frame',
+    cam_hint: 'Upload a surveillance image or frame. The system analyzes motion and objects and returns a risk score.',
     scan_title: 'Code & file audit', scan_file: 'Upload file', scan_text: '…or paste code / text', scan_btn: 'Audit',
     alerts_title: 'Alerts', al_unread: 'Unread only', hist_title: 'Scan history', hist_all: 'All modules',
     guest: 'Guest', not_signed: 'Not signed in', signed_in: 'Signed in'
@@ -1061,19 +1070,27 @@ function chipClass(score, level) {
 }
 
 function renderResult(box, title, score, level, rows, lists) {
+  if (!box) return;
   const chip = `<span class="chip ${chipClass(score, level)}">${esc(riskLabel(score, level))} · ${esc(score)}</span>`;
   let kv = '<div class="kv-grid">';
-  (rows || []).forEach(([k, v]) => { kv += `<div class="kv"><div class="k">${esc(k)}</div><div class="v">${esc(v)}</div></div>`; });
+  (rows || []).forEach(([k, v]) => {
+    const display = (v === null || v === undefined || v === '') ? '—' : v;
+    kv += `<div class="kv"><div class="k">${esc(k)}</div><div class="v">${esc(display)}</div></div>`;
+  });
   kv += '</div>';
   let extra = '';
   (lists || []).forEach(([label, items]) => {
     if (!items || !items.length) return;
-    extra += `<div style="margin-top:10px"><div class="tag" style="font-size:0.78rem;font-weight:600;color:#FCA5A5;margin-bottom:4px">${esc(label)}</div><ul class="issue-list">`;
+    extra += `<div style="margin-top:12px"><div style="font-size:0.78rem;font-weight:600;color:#FCA5A5;margin-bottom:6px">${esc(label)}</div><ul class="issue-list">`;
     items.forEach(it => { extra += `<li>${typeof it === 'string' ? esc(it) : esc(JSON.stringify(it))}</li>`; });
     extra += '</ul></div>';
   });
+  if (!extra && Number(score) >= 40) {
+    extra = `<div style="margin-top:10px;font-size:0.82rem;color:var(--text-muted)">${currentLang === 'ar' ? 'تم رصد مخاطر — راجع التفاصيل أعلاه.' : 'Risk detected — see summary above.'}</div>`;
+  }
   box.innerHTML = `<div class="result-head"><strong>${esc(title)}</strong>${chip}</div><div class="result-body">${kv}${extra}</div>`;
   box.classList.add('show');
+  try { box.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); } catch (_) {}
 }
 
 function closeSidebar() {
@@ -1110,6 +1127,15 @@ function showView(target) {
   if (link) link.classList.add('active');
   document.getElementById('pageTitle').textContent = titles[target]?.[currentLang] || target;
   if (window.innerWidth <= 900) closeSidebar();
+
+  // أوقف التحديث التلقائي لـ SysGuard عند مغادرة الصفحة حتى لا يتداخل مع الوحدات الأخرى
+  if (target !== 'sysguard' && sysTimer) {
+    clearInterval(sysTimer);
+    sysTimer = null;
+    const streamBtn = document.getElementById('sgStream');
+    if (streamBtn) streamBtn.textContent = '▶ ' + i18n[currentLang].sys_stream;
+  }
+
   if (target === 'overview') loadOverview();
   if (target === 'alerts') loadAlerts();
   if (target === 'history') loadHistory();
@@ -1248,30 +1274,98 @@ document.getElementById('docScanBtn')?.addEventListener('click', async () => {
       fd.append('file', file);
       res = await fetch('/api/docguard/scan', { method: 'POST', body: fd, headers: authHeaders() });
     } else {
-      res = await fetch('/api/docguard/scan', {
+      // نص: جرّب analyze-text ثم scan للتوافق مع الـ API
+      res = await fetch('/api/docguard/analyze-text', {
         method: 'POST',
         headers: { ...authHeaders(), 'Content-Type': 'application/json' },
         body: JSON.stringify({ text, filename: 'pasted_text.txt' })
       });
+      if (!res.ok) {
+        res = await fetch('/api/docguard/scan', {
+          method: 'POST',
+          headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text, filename: 'pasted_text.txt' })
+        });
+      }
     }
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Scan failed');
+
+    // الـ API يرجّع: { issues: { suspicious_urls, credit_cards, dangerous_keywords }, issues_found, risk_score }
+    const bag = (data.issues && typeof data.issues === 'object' && !Array.isArray(data.issues))
+      ? data.issues
+      : data;
+    const asArr = (x) => Array.isArray(x) ? x : (x ? [x] : []);
+    const urls = asArr(data.suspicious_urls || bag.suspicious_urls || bag.urls);
+    const cards = asArr(data.credit_cards || bag.credit_cards || bag.cards);
+    const keywords = asArr(
+      data.danger_keywords || data.dangerous_keywords ||
+      bag.dangerous_keywords || bag.danger_keywords || bag.keywords
+    );
+    const findings = asArr(data.findings || bag.findings);
+    const issueCount = Number(
+      data.issues_found ?? data.total_issues ?? data.issues_count ??
+      (urls.length + cards.length + keywords.length + findings.length)
+    ) || 0;
+
     const lists = [];
-    if (data.suspicious_urls?.length) lists.push([currentLang==='ar'?'روابط مشبوهة':'Suspicious URLs', data.suspicious_urls.map(u => typeof u === 'string' ? u : (u.url || JSON.stringify(u)))]);
-    if (data.credit_cards?.length) lists.push([currentLang==='ar'?'بطاقات ائتمان':'Credit cards', data.credit_cards.map(c => typeof c === 'string' ? c : (c.masked || c.number || JSON.stringify(c)))]);
-    if (data.danger_keywords?.length) lists.push([currentLang==='ar'?'كلمات خطرة':'Danger keywords', data.danger_keywords]);
-    if (data.findings?.length) lists.push([currentLang==='ar'?'نتائج':'Findings', data.findings]);
-    renderResult(document.getElementById('docResult'), currentLang==='ar'?'نتيجة الفحص':'Scan result', data.risk_score, data.risk_level || data.level,
+    if (urls.length) {
+      lists.push([
+        currentLang === 'ar' ? 'روابط مشبوهة' : 'Suspicious URLs',
+        urls.map(u => {
+          if (typeof u === 'string') return u;
+          const risk = u.risk != null ? ` (risk ${u.risk})` : '';
+          const reasons = Array.isArray(u.reasons) ? ' — ' + u.reasons.join('; ') : '';
+          return (u.url || JSON.stringify(u)) + risk + reasons;
+        })
+      ]);
+    }
+    if (cards.length) {
+      lists.push([
+        currentLang === 'ar' ? 'بطاقات ائتمان مكتشفة' : 'Credit cards detected',
+        cards.map(c => {
+          if (typeof c === 'string') return c;
+          const risk = c.risk != null ? ` (risk ${c.risk})` : '';
+          return (c.card_number_masked || c.masked || c.number || JSON.stringify(c)) + risk;
+        })
+      ]);
+    }
+    if (keywords.length) {
+      lists.push([
+        currentLang === 'ar' ? 'كلمات خطرة' : 'Danger keywords',
+        keywords.map(k => {
+          if (typeof k === 'string') return k;
+          return (k.keyword || k.word || JSON.stringify(k)) + (k.count ? ` × ${k.count}` : '');
+        })
+      ]);
+    }
+    if (findings.length) {
+      lists.push([
+        currentLang === 'ar' ? 'نتائج إضافية' : 'Findings',
+        findings.map(f => typeof f === 'string' ? f : (f.rule || f.message || f.description || JSON.stringify(f)))
+      ]);
+    }
+
+    renderResult(
+      document.getElementById('docResult'),
+      currentLang === 'ar' ? 'نتيجة الفحص' : 'Scan result',
+      data.risk_score,
+      data.risk_level || data.level,
       [
-        [currentLang==='ar'?'درجة المخاطر':'Risk score', data.risk_score],
-        [currentLang==='ar'?'المستوى':'Level', riskLabel(data.risk_score, data.risk_level)],
-        [currentLang==='ar'?'طول النص':'Text length', data.text_length || data.length || '—'],
-        [currentLang==='ar'?'المشاكل':'Issues', data.total_issues || data.issues_count || (data.findings?.length ?? '—')]
-      ], lists);
-    showToast(currentLang==='ar' ? 'تم الفحص بنجاح' : 'Scan complete', Number(data.risk_score)>=70 ? 'warn' : 'ok');
+        [currentLang === 'ar' ? 'درجة المخاطر' : 'Risk score', data.risk_score ?? 0],
+        [currentLang === 'ar' ? 'المستوى' : 'Level', riskLabel(data.risk_score, data.risk_level || data.level)],
+        [currentLang === 'ar' ? 'طول النص' : 'Text length', data.text_length ?? data.length ?? '—'],
+        [currentLang === 'ar' ? 'المشاكل المكتشفة' : 'Issues found', issueCount]
+      ],
+      lists
+    );
+    showToast(currentLang === 'ar' ? 'تم الفحص بنجاح' : 'Scan complete', Number(data.risk_score) >= 70 ? 'warn' : 'ok');
   } catch (e) {
-    showToast(e.message || (currentLang==='ar'?'فشل الفحص — حاول مرة أخرى':'Scan failed — try again'), 'err');
-  } finally { btn.disabled = false; btn.classList.remove('loading'); }
+    showToast(e.message || (currentLang === 'ar' ? 'فشل الفحص — حاول مرة أخرى' : 'Scan failed — try again'), 'err');
+  } finally {
+    btn.disabled = false;
+    btn.classList.remove('loading');
+  }
 });
 
 // ===== MailGuard =====
@@ -1298,18 +1392,49 @@ document.getElementById('mailScanBtn')?.addEventListener('click', async () => {
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Failed');
     const scores = data.scores || {};
-    const scoreRows = Object.entries(scores).map(([k,v]) => [k, v]);
-    renderResult(document.getElementById('mailResult'), currentLang==='ar'?'التصنيف':'Classification',
-      data.risk_score ?? data.score, data.classification || data.risk_level,
+    const scoreRows = Object.entries(scores).map(([k, v]) => [k, v]);
+    const lists = [];
+    const spamHits = data.spam_hits || data.keyword_hits || data.details?.spam_hits || [];
+    const urgentHits = data.urgent_hits || data.details?.urgent_hits || [];
+    const linkIssues = data.link_issues || data.details?.link_issues || [];
+    if (spamHits.length) {
+      lists.push([
+        currentLang === 'ar' ? 'كلمات سبام' : 'Spam keywords',
+        spamHits.map(h => typeof h === 'string' ? h : `${h.keyword || h.word || JSON.stringify(h)}${h.count ? ' ×' + h.count : ''}${h.weight != null ? ' (w' + h.weight + ')' : ''}`)
+      ]);
+    }
+    if (urgentHits.length) {
+      lists.push([
+        currentLang === 'ar' ? 'كلمات استعجال' : 'Urgency keywords',
+        urgentHits.map(h => typeof h === 'string' ? h : `${h.keyword || h.word || JSON.stringify(h)}${h.count ? ' ×' + h.count : ''}`)
+      ]);
+    }
+    if (linkIssues.length) {
+      lists.push([
+        currentLang === 'ar' ? 'مشاكل الروابط' : 'Link issues',
+        linkIssues.map(l => typeof l === 'string' ? l : (l.url || l.reason || JSON.stringify(l)))
+      ]);
+    }
+    renderResult(
+      document.getElementById('mailResult'),
+      currentLang === 'ar' ? 'التصنيف' : 'Classification',
+      data.risk_score ?? data.score,
+      data.classification || data.risk_level,
       [
-        [currentLang==='ar'?'التصنيف':'Class', data.classification || '—'],
-        [currentLang==='ar'?'درجة المخاطر':'Risk', data.risk_score ?? data.score ?? '—'],
-        [currentLang==='ar'?'المستوى':'Level', riskLabel(data.risk_score, data.classification)],
-        [currentLang==='ar'?'طول النص':'Length', data.text_length || body.length]
-      ].concat(scoreRows));
-    showToast(currentLang==='ar'?'تم التصنيف':'Classified', 'ok');
-  } catch (e) { showToast(e.message || (currentLang==='ar'?'فشل التصنيف':'Classify failed'), 'err'); }
-  finally { btn.disabled = false; btn.classList.remove('loading'); }
+        [currentLang === 'ar' ? 'التصنيف' : 'Class', data.classification || '—'],
+        [currentLang === 'ar' ? 'درجة المخاطر' : 'Risk', data.risk_score ?? data.score ?? '—'],
+        [currentLang === 'ar' ? 'المستوى' : 'Level', riskLabel(data.risk_score, data.classification)],
+        [currentLang === 'ar' ? 'طول النص' : 'Length', data.text_length || body.length]
+      ].concat(scoreRows),
+      lists
+    );
+    showToast(currentLang === 'ar' ? 'تم التصنيف' : 'Classified', Number(data.risk_score) >= 70 ? 'warn' : 'ok');
+  } catch (e) {
+    showToast(e.message || (currentLang === 'ar' ? 'فشل التصنيف' : 'Classify failed'), 'err');
+  } finally {
+    btn.disabled = false;
+    btn.classList.remove('loading');
+  }
 });
 
 // ===== SysGuard =====
@@ -1332,10 +1457,17 @@ async function fetchSysStatus() {
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Failed');
 
-    // API returns nested: cpu.percent / memory.percent / disk.percent
+    // API: cpu.percent / memory.percent / disk.max_used_percent + partitions[]
     const cpu = _numMetric(data.cpu_percent ?? data.cpu);
     const mem = _numMetric(data.memory_percent ?? data.memory);
-    const disk = _numMetric(data.disk_percent ?? data.disk);
+    const diskObj = (data.disk && typeof data.disk === 'object') ? data.disk : null;
+    const disk = _numMetric(
+      data.disk_percent ??
+      diskObj?.max_used_percent ??
+      diskObj?.percent ??
+      diskObj?.partitions?.[0]?.percent ??
+      data.disk
+    );
     const risk = _numMetric(data.risk_score ?? data.risk);
 
     document.getElementById('sysCpu').textContent = _fmtPct(cpu);
@@ -1345,15 +1477,18 @@ async function fetchSysStatus() {
     riskEl.textContent = risk == null ? '—' : (Math.round(risk * 10) / 10) + (data.risk_level ? ' · ' + data.risk_level : '');
 
     const memInfo = (data.memory && typeof data.memory === 'object') ? data.memory : {};
-    const diskInfo = (data.disk && typeof data.disk === 'object') ? data.disk : {};
+    const diskInfo = diskObj || {};
+    const part0 = Array.isArray(diskInfo.partitions) && diskInfo.partitions[0] ? diskInfo.partitions[0] : null;
     const procs = data.top_processes || data.processes || [];
     const anomalies = data.anomalies || [];
     let html = '';
 
-    if (memInfo.used_gb != null || diskInfo.used_gb != null) {
+    const diskUsed = diskInfo.used_gb ?? part0?.used_gb;
+    const diskTotal = diskInfo.total_gb ?? part0?.total_gb;
+    if (memInfo.used_gb != null || diskUsed != null) {
       html += '<div style="margin-top:10px;font-size:0.82rem;color:var(--text-secondary);display:flex;flex-wrap:wrap;gap:14px">';
       if (memInfo.used_gb != null) html += `<span>RAM: ${esc(memInfo.used_gb)} / ${esc(memInfo.total_gb)} GB</span>`;
-      if (diskInfo.used_gb != null) html += `<span>Disk: ${esc(diskInfo.used_gb)} / ${esc(diskInfo.total_gb)} GB</span>`;
+      if (diskUsed != null) html += `<span>Disk: ${esc(diskUsed)} / ${esc(diskTotal)} GB</span>`;
       if (data.history_samples != null) html += `<span>${currentLang==='ar'?'عينات':'Samples'}: ${esc(data.history_samples)}</span>`;
       html += '</div>';
     }
@@ -1418,17 +1553,39 @@ document.getElementById('camScanBtn')?.addEventListener('click', async () => {
     if (!res.ok) throw new Error(data.error || 'Failed');
     const tags = data.scene?.tags || data.tags || [];
     const dets = data.detections || data.yolo_detections || [];
-    renderResult(document.getElementById('camResult'), currentLang==='ar'?'نتيجة التحليل':'Analysis',
-      data.risk_score, data.risk_level,
+    const lists = [];
+    if (tags.length) lists.push([currentLang === 'ar' ? 'الوسوم' : 'Tags', tags]);
+    if (dets.length) {
+      lists.push([
+        currentLang === 'ar' ? 'الأجسام المكتشفة' : 'Detected objects',
+        dets.slice(0, 20).map(d => {
+          if (typeof d === 'string') return d;
+          const name = d.name || d.class || d.label || 'object';
+          const conf = d.confidence != null ? ` ${Math.round(d.confidence * 100)}%` : '';
+          return name + conf;
+        })
+      ]);
+    }
+    renderResult(
+      document.getElementById('camResult'),
+      currentLang === 'ar' ? 'نتيجة التحليل' : 'Analysis',
+      data.risk_score,
+      data.risk_level,
       [
-        [currentLang==='ar'?'المخاطر':'Risk', data.risk_score],
-        [currentLang==='ar'?'الأجسام':'Objects', dets.length],
-        [currentLang==='ar'?'الحركة':'Motion', data.motion_score ?? data.motion ?? '—']
+        [currentLang === 'ar' ? 'المخاطر' : 'Risk', data.risk_score],
+        [currentLang === 'ar' ? 'الأجسام' : 'Objects', dets.length],
+        [currentLang === 'ar' ? 'الحركة' : 'Motion', data.motion_score ?? data.motion ?? '—'],
+        [currentLang === 'ar' ? 'YOLO' : 'YOLO', data.yolo_available === false ? (currentLang === 'ar' ? 'غير محمّل' : 'not loaded') : (currentLang === 'ar' ? 'نشط' : 'active')]
       ],
-      tags.length ? [[currentLang==='ar'?'الوسوم':'Tags', tags]] : []);
-    showToast(currentLang==='ar'?'تم التحليل':'Analyzed', 'ok');
-  } catch (e) { showToast(e.message || (currentLang==='ar'?'فشل التحليل':'Analysis failed'), 'err'); }
-  finally { btn.disabled = false; btn.classList.remove('loading'); }
+      lists
+    );
+    showToast(currentLang === 'ar' ? 'تم التحليل' : 'Analyzed', Number(data.risk_score) >= 70 ? 'warn' : 'ok');
+  } catch (e) {
+    showToast(e.message || (currentLang === 'ar' ? 'فشل التحليل' : 'Analysis failed'), 'err');
+  } finally {
+    btn.disabled = false;
+    btn.classList.remove('loading');
+  }
 });
 
 // ===== ScanGuard =====
@@ -1462,18 +1619,70 @@ document.getElementById('scanScanBtn')?.addEventListener('click', async () => {
     }
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Failed');
-    const issues = data.issues || data.findings || [];
-    renderResult(document.getElementById('scanResult'), currentLang==='ar'?'نتيجة التدقيق':'Audit result',
-      data.risk_score, data.risk_level,
+
+    // findings قد يكون كائن {sqli:[], xss:[], secrets:[]} أو مصفوفة
+    const findings = data.findings || data.issues || {};
+    const lists = [];
+    let totalFound = data.total_issues_found ?? data.issues_found ?? 0;
+
+    if (Array.isArray(findings)) {
+      if (findings.length) {
+        lists.push([
+          currentLang === 'ar' ? 'التفاصيل' : 'Details',
+          findings.slice(0, 25).map(i => i.description || i.rule || i.type || JSON.stringify(i))
+        ]);
+      }
+      if (!totalFound) totalFound = findings.length;
+    } else if (findings && typeof findings === 'object') {
+      const labels = {
+        sqli: currentLang === 'ar' ? 'حقن SQL' : 'SQLi',
+        xss: 'XSS',
+        secrets: currentLang === 'ar' ? 'أسرار حساسة' : 'Secrets',
+        log_issues: currentLang === 'ar' ? 'مشاكل سجلات' : 'Log issues',
+        generic_issues: currentLang === 'ar' ? 'عام' : 'Generic'
+      };
+      let count = 0;
+      Object.keys(findings).forEach(key => {
+        const arr = findings[key];
+        if (!Array.isArray(arr) || !arr.length) return;
+        count += arr.length;
+        lists.push([
+          labels[key] || key,
+          arr.slice(0, 15).map(i => {
+            if (typeof i === 'string') return i;
+            const rule = i.rule || i.description || i.type || '';
+            const match = i.match ? ` → ${i.match}` : '';
+            const line = i.line != null ? ` (L${i.line})` : '';
+            return `${rule}${match}${line}`.trim() || JSON.stringify(i);
+          })
+        ]);
+      });
+      if (!totalFound) totalFound = count;
+    }
+
+    const cat = data.category_summary || {};
+    const catRows = Object.entries(cat).filter(([, v]) => v && (v.count > 0)).map(([k, v]) => [k, v.count]);
+
+    renderResult(
+      document.getElementById('scanResult'),
+      currentLang === 'ar' ? 'نتيجة التدقيق' : 'Audit result',
+      data.risk_score,
+      data.risk_level,
       [
-        [currentLang==='ar'?'المخاطر':'Risk', data.risk_score],
-        [currentLang==='ar'?'المستوى':'Level', riskLabel(data.risk_score, data.risk_level)],
-        [currentLang==='ar'?'المشاكل':'Issues', data.total_issues_found ?? issues.length]
-      ],
-      issues.length ? [[currentLang==='ar'?'التفاصيل':'Details', issues.slice(0, 20).map(i => i.description || i.rule || i.type || JSON.stringify(i))]] : []);
-    showToast(currentLang==='ar'?'تم التدقيق':'Audit complete', Number(data.risk_score)>=70?'warn':'ok');
-  } catch (e) { showToast(e.message || (currentLang==='ar'?'فشل التدقيق':'Audit failed'), 'err'); }
-  finally { btn.disabled = false; btn.classList.remove('loading'); }
+        [currentLang === 'ar' ? 'المخاطر' : 'Risk', data.risk_score],
+        [currentLang === 'ar' ? 'المستوى' : 'Level', riskLabel(data.risk_score, data.risk_level)],
+        [currentLang === 'ar' ? 'المشاكل' : 'Issues', totalFound],
+        [currentLang === 'ar' ? 'نوع الإدخال' : 'Input type', data.detected_input_type || '—']
+      ].concat(catRows),
+      lists
+    );
+    showToast(currentLang === 'ar' ? 'تم التدقيق' : 'Audit complete', Number(data.risk_score) >= 70 ? 'warn' : 'ok');
+  } catch (e) {
+    showToast(e.message || (currentLang === 'ar' ? 'فشل التدقيق' : 'Audit failed'), 'err');
+  } finally {
+    btn.disabled = false;
+    btn.classList.remove('loading');
+  }
 });
 
 // Init
@@ -1486,16 +1695,28 @@ if (token && userStr) {
   setGuest();
 }
 
-// Desktop: sidebar open by default
-if (window.innerWidth > 900) {
-  document.getElementById('sidebar').classList.remove('closed');
-  document.getElementById('main').classList.remove('full');
-} else {
-  document.getElementById('sidebar').classList.add('closed');
-}
+// Desktop: sidebar open by default | Mobile: closed
+(function initSidebar() {
+  const sb = document.getElementById('sidebar');
+  const main = document.getElementById('main');
+  if (!sb) return;
+  if (window.innerWidth > 900) {
+    sb.classList.remove('closed');
+    sb.classList.add('open');
+    if (main) main.classList.remove('full');
+  } else {
+    sb.classList.add('closed');
+    sb.classList.remove('open');
+  }
+})();
 
 showView('overview');
 loadOverview();
+
+document.getElementById('overviewDemoBtn')?.addEventListener('click', () => {
+  showView('docguard');
+  setTimeout(() => document.getElementById('docDemo')?.click(), 200);
+});
 
 async function checkApiHealth() {
   const el = document.getElementById('apiStatus');
@@ -1532,4 +1753,3 @@ setInterval(checkApiHealth, 60000);
 </script>
 </body>
 </html>
-
