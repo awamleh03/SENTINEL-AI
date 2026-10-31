@@ -575,7 +575,12 @@
       .sidebar.closed { transform: translateX(105%) !important; }
       html[dir="ltr"] .sidebar.closed { transform: translateX(-105%) !important; }
     }
-  </style>
+  
+.risk-chip{display:inline-block;padding:2px 8px;border-radius:999px;font-size:0.78rem;font-weight:600}
+.risk-chip.danger{background:rgba(239,68,68,0.15);color:#f87171}
+.risk-chip.warning{background:rgba(245,158,11,0.15);color:#fbbf24}
+.risk-chip.ok{background:rgba(16,185,129,0.15);color:#34d399}
+</style>
 </head>
 <body>
 <div class="app">
@@ -1186,13 +1191,106 @@ async function loadOverview() {
     const res = await fetch('/api/dashboard/summary', { headers: authHeaders() });
     if (!res.ok) throw new Error('summary');
     const data = await res.json();
-    document.getElementById('statScans').textContent = data.scans_24h ?? data.total_scans ?? 0;
-    document.getElementById('statCritical').textContent = data.critical_scans ?? data.critical ?? 0;
-    document.getElementById('statHigh').textContent = data.high_risk_scans ?? data.high ?? 0;
-    document.getElementById('statUnread').textContent = data.unread_alerts ?? data.unread ?? 0;
-    updateAlertsBadge(data.unread_alerts ?? data.unread ?? 0);
-  } catch {
-    // keep zeros — fine for guest / missing endpoint
+
+    // API shape: { scans:{last_24h,critical,high_risk,total}, alerts:{unread,high_severity}, by_module, recent_scans, recent_alerts }
+    const scans = data.scans || {};
+    const alerts = data.alerts || {};
+    const scans24 = scans.last_24h ?? data.scans_24h ?? data.total_scans ?? scans.total ?? 0;
+    const critical = scans.critical ?? data.critical_scans ?? data.critical ?? 0;
+    const high = scans.high_risk ?? data.high_risk_scans ?? data.high ?? 0;
+    const unread = alerts.unread ?? data.unread_alerts ?? data.unread ?? 0;
+
+    const elScans = document.getElementById('statScans');
+    const elCrit = document.getElementById('statCritical');
+    const elHigh = document.getElementById('statHigh');
+    const elUnread = document.getElementById('statUnread');
+    if (elScans) elScans.textContent = scans24;
+    if (elCrit) elCrit.textContent = critical;
+    if (elHigh) elHigh.textContent = high;
+    if (elUnread) elUnread.textContent = unread;
+    updateAlertsBadge(unread);
+
+    // Module performance
+    const modWrap = document.getElementById('overviewModules');
+    const byMod = data.by_module || [];
+    if (modWrap) {
+      if (!byMod.length) {
+        modWrap.className = 'empty-state';
+        modWrap.innerHTML = `<strong>${currentLang === 'ar' ? 'لا توجد فحوصات بعد' : 'No scans yet'}</strong><span>${currentLang === 'ar' ? 'ابدأ من الوحدات أعلاه.' : 'Start from the modules above.'}</span>`;
+      } else {
+        modWrap.className = '';
+        modWrap.innerHTML = byMod.map(m => {
+          const name = (m.module || '').toString();
+          const label = name ? name.charAt(0).toUpperCase() + name.slice(1) : '—';
+          const count = m.scan_count ?? m.count ?? 0;
+          const avg = Math.round(Number(m.avg_risk ?? m.max_risk ?? 0));
+          const riskClass = avg >= 70 ? 'danger' : avg >= 40 ? 'warning' : 'ok';
+          return `<div class="ov-mod-row" style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border,rgba(255,255,255,0.06));gap:10px">
+            <div style="font-weight:600">${esc(label)}</div>
+            <div style="display:flex;gap:10px;align-items:center;font-size:0.85rem;color:var(--text-muted)">
+              <span>${count} ${currentLang === 'ar' ? 'فحص' : 'scans'}</span>
+              <span class="risk-chip ${riskClass}" style="min-width:42px;text-align:center">${avg}</span>
+            </div>
+          </div>`;
+        }).join('');
+      }
+    }
+
+    // Recent scans
+    const scansWrap = document.getElementById('overviewScans');
+    const recentScans = data.recent_scans || [];
+    if (scansWrap) {
+      if (!recentScans.length) {
+        scansWrap.className = 'empty-state';
+        scansWrap.textContent = i18n[currentLang].no_scans;
+      } else {
+        scansWrap.className = 'overflow-x';
+        scansWrap.innerHTML = `<table class="data-table"><thead><tr>
+          <th>${currentLang === 'ar' ? 'الوحدة' : 'Module'}</th>
+          <th>${currentLang === 'ar' ? 'الهدف' : 'Target'}</th>
+          <th>${currentLang === 'ar' ? 'المخاطر' : 'Risk'}</th>
+          <th>${currentLang === 'ar' ? 'الوقت' : 'Time'}</th>
+        </tr></thead><tbody>${
+          recentScans.slice(0, 8).map(s => {
+            const risk = Number(s.risk_score ?? 0);
+            const rc = risk >= 70 ? 'danger' : risk >= 40 ? 'warning' : 'ok';
+            return `<tr>
+              <td>${esc(s.module || '')}</td>
+              <td>${esc(s.target || s.filename || '—')}</td>
+              <td><span class="risk-chip ${rc}">${esc(String(s.risk_score ?? '—'))}</span></td>
+              <td style="white-space:nowrap;font-size:0.8rem">${esc((s.created_at || '').replace('T', ' ').slice(0, 19))}</td>
+            </tr>`;
+          }).join('')
+        }</tbody></table>`;
+      }
+    }
+
+    // Recent alerts
+    const alertsWrap = document.getElementById('overviewAlerts');
+    const recentAlerts = data.recent_alerts || [];
+    if (alertsWrap) {
+      if (!recentAlerts.length) {
+        alertsWrap.className = 'empty-state';
+        alertsWrap.textContent = i18n[currentLang].no_alerts;
+      } else {
+        alertsWrap.className = 'overflow-x';
+        alertsWrap.innerHTML = `<table class="data-table"><thead><tr>
+          <th>${currentLang === 'ar' ? 'المصدر' : 'Source'}</th>
+          <th>${currentLang === 'ar' ? 'الشدة' : 'Severity'}</th>
+          <th>${currentLang === 'ar' ? 'العنوان' : 'Title'}</th>
+          <th>${currentLang === 'ar' ? 'الوقت' : 'Time'}</th>
+        </tr></thead><tbody>${
+          recentAlerts.slice(0, 8).map(a => `<tr>
+            <td>${esc(a.source || '')}</td>
+            <td>${esc(a.severity || '')}</td>
+            <td>${esc(a.title || a.message || '')}</td>
+            <td style="white-space:nowrap;font-size:0.8rem">${esc((a.created_at || '').replace('T', ' ').slice(0, 19))}</td>
+          </tr>`).join('')
+        }</tbody></table>`;
+      }
+    }
+  } catch (err) {
+    console.warn('loadOverview failed', err);
   }
 }
 
@@ -1359,7 +1457,7 @@ document.getElementById('docScanBtn')?.addEventListener('click', async () => {
       ],
       lists
     );
-    showToast(currentLang === 'ar' ? 'تم الفحص بنجاح' : 'Scan complete', Number(data.risk_score) >= 70 ? 'warn' : 'ok');
+    try { loadOverview(); } catch (e) {} showToast(currentLang === 'ar' ? 'تم الفحص بنجاح' : 'Scan complete', Number(data.risk_score) >= 70 ? 'warn' : 'ok');
   } catch (e) {
     showToast(e.message || (currentLang === 'ar' ? 'فشل الفحص — حاول مرة أخرى' : 'Scan failed — try again'), 'err');
   } finally {
@@ -1428,7 +1526,7 @@ document.getElementById('mailScanBtn')?.addEventListener('click', async () => {
       ].concat(scoreRows),
       lists
     );
-    showToast(currentLang === 'ar' ? 'تم التصنيف' : 'Classified', Number(data.risk_score) >= 70 ? 'warn' : 'ok');
+    try { loadOverview(); } catch (e) {} showToast(currentLang === 'ar' ? 'تم التصنيف' : 'Classified', Number(data.risk_score) >= 70 ? 'warn' : 'ok');
   } catch (e) {
     showToast(e.message || (currentLang === 'ar' ? 'فشل التصنيف' : 'Classify failed'), 'err');
   } finally {
@@ -1676,7 +1774,7 @@ document.getElementById('scanScanBtn')?.addEventListener('click', async () => {
       ].concat(catRows),
       lists
     );
-    showToast(currentLang === 'ar' ? 'تم التدقيق' : 'Audit complete', Number(data.risk_score) >= 70 ? 'warn' : 'ok');
+    try { loadOverview(); } catch (e) {} showToast(currentLang === 'ar' ? 'تم التدقيق' : 'Audit complete', Number(data.risk_score) >= 70 ? 'warn' : 'ok');
   } catch (e) {
     showToast(e.message || (currentLang === 'ar' ? 'فشل التدقيق' : 'Audit failed'), 'err');
   } finally {
