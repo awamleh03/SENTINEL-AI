@@ -35,31 +35,47 @@ camguard_bp = Blueprint('camguard', __name__, url_prefix='/api/camguard')
 
 _PREV_FRAME = {}
 _YOLO_MODEL_INSTANCE = None
+_YOLO_LOAD_ERROR = None
 
 
 def _load_yolo_model(weights='yolov8n.pt'):
-    """Loads the YOLOv8 model using ultralytics if available."""
-    global _YOLO_MODEL_INSTANCE
+    """Load YOLOv8 once. Tries local file then ultralytics default download."""
+    global _YOLO_MODEL_INSTANCE, _YOLO_LOAD_ERROR
     if not YOLO_AVAILABLE:
+        _YOLO_LOAD_ERROR = 'ultralytics not installed'
         return None
     if _YOLO_MODEL_INSTANCE is not None:
         return _YOLO_MODEL_INSTANCE
     try:
-        model_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')), weights)
-        if os.path.exists(model_path):
-            _YOLO_MODEL_INSTANCE = YOLO(model_path)
-            logger.info(f"YOLO model loaded from {model_path}")
-        else:
+        base = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+        local_path = os.path.join(base, weights)
+        # also check /tmp (Render writable) and models/
+        candidates = [
+            local_path,
+            os.path.join(base, 'models', weights),
+            os.path.join('/tmp', weights),
+            weights,  # ultralytics may auto-download
+        ]
+        last_err = None
+        for path in candidates:
             try:
-                _YOLO_MODEL_INSTANCE = YOLO(weights)
-                logger.info(f"YOLO model loaded (default weights '{weights}')")
+                if path != weights and not os.path.exists(path):
+                    continue
+                _YOLO_MODEL_INSTANCE = YOLO(path)
+                _YOLO_LOAD_ERROR = None
+                logger.info('YOLO model loaded from %s', path)
+                return _YOLO_MODEL_INSTANCE
             except Exception as e:
-                logger.warning(f"Could not load YOLO model with '{weights}': {str(e)}")
-                _YOLO_MODEL_INSTANCE = None
-    except Exception as e:
-        logger.warning(f"YOLO model loading failed: {str(e)}")
+                last_err = e
+                logger.warning('YOLO load failed for %s: %s', path, e)
+        _YOLO_LOAD_ERROR = str(last_err)[:200] if last_err else 'unknown load error'
         _YOLO_MODEL_INSTANCE = None
-    return _YOLO_MODEL_INSTANCE
+        return None
+    except Exception as e:
+        _YOLO_LOAD_ERROR = str(e)[:200]
+        logger.warning('YOLO model loading failed: %s', e)
+        _YOLO_MODEL_INSTANCE = None
+        return None
 
 
 def _decode_image_from_request():
@@ -85,8 +101,10 @@ def _decode_image_from_request():
             raw_data = request.get_data(cache=False)
             raw = raw_data if raw_data and len(raw_data) > 100 else None
             if not raw:
-                return None, ('No image provided. Send multipart file "frame", '
-                              'JSON with base64 "frame" field, or raw image bytes.')
+                return None, (
+                    'No image provided. Send multipart file "frame", '
+                    'JSON with base64 "frame" field, or raw image bytes.'
+                )
     if not raw or len(raw) < 32:
         return None, 'Empty or too-small image payload'
     try:
@@ -165,6 +183,8 @@ def _run_yolo_detection(frame, model, conf_threshold=0.45):
                         max_conf = max(max_conf, conf)
                         detections.append({
                             'class': cls_name,
+                            'name': cls_name,
+                            'label': cls_name,
                             'class_id': cls_id,
                             'confidence': round(conf, 4),
                             'bbox': {
@@ -177,14 +197,20 @@ def _run_yolo_detection(frame, model, conf_threshold=0.45):
                         continue
         return detections, max_conf
     except Exception as e:
-        logger.error(f"YOLO detection error: {str(e)}")
+        logger.error('YOLO detection error: %s', e)
         return [], 0
 
 
 def _classify_scene(frame_shape, motion_score, yolo_detections):
-    people = sum(1 for d in yolo_detections if d.get('class') in ('person', 'Person'))
-    vehicles = sum(1 for d in yolo_detections if d.get('class') in ('car', 'truck', 'bus', 'motorcycle', 'bicycle'))
-    weapons = sum(1 for d in yolo_detections if d.get('class', '').lower() in ('knife', 'scissors', 'baseball bat'))
+    people = sum(1 for d in yolo_detections if str(d.get('class', '')).lower() in ('person',))
+    vehicles = sum(
+        1 for d in yolo_detections
+        if str(d.get('class', '')).lower() in ('car', 'truck', 'bus', 'motorcycle', 'bicycle')
+    )
+    weapons = sum(
+        1 for d in yolo_detections
+        if str(d.get('class', '')).lower() in ('knife', 'scissors', 'baseball bat')
+    )
     risk = 0
     tags = []
     if people == 0 and motion_score > 30:
@@ -205,9 +231,11 @@ def _classify_scene(frame_shape, motion_score, yolo_detections):
     elif motion_score >= 50:
         risk += 10
         tags.append('moderate_motion')
+    if people > 0:
+        tags.append('person_detected')
+        risk += min(20, people * 5)
     if not tags:
         tags.append('normal')
-        risk += 0
     risk = min(round(risk, 2), 100)
     level = 'critical' if risk >= 70 else 'high' if risk >= 40 else 'medium' if risk >= 15 else 'low'
     return {
@@ -238,19 +266,15 @@ def analyze():
             return jsonify({'error': error}), 400
 
         h, w = frame.shape[:2]
-        
-        # Load and run YOLOv8 model for active AI object detection
+
         yolo_model = _load_yolo_model('yolov8n.pt') if run_yolo else None
         yolo_detections, yolo_max_conf = _run_yolo_detection(frame, yolo_model) if run_yolo else ([], 0)
 
-        # Retain motion metrics as supplement if needed
         motion_detected, contour_count, max_area, boxes, motion_score = _detect_motion(
             frame, camera_id=camera_id, sensitivity=sensitivity, min_area=min_area
         )
 
         scene = _classify_scene((h, w), motion_score, yolo_detections)
-
-        # Clearly indicate if no important objects are detected
         no_objects_detected = len(yolo_detections) == 0
 
         result = {
@@ -261,9 +285,16 @@ def analyze():
                 'height': h,
                 'channels': frame.shape[2] if len(frame.shape) == 3 else 1
             },
+            # Primary + aliases so frontend always finds detections
             'detected_objects': yolo_detections,
+            'detections': yolo_detections,
+            'yolo_detections': yolo_detections,
             'no_objects_detected': no_objects_detected,
-            'detection_status_message': 'No important objects detected in the current frame.' if no_objects_detected else f'Successfully detected {len(yolo_detections)} object(s).',
+            'detection_status_message': (
+                'No important objects detected in the current frame.'
+                if no_objects_detected else
+                f'Successfully detected {len(yolo_detections)} object(s).'
+            ),
             'motion': {
                 'detected': motion_detected,
                 'contour_count': contour_count,
@@ -271,16 +302,21 @@ def analyze():
                 'motion_score': motion_score,
                 'bboxes': boxes[:20]
             },
+            'motion_score': motion_score,
             'yolo': {
                 'status': {
                     'enabled': run_yolo,
                     'loaded': yolo_model is not None,
-                    'max_confidence': round(yolo_max_conf, 4)
+                    'max_confidence': round(yolo_max_conf, 4),
+                    'error': _YOLO_LOAD_ERROR
                 },
                 'detections': yolo_detections,
                 'detection_count': len(yolo_detections)
             },
+            'yolo_available': YOLO_AVAILABLE,
+            'yolo_model_loaded': yolo_model is not None,
             'scene': scene,
+            'tags': scene.get('tags', []),
             'risk_score': scene['risk_score'],
             'risk_level': scene['risk_level']
         }
@@ -310,26 +346,40 @@ def analyze():
                 source='camguard',
                 severity='high' if result['risk_score'] >= 70 else 'medium',
                 title=f'CamGuard alert: {", ".join(scene["tags"])}',
-                message=(f'Camera {camera_id}: risk score {result["risk_score"]}. '
-                         f'Objects detected: {len(yolo_detections)}.'),
+                message=(
+                    f'Camera {camera_id}: risk score {result["risk_score"]}. '
+                    f'Objects detected: {len(yolo_detections)}.'
+                ),
                 alert_metadata={'scan_id': scan_id, 'tags': scene['tags'], 'camera_id': camera_id}
             )
 
-        logger.info(f"CamGuard analyze: camera={camera_id} risk={result['risk_score']} yolo_objects={len(yolo_detections)}")
+        logger.info(
+            'CamGuard analyze: camera=%s risk=%s yolo_objects=%s loaded=%s',
+            camera_id, result['risk_score'], len(yolo_detections), yolo_model is not None
+        )
         return jsonify(result), 200
     except Exception as e:
-        logger.error(f"CamGuard analyze error: {str(e)}")
+        logger.error('CamGuard analyze error: %s', e)
         return jsonify({'error': f'Analysis failed: {str(e)[:200]}'}), 500
 
 
 @camguard_bp.route('/health', methods=['GET'])
 def health():
+    # Optional warm-load so status is accurate without waiting for first analyze
+    try_load = str(request.args.get('load', '0')).lower() in ('1', 'true', 'yes')
+    if try_load and _YOLO_MODEL_INSTANCE is None and YOLO_AVAILABLE:
+        _load_yolo_model('yolov8n.pt')
     return jsonify({
         'opencv_available': OPENCV_AVAILABLE,
         'yolo_available': YOLO_AVAILABLE,
         'yolo_model_loaded': _YOLO_MODEL_INSTANCE is not None,
+        'yolo_load_error': _YOLO_LOAD_ERROR,
         'cached_frames': list(_PREV_FRAME.keys()),
-        'yolo_integration_status': 'Active YOLOv8 object detection enabled.'
+        'yolo_integration_status': (
+            'Active YOLOv8 object detection enabled.'
+            if _YOLO_MODEL_INSTANCE is not None else
+            'YOLOv8 available but model not loaded yet — call /health?load=1 or analyze once.'
+        )
     }), 200
 
 
@@ -338,3 +388,7 @@ def reset():
     global _PREV_FRAME
     _PREV_FRAME = {}
     return jsonify({'message': 'CamGuard cache reset. Motion and baseline states cleared.'}), 200
+
+
+# Optional: warm-load on import (can slow startup on Render free tier)
+# _load_yolo_model('yolov8n.pt')
