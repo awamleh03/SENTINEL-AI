@@ -580,6 +580,9 @@
 .risk-chip.danger{background:rgba(239,68,68,0.15);color:#f87171}
 .risk-chip.warning{background:rgba(245,158,11,0.15);color:#fbbf24}
 .risk-chip.ok{background:rgba(16,185,129,0.15);color:#34d399}
+
+.cam-health.warn{background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.35);color:#fbbf24}
+.cam-health.ok{background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.35);color:#34d399}
 </style>
 </head>
 <body>
@@ -1145,6 +1148,7 @@ function showView(target) {
   if (target === 'alerts') loadAlerts();
   if (target === 'history') loadHistory();
   if (target === 'sysguard') fetchSysStatus();
+  if (target === 'camguard') loadCamHealth();
 }
 
 document.querySelectorAll('.nav-link[data-nav]').forEach(el => {
@@ -1292,6 +1296,8 @@ async function loadOverview() {
   } catch (err) {
     console.warn('loadOverview failed', err);
   }
+  // Auto-fill system snapshot on overview
+  try { if (typeof fetchSysStatus === 'function') fetchSysStatus(); } catch (e) {}
 }
 
 function updateAlertsBadge(n) {
@@ -1468,11 +1474,17 @@ document.getElementById('docScanBtn')?.addEventListener('click', async () => {
 
 // ===== MailGuard =====
 document.getElementById('mailDemo')?.addEventListener('click', () => {
-  document.getElementById('mailSender').value = 'security@paypal-verify.com';
-  document.getElementById('mailSubject').value = 'Urgent: verify your account now';
-  document.getElementById('mailBody').value = 'Click here to claim your prize and update password immediately. Limited offer. http://bit.ly/verify-now';
+  const sender = document.getElementById('mailSender');
+  const subject = document.getElementById('mailSubject');
+  const body = document.getElementById('mailBody');
+  if (sender) sender.value = 'security@paypal-verify.com';
+  if (subject) subject.value = 'Urgent: verify your account now';
+  if (body) {
+    body.value = 'Dear user,\n\nClick here to claim your prize and update password immediately. Limited offer only today. Verify your account at http://bit.ly/verify-now or we will suspend access.\n\nRegards, Security Team';
+    body.dispatchEvent(new Event('input', { bubbles: true }));
+  }
   showToast(currentLang === 'ar' ? 'تشغيل مثال بريد…' : 'Running mail demo…', 'ok');
-  setTimeout(() => document.getElementById('mailScanBtn')?.click(), 250);
+  setTimeout(() => document.getElementById('mailScanBtn')?.click(), 400);
 });
 document.getElementById('mailScanBtn')?.addEventListener('click', async () => {
   const btn = document.getElementById('mailScanBtn');
@@ -1489,16 +1501,25 @@ document.getElementById('mailScanBtn')?.addEventListener('click', async () => {
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Failed');
-    const scores = data.scores || {};
-    const scoreRows = Object.entries(scores).map(([k, v]) => [k, v]);
+    const scores = data.scores || data.category_scores || {};
+    const scoreRows = Object.entries(scores).map(([k, v]) => [k, typeof v === 'number' ? Math.round(v * 10) / 10 : v]);
     const lists = [];
-    const spamHits = data.spam_hits || data.keyword_hits || data.details?.spam_hits || [];
-    const urgentHits = data.urgent_hits || data.details?.urgent_hits || [];
-    const linkIssues = data.link_issues || data.details?.link_issues || [];
+    const hitsBag = data.hits || data.details?.hits || {};
+    const spamHits = data.spam_hits || hitsBag.spam_hits || data.keyword_hits || data.details?.spam_hits || [];
+    const phishingHits = data.phishing_hits || hitsBag.phishing_hits || data.details?.phishing_hits || [];
+    const urgentHits = data.urgent_hits || hitsBag.urgent_hits || data.details?.urgent_hits || [];
+    const linkIssues = data.link_issues || data.suspicious_urls || data.details?.link_issues || [];
+    const fmtHit = (h) => typeof h === 'string' ? h : `${h.keyword || h.word || JSON.stringify(h)}${h.count ? ' ×' + h.count : ''}${h.weight != null ? ' (w' + h.weight + ')' : ''}`;
+    if (phishingHits.length) {
+      lists.push([
+        currentLang === 'ar' ? 'مؤشرات تصيّد' : 'Phishing signals',
+        phishingHits.map(fmtHit)
+      ]);
+    }
     if (spamHits.length) {
       lists.push([
         currentLang === 'ar' ? 'كلمات سبام' : 'Spam keywords',
-        spamHits.map(h => typeof h === 'string' ? h : `${h.keyword || h.word || JSON.stringify(h)}${h.count ? ' ×' + h.count : ''}${h.weight != null ? ' (w' + h.weight + ')' : ''}`)
+        spamHits.map(fmtHit)
       ]);
     }
     if (urgentHits.length) {
@@ -1636,6 +1657,31 @@ document.getElementById('sgStream')?.addEventListener('click', function () {
 });
 
 // ===== CamGuard =====
+async function loadCamHealth() {
+  const box = document.getElementById('camHealthNote');
+  try {
+    const res = await fetch('/api/camguard/health', { headers: authHeaders() });
+    const data = await res.json();
+    if (!res.ok) throw new Error('health');
+    const yolo = data.yolo_model_loaded ? (currentLang === 'ar' ? 'موديل YOLO محمّل' : 'YOLO model loaded')
+      : (currentLang === 'ar' ? 'YOLO غير محمّل — كشف الحركة يعمل، كشف الأجسام محدود' : 'YOLO not loaded — motion works, object detection limited');
+    const cv = data.opencv_available ? 'OpenCV OK' : 'OpenCV missing';
+    const msg = `${cv} · ${yolo}`;
+    if (box) {
+      box.style.display = 'block';
+      box.textContent = msg;
+      box.className = data.yolo_model_loaded ? 'cam-health ok' : 'cam-health warn';
+    }
+  } catch (e) {
+    if (box) {
+      box.style.display = 'block';
+      box.className = 'cam-health warn';
+      box.textContent = currentLang === 'ar' ? 'تعذر قراءة حالة CamGuard' : 'Could not read CamGuard health';
+    }
+  }
+}
+
+
 document.getElementById('camScanBtn')?.addEventListener('click', async () => {
   const btn = document.getElementById('camScanBtn');
   const file = document.getElementById('camFile').files[0];
@@ -1673,11 +1719,11 @@ document.getElementById('camScanBtn')?.addEventListener('click', async () => {
         [currentLang === 'ar' ? 'المخاطر' : 'Risk', data.risk_score],
         [currentLang === 'ar' ? 'الأجسام' : 'Objects', dets.length],
         [currentLang === 'ar' ? 'الحركة' : 'Motion', data.motion_score ?? data.motion ?? '—'],
-        [currentLang === 'ar' ? 'YOLO' : 'YOLO', data.yolo_available === false ? (currentLang === 'ar' ? 'غير محمّل' : 'not loaded') : (currentLang === 'ar' ? 'نشط' : 'active')]
+        [currentLang === 'ar' ? 'YOLO' : 'YOLO', (data.yolo_model_loaded ? (currentLang === 'ar' ? 'محمّل' : 'loaded') : (data.yolo_available === false ? (currentLang === 'ar' ? 'غير متاح' : 'unavailable') : (currentLang === 'ar' ? 'غير محمّل (حركة فقط)' : 'not loaded (motion only)')))]
       ],
       lists
     );
-    showToast(currentLang === 'ar' ? 'تم التحليل' : 'Analyzed', Number(data.risk_score) >= 70 ? 'warn' : 'ok');
+    try { loadOverview(); } catch (e) {} showToast(currentLang === 'ar' ? 'تم التحليل' : 'Analyzed', Number(data.risk_score) >= 70 ? 'warn' : 'ok');
   } catch (e) {
     showToast(e.message || (currentLang === 'ar' ? 'فشل التحليل' : 'Analysis failed'), 'err');
   } finally {
@@ -1688,13 +1734,19 @@ document.getElementById('camScanBtn')?.addEventListener('click', async () => {
 
 // ===== ScanGuard =====
 document.getElementById('scanDemo')?.addEventListener('click', () => {
-  document.getElementById('scanText').value =
-    "SELECT * FROM users WHERE id = 1 OR 1=1; --\n" +
-    "<scr" + "ipt>alert('xss')</scr" + "ipt>\n" +
-    "AWS_SECRET_ACCESS_KEY=AKIA1234567890EXAMPLE";
-  document.getElementById('scanFile').value = '';
-  showToast(currentLang === 'ar' ? 'تشغيل مثال ثغرات…' : 'Running audit demo…', 'ok');
-  setTimeout(() => document.getElementById('scanScanBtn')?.click(), 250);
+  const el = document.getElementById('scanText');
+  if (el) {
+    // NOTE: never put a literal close-script tag inside inline JS — breaks the HTML parser
+    el.value = [
+      'SELECT * FROM users WHERE id = 1 OR 1=1; -- admin bypass',
+      '<' + 'script>alert(document.cookie)<' + '/script>',
+      'const aws_secret_key = "AKIAIOSFODNN7EXAMPLE";',
+      'password = "SuperSecret123!"'
+    ].join('\n');
+    el.dispatchEvent(new Event('input', { bubbles: true }));
+  }
+  showToast(currentLang === 'ar' ? 'تشغيل مثال كود…' : 'Running code demo…', 'ok');
+  setTimeout(() => document.getElementById('scanScanBtn')?.click(), 400);
 });
 document.getElementById('scanScanBtn')?.addEventListener('click', async () => {
   const btn = document.getElementById('scanScanBtn');
