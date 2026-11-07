@@ -10,13 +10,14 @@ from collections import Counter
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from flask import Blueprint, request, jsonify, current_app
-
 from modules.database import save_scan_record, save_alert_record
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 mailguard_bp = Blueprint('mailguard', __name__, url_prefix='/api/mailguard')
+
+# ===================== Keywords =====================
 
 SPAM_KEYWORDS_EN = {
     'free': 3, 'win': 4, 'winner': 4, 'won': 4, 'prize': 5, 'congratulations': 3,
@@ -70,7 +71,7 @@ URGENT_KEYWORDS_EN = {
     '24 hours': 4, '48 hours': 3, 'deadline': 5, 'expires': 4,
     'last chance': 5, 'final notice': 6, 'final warning': 6,
     'critical': 5, 'emergency': 6, 'important': 2, 'time sensitive': 5,
-    'before it': 3, 'don\'t miss': 3, 'limited time': 4,
+    'before it': 3, "don't miss": 3, 'limited time': 4,
     'act now': 5, 'do not delay': 5, 'without delay': 5,
     'fire': 7, 'breach': 7, 'compromise': 7, 'leak': 7,
     'help me': 5, 'please help': 4, 'stuck': 3, 'need you': 3,
@@ -97,20 +98,15 @@ SPAM_KEYWORDS_AR = {
     'تهانينا': 3, 'عرض': 3, 'محدود': 2, 'حصري': 2, 'عاجل': 5,
     'الآن': 2, 'اليوم': 2, 'فقط': 2, 'مضمون': 4, '100%': 3,
     'اضغط هنا': 4, 'اشترِ الآن': 4, 'تحرك الآن': 4, 'خصم': 2, 'تخفيض': 2,
-    'رخيص': 3, 'الأدنى سعر': 3, 'صفقة': 3, 'استثمار': 4, 'مليون': 4,
+    'رخيص': 3, 'صفقة': 3, 'استثمار': 4, 'مليون': 4,
     'نقدي': 3, 'مال': 3, 'دخل': 4, 'ربح': 4, 'يانصيب': 5,
     'قرض': 3, 'ائتمان': 2, 'دين': 2, 'رهن': 3, 'تأمين': 2,
-    'استرداد': 3, 'استبدال': 3, 'اشترك': 2,
-    'تخسيس وزن': 4, 'رجيم': 3, 'مكملات': 4, 'ادوية': 4,
-    'مواعدة': 2, 'عازب': 3, 'ساخن': 2, 'جنس': 5,
-    'بنك': 2, 'باى بال': 3, 'تحقق': 5, 'تأكيد': 3, 'تحديث': 3,
-    'حساب': 3, 'كلمة مرور': 3, 'تسجيل دخول': 3, 'أمن': 3,
-    'صديقي العزيز': 4, 'عزيزي': 3, 'تحياتي': 2,
-    'تحميل': 3, 'مرفق': 3, 'فاتورة': 3, 'كشف حساب': 3,
-    'جهة حكومية': 3, 'شرطة': 3, 'محكمة': 4,
-    'تحويل بنكي': 4, 'أرسل مالاً': 5,
-    'بيتكوين': 3, 'عملة رقمية': 3, 'محفظة': 3,
-    'برامج ضارة': 2, 'فيروس': 2, 'موقوف': 4, 'ملغى': 4
+    'استرداد': 3, 'اشترك': 2, 'تخسيس وزن': 4, 'رجيم': 3,
+    'مواعدة': 2, 'جنس': 5, 'بنك': 2, 'تحقق': 5, 'تأكيد': 3,
+    'تحديث': 3, 'حساب': 3, 'كلمة مرور': 3, 'تسجيل دخول': 3,
+    'صديقي العزيز': 4, 'عزيزي': 3, 'تحميل': 3, 'مرفق': 3,
+    'فاتورة': 3, 'تحويل بنكي': 4, 'أرسل مالاً': 5, 'بيتكوين': 3,
+    'موقوف': 4, 'ملغى': 4
 }
 
 PHISHING_KEYWORDS_AR = {
@@ -119,38 +115,26 @@ PHISHING_KEYWORDS_AR = {
     'يرجى التأكيد': 6, 'اضغط للتحقق': 8, 'سجل دخول للتأكيد': 8,
     'حدث بيانات الدفع': 7, 'فشل الدفع': 6, 'تم رفض الدفع': 6,
     'تحقق من الشراء': 7, 'سيتم إيقاف حسابك': 7, 'خلال 24 ساعة': 6,
-    'إجراء فوري مطلوب': 8, 'عدم الامتثال': 7,
-    'إعادة تعيين كلمة المرور': 5, 'انتهت صلاحية كلمة المرور': 6,
-    'عميلنا العزيز': 5, 'مستخدمنا العزيز': 4, 'عميلنا المميز': 4,
-    'هذا إشعار رسمي': 4, 'ممثل معتمد': 5,
-    'لاحظنا تسجيل دخول': 7, 'محاولة تسجيل دخول جديدة': 7,
-    'شخص ما لديه كلمة مرورك': 9, 'كلمة مرورك مسربة': 9,
-    'معرف أبل': 6, 'حساب جوجل': 6, 'حساب مايكروسوفت': 6,
-    'أمازون': 6, 'إي باي': 5, 'نتفليكس': 5, 'سبوتيفاي': 5,
-    'طلبك': 5, 'فشل التوصيل': 5, 'شحن': 4,
-    'http://': 4, 'رابط مختصر': 3,
-    'افتح المرفق': 5, 'حمّل المستند': 5,
-    'تفعيل الماكرو': 9, 'مكتب 365': 4, 'جوجل درايف': 5
+    'إجراء فوري مطلوب': 8, 'إعادة تعيين كلمة المرور': 5,
+    'انتهت صلاحية كلمة المرور': 6, 'عميلنا العزيز': 5,
+    'مستخدمنا العزيز': 4, 'لاحظنا تسجيل دخول': 7,
+    'محاولة تسجيل دخول جديدة': 7, 'شخص ما لديه كلمة مرورك': 9,
+    'كلمة مرورك مسربة': 9, 'حساب جوجل': 6, 'حساب مايكروسوفت': 6,
+    'فشل التوصيل': 5, 'افتح المرفق': 5, 'حمّل المستند': 5
 }
 
 URGENT_KEYWORDS_AR = {
     'عاجل جداً': 8, 'عاجل': 6, 'فوراً': 5, 'الآن': 3, 'اليوم': 2,
-    'هذا الصباح': 3, 'هذه الليلة': 3, 'مباشرة': 5, 'حالاً': 5,
-    '24 ساعة': 4, '48 ساعة': 3, 'موعد نهائي': 5, 'ينتهي': 4,
-    'آخر فرصة': 5, 'إشعار نهائي': 6, 'تحذير نهائي': 6,
-    'حرج': 5, 'طارئ': 6, 'مهم': 2, 'حساس الوقت': 5,
-    'لا تفوت': 3, 'وقت محدود': 4,
+    'مباشرة': 5, 'حالاً': 5, '24 ساعة': 4, '48 ساعة': 3,
+    'موعد نهائي': 5, 'ينتهي': 4, 'آخر فرصة': 5, 'إشعار نهائي': 6,
+    'تحذير نهائي': 6, 'حرج': 5, 'طارئ': 6, 'مهم': 2,
     'تحرك الآن': 5, 'لا تتأخر': 5, 'بدون تأخير': 5,
-    'حريق': 7, 'اختراق': 7, 'اخترق': 7, 'تسريب': 7,
-    'ساعدني': 5, 'من فضلك ساعد': 4, 'عالق': 3, 'أحتاجك': 3,
-    'هل يمكنك إرسال': 4, 'هل يمكنك شراء': 5, 'أحتاجك لـ': 4,
-    'الرئيس التنفيذي': 5, 'المدير': 3, 'المدير العام': 3, 'الموارد البشرية': 3,
-    'سري': 4, 'بيننا': 4, 'لا تشارك': 4,
-    'طلب سريع': 5, 'أمر شخصي': 3
+    'اختراق': 7, 'تسريب': 7, 'ساعدني': 5, 'من فضلك ساعد': 4,
+    'هل يمكنك إرسال': 4, 'هل يمكنك شراء': 5, 'سري': 4,
+    'بيننا': 4, 'لا تشارك': 4, 'طلب سريع': 5
 }
 
 URL_REGEX = re.compile(r'https?://[^\s<>"]+|www\.[^\s<>"]+', re.IGNORECASE)
-EMAIL_REGEX = re.compile(r'[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+')
 LINK_TEXT_REGEX = re.compile(r'<a[^>]*href=["\'](.*?)["\'][^>]*>(.*?)</a>', re.DOTALL | re.IGNORECASE)
 
 
@@ -160,7 +144,6 @@ def _match_keywords(text, keyword_dict):
     hits = []
     for phrase, weight in keyword_dict.items():
         phrase_lower = phrase.lower()
-        count = 0
         if len(phrase_lower.split()) > 1:
             count = text_lower.count(phrase_lower)
         else:
@@ -175,14 +158,10 @@ def _analyze_headers(sender, subject, content_type):
     score = 0.0
     notes = []
     if sender:
-        if re.search(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}', sender):
-            pass
-        else:
+        if not re.search(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}', sender):
             score += 10
             notes.append('Sender format looks suspicious')
         sender_lower = sender.lower()
-        if 'noreply' in sender_lower or 'no-reply' in sender_lower:
-            pass
         if any(s in sender_lower for s in ['verify', 'secure', 'support', 'service', 'help', 'admin']):
             if not any(d in sender_lower for d in ['.com', '.org', '.net', '.edu', '.gov']):
                 score += 5
@@ -190,28 +169,24 @@ def _analyze_headers(sender, subject, content_type):
             score += 5
             notes.append('Sender contains many numbers')
     if subject:
-        if not subject or subject.strip() == '':
+        if not subject.strip():
             score += 5
             notes.append('Empty subject')
         if len(subject) > 150:
             score += 2
-        if any(ch in subject for ch in '!#$%&*'):
-            score += min(subject.count(ch) for ch in '!#$%&*') * 2
         if subject.isupper():
             score += 5
             notes.append('Subject is all caps')
-    if content_type:
-        ct_lower = content_type.lower()
-        if 'html' in ct_lower:
-            score += 2
-            notes.append('HTML email (slightly higher risk)')
+    if content_type and 'html' in content_type.lower():
+        score += 2
+        notes.append('HTML email (slightly higher risk)')
     return score, notes
 
 
 def _analyze_links(text):
     score = 0.0
     link_issues = []
-    urls = URL_REGEX.findall(text)
+    urls = URL_REGEX.findall(text or '')
     for url in urls:
         url_lower = url.lower()
         if url_lower.startswith('http://'):
@@ -222,19 +197,21 @@ def _analyze_links(text):
             link_issues.append({'url': url[:150], 'issue': 'IP address URL'})
         if any(s in url_lower for s in ['bit.ly', 'tinyurl', 't.co', 'is.gd', 'buff.ly', 'ow.ly']):
             score += 6
-            link_issues.append({'url': url[:150], 'issue': 'Shortened URL (risk of hiding destination)'})
+            link_issues.append({'url': url[:150], 'issue': 'Shortened URL'})
         if len(url) > 100:
             score += 2
         if '@' in url:
             score += 6
-            link_issues.append({'url': url[:150], 'issue': 'URL contains @ (potential redirect)'})
-    link_mismatches = LINK_TEXT_REGEX.findall(text)
-    for href, display in link_mismatches:
+            link_issues.append({'url': url[:150], 'issue': 'URL contains @'})
+    for href, display in LINK_TEXT_REGEX.findall(text or ''):
         display_urls = URL_REGEX.findall(display)
         if display_urls and href not in display_urls[0]:
             score += 10
-            link_issues.append({'display': display.strip()[:100], 'actual': href[:150],
-                                'issue': 'Display text URL differs from actual href (classic phishing)'})
+            link_issues.append({
+                'display': display.strip()[:100],
+                'actual': href[:150],
+                'issue': 'Display text URL differs from actual href'
+            })
     return score, link_issues
 
 
@@ -242,26 +219,25 @@ def classify_email_ai(sender=None, subject=None, body=None):
     api_key = os.getenv('OPENAI_API_KEY') or os.getenv('GROQ_API_KEY')
     if not api_key:
         return None
-    
+
     is_groq = bool(os.getenv('GROQ_API_KEY')) and not os.getenv('OPENAI_API_KEY')
     url = "https://api.groq.com/openai/v1/chat/completions" if is_groq else "https://api.openai.com/v1/chat/completions"
     model = "llama-3.3-70b-versatile" if is_groq else "gpt-4o-mini"
-    
+
     headers = {
         "Authorization": f"Bearer {api_key}",
         "Content-Type": "application/json"
     }
-    
+
     system_prompt = (
         "You are an advanced cybersecurity email classification assistant. "
-        "Analyze the provided email subject, sender, and body. "
-        "Classify the email strictly into one of these four categories: 'Safe', 'Spam', 'Phishing', or 'Urgent'. "
-        "Return a valid JSON object with keys: 'classification' (string), 'confidence_score' (float between 0 and 100), "
-        "'risk_score' (float between 0 and 100), and 'reasoning' (string)."
+        "Classify the email into one of: 'Safe', 'Spam', 'Phishing', or 'Urgent'. "
+        "Return valid JSON with: classification, confidence_score (0-100), "
+        "risk_score (0-100), reasoning."
     )
-    
+
     user_content = f"Sender: {sender}\nSubject: {subject}\nBody: {body}"
-    
+
     payload = {
         "model": model,
         "messages": [
@@ -271,12 +247,11 @@ def classify_email_ai(sender=None, subject=None, body=None):
         "response_format": {"type": "json_object"},
         "temperature": 0.1
     }
-    
+
     try:
-        response = requests.post(url, headers=headers, json=payload, timeout=10)
+        response = requests.post(url, headers=headers, json=payload, timeout=12)
         if response.status_code == 200:
-            res_json = response.json()
-            content = res_json['choices'][0]['message']['content']
+            content = response.json()['choices'][0]['message']['content']
             return json.loads(content)
     except Exception as e:
         logger.error(f"AI Email Classification error: {str(e)}")
@@ -287,14 +262,16 @@ def classify_email(sender=None, subject=None, body=None, content_type='text/plai
     body = body or ''
     subject = subject or ''
     sender = sender or ''
-    
-    # Try AI classification first
+
+    # ---- AI path ----
     ai_result = classify_email_ai(sender=sender, subject=subject, body=body)
     if ai_result and 'classification' in ai_result:
         label = ai_result.get('classification', 'Safe')
         if label not in ['Safe', 'Spam', 'Phishing', 'Urgent']:
             label = 'Safe'
         risk_score = float(ai_result.get('risk_score', ai_result.get('confidence_score', 10.0)))
+        risk_score = max(0.0, min(100.0, risk_score))
+
         if risk_score >= 70:
             level = 'critical'
         elif risk_score >= 40:
@@ -303,7 +280,7 @@ def classify_email(sender=None, subject=None, body=None, content_type='text/plai
             level = 'medium'
         else:
             level = 'low'
-            
+
         return {
             'classification': label,
             'risk_score': risk_score,
@@ -313,9 +290,14 @@ def classify_email(sender=None, subject=None, body=None, content_type='text/plai
                 'spam_score': risk_score if label == 'Spam' else 0.0,
                 'phishing_score': risk_score if label == 'Phishing' else 0.0,
                 'urgent_score': risk_score if label == 'Urgent' else 0.0,
-                'safe_score': 100 - risk_score if label == 'Safe' else 0.0
+                'safe_score': max(0.0, 100 - risk_score) if label == 'Safe' else 0.0
             },
-            'hits': {'spam_hits': [], 'phishing_hits': [], 'urgent_hits': [], 'safe_hits': []},
+            'hits': {
+                'spam_hits': [],
+                'phishing_hits': [],
+                'urgent_hits': [],
+                'safe_hits': []
+            },
             'header_notes': [],
             'link_issues': [],
             'attachments_detected': 0,
@@ -323,45 +305,20 @@ def classify_email(sender=None, subject=None, body=None, content_type='text/plai
             'timestamp': datetime.datetime.utcnow().isoformat()
         }
 
-    # Fallback to original regex and keyword logic if AI is unavailable
+    # ---- Rule-based fallback ----
     full_text = f"{subject}\n{body}"
-    scores = {
-        'spam_score': 0.0,
-        'phishing_score': 0.0,
-        'urgent_score': 0.0,
-        'safe_score': 0.0
-    }
-    hits_collection = {
-        'spam_hits': [],
-        'phishing_hits': [],
-        'urgent_hits': [],
-        'safe_hits': []
-    }
+    scores = {'spam_score': 0.0, 'phishing_score': 0.0, 'urgent_score': 0.0, 'safe_score': 0.0}
+    hits_collection = {'spam_hits': [], 'phishing_hits': [], 'urgent_hits': [], 'safe_hits': []}
 
-    s, h = _match_keywords(full_text, SPAM_KEYWORDS_EN)
-    scores['spam_score'] += s
-    hits_collection['spam_hits'].extend(h)
-    s, h = _match_keywords(full_text, SPAM_KEYWORDS_AR)
-    scores['spam_score'] += s
-    hits_collection['spam_hits'].extend(h)
-
-    s, h = _match_keywords(full_text, PHISHING_KEYWORDS_EN)
-    scores['phishing_score'] += s
-    hits_collection['phishing_hits'].extend(h)
-    s, h = _match_keywords(full_text, PHISHING_KEYWORDS_AR)
-    scores['phishing_score'] += s
-    hits_collection['phishing_hits'].extend(h)
-
-    s, h = _match_keywords(full_text, URGENT_KEYWORDS_EN)
-    scores['urgent_score'] += s
-    hits_collection['urgent_hits'].extend(h)
-    s, h = _match_keywords(full_text, URGENT_KEYWORDS_AR)
-    scores['urgent_score'] += s
-    hits_collection['urgent_hits'].extend(h)
-
-    s, h = _match_keywords(full_text, SAFE_KEYWORDS_EN)
-    scores['safe_score'] += s
-    hits_collection['safe_hits'].extend(h)
+    for kw_dict, key in [
+        (SPAM_KEYWORDS_EN, 'spam'), (SPAM_KEYWORDS_AR, 'spam'),
+        (PHISHING_KEYWORDS_EN, 'phishing'), (PHISHING_KEYWORDS_AR, 'phishing'),
+        (URGENT_KEYWORDS_EN, 'urgent'), (URGENT_KEYWORDS_AR, 'urgent'),
+        (SAFE_KEYWORDS_EN, 'safe')
+    ]:
+        s, h = _match_keywords(full_text, kw_dict)
+        scores[f'{key}_score'] += s
+        hits_collection[f'{key}_hits'].extend(h)
 
     header_score, header_notes = _analyze_headers(sender, subject, content_type)
     scores['phishing_score'] += header_score * 0.5
@@ -374,6 +331,7 @@ def classify_email(sender=None, subject=None, body=None, content_type='text/plai
     body_len = len(body)
     if body_len < 20 and scores['safe_score'] < 5:
         scores['spam_score'] += 3
+
     attachment_count = len(re.findall(r'\.(pdf|doc|docx|xls|xlsx|zip|rar|exe|js|vbs)', body, re.IGNORECASE))
     scores['phishing_score'] += attachment_count * 3
     scores['spam_score'] += attachment_count * 2
@@ -435,15 +393,20 @@ def classify():
         data = request.get_json(silent=True)
         if not data:
             return jsonify({'error': 'Request body is required (JSON)'}), 400
+
         sender = data.get('sender', data.get('from', ''))
         subject = data.get('subject', '')
         body = data.get('body', data.get('content', data.get('text', '')))
         content_type = data.get('content_type', 'text/plain')
+
         if not body and not subject:
             return jsonify({'error': 'At least "body" or "subject" must be provided'}), 400
+
         result = classify_email(sender=sender, subject=subject, body=body, content_type=content_type)
+
         user_id = getattr(request, 'current_user', None)
         user_id = user_id.id if user_id else None
+
         scan_id = save_scan_record(
             current_app._get_current_object(),
             user_id=user_id,
@@ -454,6 +417,7 @@ def classify():
             raw_input_size=len(body or '') + len(subject or '')
         )
         result['scan_id'] = scan_id
+
         if result['risk_score'] >= 40:
             save_alert_record(
                 current_app._get_current_object(),
@@ -464,6 +428,7 @@ def classify():
                 message=f'Email from {sender[:100] if sender else "unknown"} with subject "{subject[:150]}" was classified as {result["classification"]} with risk score {result["risk_score"]}',
                 alert_metadata={'scan_id': scan_id, 'classification': result['classification']}
             )
+
         logger.info(f"MailGuard classification: {result['classification']} (risk={result['risk_score']})")
         return jsonify(result), 200
     except Exception as e:
@@ -479,9 +444,8 @@ def classify_batch():
             return jsonify({'error': 'Request body must include "emails" list'}), 400
         if len(data['emails']) > 100:
             return jsonify({'error': 'Batch size cannot exceed 100 emails'}), 400
+
         results = []
-        user_id = getattr(request, 'current_user', None)
-        user_id = user_id.id if user_id else None
         for idx, email in enumerate(data['emails']):
             try:
                 r = classify_email(
@@ -494,6 +458,7 @@ def classify_batch():
                 results.append(r)
             except Exception as inner_e:
                 results.append({'email_index': idx, 'error': str(inner_e)[:200]})
+
         summary = Counter(r.get('classification', 'Error') for r in results)
         logger.info(f"MailGuard batch: {len(results)} emails processed. Summary: {dict(summary)}")
         return jsonify({

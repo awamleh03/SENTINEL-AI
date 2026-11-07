@@ -1,10 +1,8 @@
 import os
 import sys
-import io
 import logging
 import datetime
 import base64
-import json
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
@@ -39,49 +37,43 @@ _YOLO_LOAD_ERROR = None
 
 
 def _load_yolo_model(weights='yolov8n.pt'):
-    """Load YOLOv8 once. Tries local file then ultralytics default download."""
+    """Load YOLOv8 from local paths only (no auto-download on Render)."""
     global _YOLO_MODEL_INSTANCE, _YOLO_LOAD_ERROR
     if not YOLO_AVAILABLE:
         _YOLO_LOAD_ERROR = 'ultralytics not installed'
         return None
     if _YOLO_MODEL_INSTANCE is not None:
         return _YOLO_MODEL_INSTANCE
-    try:
-        base = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-        local_path = os.path.join(base, weights)
-        # also check /tmp (Render writable) and models/
-        candidates = [
-            local_path,
-            os.path.join(base, 'models', weights),
-            os.path.join('/tmp', weights),
-            weights,  # ultralytics may auto-download
-        ]
-        last_err = None
-        for path in candidates:
-            try:
-                if path != weights and not os.path.exists(path):
-                    continue
-                _YOLO_MODEL_INSTANCE = YOLO(path)
-                _YOLO_LOAD_ERROR = None
-                logger.info('YOLO model loaded from %s', path)
-                return _YOLO_MODEL_INSTANCE
-            except Exception as e:
-                last_err = e
-                logger.warning('YOLO load failed for %s: %s', path, e)
-        _YOLO_LOAD_ERROR = str(last_err)[:200] if last_err else 'unknown load error'
-        _YOLO_MODEL_INSTANCE = None
-        return None
-    except Exception as e:
-        _YOLO_LOAD_ERROR = str(e)[:200]
-        logger.warning('YOLO model loading failed: %s', e)
-        _YOLO_MODEL_INSTANCE = None
-        return None
+
+    base = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    candidates = [
+        os.path.join(base, 'models', weights),
+        os.path.join(base, weights),
+        os.path.join('/tmp', weights),
+        os.path.join(base, 'static', 'models', weights),
+    ]
+
+    for path in candidates:
+        if not os.path.exists(path):
+            continue
+        try:
+            _YOLO_MODEL_INSTANCE = YOLO(path)
+            _YOLO_LOAD_ERROR = None
+            logger.info('YOLO model loaded from %s', path)
+            return _YOLO_MODEL_INSTANCE
+        except Exception as e:
+            logger.warning('YOLO load failed for %s: %s', path, e)
+            _YOLO_LOAD_ERROR = str(e)[:200]
+
+    _YOLO_LOAD_ERROR = 'Model file not found. Place yolov8n.pt inside /models folder'
+    _YOLO_MODEL_INSTANCE = None
+    return None
 
 
 def _decode_image_from_request():
-    """Accept image as multipart file, base64 in JSON, or raw bytes. Returns numpy BGR frame or None."""
     if not OPENCV_AVAILABLE or np is None:
         return None, 'OpenCV/numpy not available'
+
     file = request.files.get('frame') or request.files.get('image')
     if file:
         raw = file.read()
@@ -101,28 +93,28 @@ def _decode_image_from_request():
             raw_data = request.get_data(cache=False)
             raw = raw_data if raw_data and len(raw_data) > 100 else None
             if not raw:
-                return None, (
-                    'No image provided. Send multipart file "frame", '
-                    'JSON with base64 "frame" field, or raw image bytes.'
-                )
+                return None, 'No image provided. Send multipart file "frame" or JSON with base64 "frame".'
+
     if not raw or len(raw) < 32:
         return None, 'Empty or too-small image payload'
+
     try:
         arr = np.frombuffer(raw, dtype=np.uint8)
         img = cv2.imdecode(arr, cv2.IMREAD_COLOR)
         if img is None or img.size == 0:
-            return None, 'Failed to decode image (format may be unsupported or corrupted)'
+            return None, 'Failed to decode image'
         return img, None
     except Exception as e:
         return None, f'Image decode error: {str(e)[:200]}'
 
 
 def _detect_motion(current_frame, camera_id='default', sensitivity=25, min_area=500, history_weight=0.7):
-    """Fallback basic motion detection using background subtraction."""
     if not OPENCV_AVAILABLE or np is None:
         return False, 0, 0, [], 0.0
+
     prev = _PREV_FRAME.get(camera_id)
     h, w = current_frame.shape[:2]
+
     try:
         gray = cv2.cvtColor(current_frame, cv2.COLOR_BGR2GRAY)
         gray = cv2.GaussianBlur(gray, (21, 21), 0)
@@ -139,6 +131,7 @@ def _detect_motion(current_frame, camera_id='default', sensitivity=25, min_area=
 
     _, thresh = cv2.threshold(delta, sensitivity, 255, cv2.THRESH_BINARY)
     thresh = cv2.dilate(thresh, None, iterations=2)
+
     try:
         contours, _ = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     except Exception:
@@ -158,6 +151,7 @@ def _detect_motion(current_frame, camera_id='default', sensitivity=25, min_area=
             'x': int(x), 'y': int(y), 'width': int(bw), 'height': int(bh),
             'area': int(area)
         })
+
     frame_area = h * w
     motion_score = min(100.0, round((total_area / max(1, frame_area)) * 400, 2))
     motion_detected = len(boxes) > 0
@@ -165,7 +159,6 @@ def _detect_motion(current_frame, camera_id='default', sensitivity=25, min_area=
 
 
 def _run_yolo_detection(frame, model, conf_threshold=0.45):
-    """YOLO object detection — runs object detection using YOLOv8."""
     if model is None or frame is None:
         return [], 0
     try:
@@ -211,8 +204,10 @@ def _classify_scene(frame_shape, motion_score, yolo_detections):
         1 for d in yolo_detections
         if str(d.get('class', '')).lower() in ('knife', 'scissors', 'baseball bat')
     )
+
     risk = 0
     tags = []
+
     if people == 0 and motion_score > 30:
         risk += 15
         tags.append('unattended_motion')
@@ -236,8 +231,10 @@ def _classify_scene(frame_shape, motion_score, yolo_detections):
         risk += min(20, people * 5)
     if not tags:
         tags.append('normal')
+
     risk = min(round(risk, 2), 100)
     level = 'critical' if risk >= 70 else 'high' if risk >= 40 else 'medium' if risk >= 15 else 'low'
+
     return {
         'people_count': people,
         'vehicle_count': vehicles,
@@ -275,7 +272,6 @@ def analyze():
         )
 
         scene = _classify_scene((h, w), motion_score, yolo_detections)
-        no_objects_detected = len(yolo_detections) == 0
 
         result = {
             'timestamp': datetime.datetime.utcnow().isoformat(),
@@ -285,14 +281,13 @@ def analyze():
                 'height': h,
                 'channels': frame.shape[2] if len(frame.shape) == 3 else 1
             },
-            # Primary + aliases so frontend always finds detections
             'detected_objects': yolo_detections,
             'detections': yolo_detections,
             'yolo_detections': yolo_detections,
-            'no_objects_detected': no_objects_detected,
+            'no_objects_detected': len(yolo_detections) == 0,
             'detection_status_message': (
                 'No important objects detected in the current frame.'
-                if no_objects_detected else
+                if len(yolo_detections) == 0 else
                 f'Successfully detected {len(yolo_detections)} object(s).'
             ),
             'motion': {
@@ -353,10 +348,6 @@ def analyze():
                 alert_metadata={'scan_id': scan_id, 'tags': scene['tags'], 'camera_id': camera_id}
             )
 
-        logger.info(
-            'CamGuard analyze: camera=%s risk=%s yolo_objects=%s loaded=%s',
-            camera_id, result['risk_score'], len(yolo_detections), yolo_model is not None
-        )
         return jsonify(result), 200
     except Exception as e:
         logger.error('CamGuard analyze error: %s', e)
@@ -365,21 +356,20 @@ def analyze():
 
 @camguard_bp.route('/health', methods=['GET'])
 def health():
-    # Optional warm-load so status is accurate without waiting for first analyze
     try_load = str(request.args.get('load', '0')).lower() in ('1', 'true', 'yes')
     if try_load and _YOLO_MODEL_INSTANCE is None and YOLO_AVAILABLE:
         _load_yolo_model('yolov8n.pt')
+
     return jsonify({
         'opencv_available': OPENCV_AVAILABLE,
         'yolo_available': YOLO_AVAILABLE,
         'yolo_model_loaded': _YOLO_MODEL_INSTANCE is not None,
         'yolo_load_error': _YOLO_LOAD_ERROR,
-        'cached_frames': list(_PREV_FRAME.keys()),
-        'yolo_integration_status': (
-            'Active YOLOv8 object detection enabled.'
-            if _YOLO_MODEL_INSTANCE is not None else
-            'YOLOv8 available but model not loaded yet — call /health?load=1 or analyze once.'
-        )
+        'status_message': (
+            'YOLO جاهز' if _YOLO_MODEL_INSTANCE
+            else f'YOLO غير محمّل: {_YOLO_LOAD_ERROR or "ملف الموديل غير موجود"}'
+        ),
+        'cached_frames': list(_PREV_FRAME.keys())
     }), 200
 
 
@@ -387,8 +377,4 @@ def health():
 def reset():
     global _PREV_FRAME
     _PREV_FRAME = {}
-    return jsonify({'message': 'CamGuard cache reset. Motion and baseline states cleared.'}), 200
-
-
-# Optional: warm-load on import (can slow startup on Render free tier)
-# _load_yolo_model('yolov8n.pt')
+    return jsonify({'message': 'CamGuard cache reset.'}), 200
