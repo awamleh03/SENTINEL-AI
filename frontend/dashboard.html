@@ -399,54 +399,56 @@
     input[type="file"].form-control { padding: 8px; }
 
     .result-box {
-      margin-top: 16px;
+      margin-top: 18px;
       border: 1px solid var(--border);
       border-radius: var(--radius);
       overflow: hidden;
       display: none;
+      animation: fadeIn 0.25s ease;
     }
     .result-box.show { display: block; }
     .result-head {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 12px 16px;
+      padding: 13px 16px;
       border-bottom: 1px solid var(--border);
-      background: rgba(255,255,255,0.02);
+      background: rgba(255,255,255,0.03);
     }
     .result-body { padding: 16px; }
     .chip {
       display: inline-flex; align-items: center; gap: 4px;
-      padding: 3px 10px;
+      padding: 4px 11px;
       border-radius: 999px;
-      font-size: 0.75rem; font-weight: 600;
+      font-size: 0.78rem; font-weight: 600;
     }
-    .chip-critical, .chip-high { background: rgba(239,68,68,0.15); color: #FCA5A5; }
-    .chip-medium { background: rgba(245,158,11,0.15); color: #FCD34D; }
-    .chip-low, .chip-safe, .chip-info { background: rgba(16,185,129,0.12); color: #6EE7B7; }
-    .chip-spam { background: rgba(245,158,11,0.15); color: #FCD34D; }
-    .chip-phishing { background: rgba(239,68,68,0.15); color: #FCA5A5; }
+    .chip-critical, .chip-high { background: rgba(239,68,68,0.18); color: #FCA5A5; }
+    .chip-medium { background: rgba(245,158,11,0.18); color: #FCD34D; }
+    .chip-low, .chip-safe, .chip-info { background: rgba(16,185,129,0.15); color: #6EE7B7; }
+    .chip-spam { background: rgba(245,158,11,0.18); color: #FCD34D; }
+    .chip-phishing { background: rgba(239,68,68,0.18); color: #FCA5A5; }
 
     .kv-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
       gap: 10px;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
     .kv {
       background: var(--bg-elevated);
       border-radius: 9px;
-      padding: 10px 12px;
+      padding: 11px 13px;
     }
-    .kv .k { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 2px; }
+    .kv .k { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 3px; }
     .kv .v { font-size: 0.95rem; font-weight: 600; }
 
     .issue-list { list-style: none; }
     .issue-list li {
-      padding: 8px 0;
+      padding: 9px 0;
       border-bottom: 1px solid var(--border);
       font-size: 0.85rem;
       color: var(--text-secondary);
+      line-height: 1.45;
     }
     .issue-list li:last-child { border-bottom: none; }
     .issue-list .tag {
@@ -563,6 +565,22 @@
     .api-status.ok .dot { background: var(--success); box-shadow: 0 0 6px var(--success); }
     .api-status.bad .dot { background: var(--danger); box-shadow: 0 0 6px var(--danger); }
 
+    .risk-chip{display:inline-block;padding:2px 8px;border-radius:999px;font-size:0.78rem;font-weight:600}
+    .risk-chip.danger{background:rgba(239,68,68,0.15);color:#f87171}
+    .risk-chip.warning{background:rgba(245,158,11,0.15);color:#fbbf24}
+    .risk-chip.ok{background:rgba(16,185,129,0.15);color:#34d399}
+
+    .cam-health {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      margin-bottom: 14px;
+    }
+    .cam-health.warn{background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.35);color:#fbbf24}
+    .cam-health.ok{background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.35);color:#34d399}
 
     @media (max-width: 900px) {
       .sidebar { transform: translateX(105%); }
@@ -575,15 +593,7 @@
       .sidebar.closed { transform: translateX(105%) !important; }
       html[dir="ltr"] .sidebar.closed { transform: translateX(-105%) !important; }
     }
-  
-.risk-chip{display:inline-block;padding:2px 8px;border-radius:999px;font-size:0.78rem;font-weight:600}
-.risk-chip.danger{background:rgba(239,68,68,0.15);color:#f87171}
-.risk-chip.warning{background:rgba(245,158,11,0.15);color:#fbbf24}
-.risk-chip.ok{background:rgba(16,185,129,0.15);color:#34d399}
-
-.cam-health.warn{background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.35);color:#fbbf24}
-.cam-health.ok{background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.35);color:#34d399}
-</style>
+  </style>
 </head>
 <body>
 <div class="app">
@@ -867,16 +877,18 @@
         <div class="card">
           <div class="card-head">
             <h3>CamGuard — <span data-i18n="cam_title">تحليل الكاميرا</span></h3>
+            <button type="button" class="btn btn-sm btn-demo" id="camDemo" data-i18n="try_demo">جرّب مثالاً</button>
           </div>
           <div class="card-body">
-            <p class="empty-state" style="padding:12px 0 16px;text-align:start" data-i18n="cam_hint">ارفع صورة من كاميرا مراقبة أو إطار لقطة. النظام يحلل الحركة والأجسام ويعطي درجة مخاطر.</p>
+            <div id="camHealthNote" class="cam-health warn" style="display:none"></div>
+            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:14px" data-i18n="cam_hint">ارفع صورة من كاميرا مراقبة أو إطار لقطة. النظام يحلل الحركة والأجسام ويعطي درجة مخاطر.</p>
             <div class="form-group">
               <label data-i18n="cam_file">رفع صورة / إطار</label>
               <input type="file" id="camFile" class="form-control" accept="image/*" />
             </div>
             <div class="form-group">
               <label data-i18n="cam_id">معرّف الكاميرا (اختياري)</label>
-              <input type="text" id="camId" class="form-control" placeholder="cam-01" />
+              <input type="text" id="camId" class="form-control" placeholder="cam-01" value="cam-01" />
             </div>
             <button type="button" class="btn" id="camScanBtn"><span class="spinner"></span>📷 <span data-i18n="cam_scan">تحليل الإطار</span></button>
             <div class="result-box" id="camResult"></div>
@@ -987,12 +999,12 @@ const i18n = {
   en: {
     control_center: 'Control Center', nav_main: 'Main', nav_overview: 'Overview',
     nav_modules: 'Security Modules', nav_ops: 'Operations', nav_alerts: 'Alerts', nav_history: 'History',
-    login: 'Sign in', register: 'Create account', logout: 'Sign out',
-    guest_title: 'Browsing as guest.', guest_msg: 'Try all modules without an account. Sign in to save history and receive alerts.',
+    login: 'Login', register: 'Create account', logout: 'Logout',
+    guest_title: 'Browsing as guest.', guest_msg: 'You can try all modules without an account. Sign in to save history and receive alerts.',
     st_scans: 'Scans (24h)', st_today: 'Today', st_critical: 'Critical scans', st_risk70: 'Risk ≥ 70',
-    st_high: 'High-risk scans', st_risk40: 'Risk ≥ 40', st_unread: 'Unread alerts', st_action: 'Needs action',
-    quick_title: 'Quick scan', q_doc: 'Scan docs', q_mail: 'Classify mail', q_sys: 'System monitor', q_cam: 'Camera analysis', q_scan: 'Code audit',
-    sys_snapshot: 'System snapshot', scan_now: 'Scan now', sys_empty_title: 'Click “Scan now”', sys_empty: 'to show CPU / memory / disk live.',
+    st_high: 'High risk scans', st_risk40: 'Risk ≥ 40', st_unread: 'Unread alerts', st_action: 'Needs action',
+    quick_title: 'Start a quick scan', q_doc: 'Document scan', q_mail: 'Email classify', q_sys: 'System monitor', q_cam: 'Camera analysis', q_scan: 'Code audit',
+    sys_snapshot: 'System snapshot', scan_now: 'Scan now', sys_empty_title: 'Click «Scan now»', sys_empty: 'to show CPU / Memory / Disk live.',
     module_perf: 'Module performance', mod_empty_title: 'No scans yet', mod_empty: 'Start from the modules above.',
     recent_alerts: 'Recent alerts', recent_scans: 'Recent scans', no_alerts: 'No alerts', no_scans: 'No scans',
     doc_title: 'Document scanner', doc_file: 'Upload PDF / TXT', doc_text: '…or paste text', doc_ph: 'Paste document text here...',
@@ -1031,7 +1043,6 @@ function setLang(lang) {
     const nav = active.getAttribute('data-nav');
     document.getElementById('pageTitle').textContent = titles[nav]?.[lang] || nav;
   }
-  // update guest labels if guest
   if (!localStorage.getItem('token')) {
     document.getElementById('authLabel').textContent = dict.guest;
     document.getElementById('authRole').textContent = dict.not_signed;
@@ -1089,16 +1100,18 @@ function renderResult(box, title, score, level, rows, lists) {
   let extra = '';
   (lists || []).forEach(([label, items]) => {
     if (!items || !items.length) return;
-    extra += `<div style="margin-top:12px"><div style="font-size:0.78rem;font-weight:600;color:#FCA5A5;margin-bottom:6px">${esc(label)}</div><ul class="issue-list">`;
+    extra += `<div style="margin-top:14px"><div style="font-size:0.8rem;font-weight:600;color:#FCA5A5;margin-bottom:8px">${esc(label)}</div><ul class="issue-list">`;
     items.forEach(it => { extra += `<li>${typeof it === 'string' ? esc(it) : esc(JSON.stringify(it))}</li>`; });
     extra += '</ul></div>';
   });
   if (!extra && Number(score) >= 40) {
-    extra = `<div style="margin-top:10px;font-size:0.82rem;color:var(--text-muted)">${currentLang === 'ar' ? 'تم رصد مخاطر — راجع التفاصيل أعلاه.' : 'Risk detected — see summary above.'}</div>`;
+    extra = `<div style="margin-top:12px;font-size:0.84rem;color:var(--text-muted)">${currentLang === 'ar' ? 'تم رصد مخاطر — راجع التفاصيل أعلاه.' : 'Risk detected — see summary above.'}</div>`;
   }
   box.innerHTML = `<div class="result-head"><strong>${esc(title)}</strong>${chip}</div><div class="result-body">${kv}${extra}</div>`;
   box.classList.add('show');
-  try { box.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); } catch (_) {}
+  setTimeout(() => {
+    try { box.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); } catch (_) {}
+  }, 80);
 }
 
 function closeSidebar() {
@@ -1136,7 +1149,6 @@ function showView(target) {
   document.getElementById('pageTitle').textContent = titles[target]?.[currentLang] || target;
   if (window.innerWidth <= 900) closeSidebar();
 
-  // أوقف التحديث التلقائي لـ SysGuard عند مغادرة الصفحة حتى لا يتداخل مع الوحدات الأخرى
   if (target !== 'sysguard' && sysTimer) {
     clearInterval(sysTimer);
     sysTimer = null;
@@ -1196,7 +1208,6 @@ async function loadOverview() {
     if (!res.ok) throw new Error('summary');
     const data = await res.json();
 
-    // API shape: { scans:{last_24h,critical,high_risk,total}, alerts:{unread,high_severity}, by_module, recent_scans, recent_alerts }
     const scans = data.scans || {};
     const alerts = data.alerts || {};
     const scans24 = scans.last_24h ?? data.scans_24h ?? data.total_scans ?? scans.total ?? 0;
@@ -1204,17 +1215,12 @@ async function loadOverview() {
     const high = scans.high_risk ?? data.high_risk_scans ?? data.high ?? 0;
     const unread = alerts.unread ?? data.unread_alerts ?? data.unread ?? 0;
 
-    const elScans = document.getElementById('statScans');
-    const elCrit = document.getElementById('statCritical');
-    const elHigh = document.getElementById('statHigh');
-    const elUnread = document.getElementById('statUnread');
-    if (elScans) elScans.textContent = scans24;
-    if (elCrit) elCrit.textContent = critical;
-    if (elHigh) elHigh.textContent = high;
-    if (elUnread) elUnread.textContent = unread;
+    document.getElementById('statScans').textContent = scans24;
+    document.getElementById('statCritical').textContent = critical;
+    document.getElementById('statHigh').textContent = high;
+    document.getElementById('statUnread').textContent = unread;
     updateAlertsBadge(unread);
 
-    // Module performance
     const modWrap = document.getElementById('overviewModules');
     const byMod = data.by_module || [];
     if (modWrap) {
@@ -1229,7 +1235,7 @@ async function loadOverview() {
           const count = m.scan_count ?? m.count ?? 0;
           const avg = Math.round(Number(m.avg_risk ?? m.max_risk ?? 0));
           const riskClass = avg >= 70 ? 'danger' : avg >= 40 ? 'warning' : 'ok';
-          return `<div class="ov-mod-row" style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border,rgba(255,255,255,0.06));gap:10px">
+          return `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);gap:10px">
             <div style="font-weight:600">${esc(label)}</div>
             <div style="display:flex;gap:10px;align-items:center;font-size:0.85rem;color:var(--text-muted)">
               <span>${count} ${currentLang === 'ar' ? 'فحص' : 'scans'}</span>
@@ -1240,7 +1246,6 @@ async function loadOverview() {
       }
     }
 
-    // Recent scans
     const scansWrap = document.getElementById('overviewScans');
     const recentScans = data.recent_scans || [];
     if (scansWrap) {
@@ -1269,7 +1274,6 @@ async function loadOverview() {
       }
     }
 
-    // Recent alerts
     const alertsWrap = document.getElementById('overviewAlerts');
     const recentAlerts = data.recent_alerts || [];
     if (alertsWrap) {
@@ -1296,7 +1300,6 @@ async function loadOverview() {
   } catch (err) {
     console.warn('loadOverview failed', err);
   }
-  // Auto-fill system snapshot on overview
   try { if (typeof fetchSysStatus === 'function') fetchSysStatus(); } catch (e) {}
 }
 
@@ -1363,8 +1366,9 @@ document.getElementById('docDemo')?.addEventListener('click', () => {
   document.getElementById('docText').value = 'Urgent: verify your account at http://paypal-login.bit.ly/secure password reset. Card 4111111111111111';
   document.getElementById('docFile').value = '';
   showToast(currentLang === 'ar' ? 'تشغيل مثال تصيّد…' : 'Running phishing demo…', 'ok');
-  setTimeout(() => document.getElementById('docScanBtn')?.click(), 250);
+  setTimeout(() => document.getElementById('docScanBtn')?.click(), 280);
 });
+
 document.getElementById('docScanBtn')?.addEventListener('click', async () => {
   const btn = document.getElementById('docScanBtn');
   const file = document.getElementById('docFile').files[0];
@@ -1378,7 +1382,6 @@ document.getElementById('docScanBtn')?.addEventListener('click', async () => {
       fd.append('file', file);
       res = await fetch('/api/docguard/scan', { method: 'POST', body: fd, headers: authHeaders() });
     } else {
-      // نص: جرّب analyze-text ثم scan للتوافق مع الـ API
       res = await fetch('/api/docguard/analyze-text', {
         method: 'POST',
         headers: { ...authHeaders(), 'Content-Type': 'application/json' },
@@ -1395,22 +1398,13 @@ document.getElementById('docScanBtn')?.addEventListener('click', async () => {
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Scan failed');
 
-    // الـ API يرجّع: { issues: { suspicious_urls, credit_cards, dangerous_keywords }, issues_found, risk_score }
-    const bag = (data.issues && typeof data.issues === 'object' && !Array.isArray(data.issues))
-      ? data.issues
-      : data;
+    const bag = (data.issues && typeof data.issues === 'object' && !Array.isArray(data.issues)) ? data.issues : data;
     const asArr = (x) => Array.isArray(x) ? x : (x ? [x] : []);
     const urls = asArr(data.suspicious_urls || bag.suspicious_urls || bag.urls);
     const cards = asArr(data.credit_cards || bag.credit_cards || bag.cards);
-    const keywords = asArr(
-      data.danger_keywords || data.dangerous_keywords ||
-      bag.dangerous_keywords || bag.danger_keywords || bag.keywords
-    );
+    const keywords = asArr(data.danger_keywords || data.dangerous_keywords || bag.dangerous_keywords || bag.danger_keywords || bag.keywords);
     const findings = asArr(data.findings || bag.findings);
-    const issueCount = Number(
-      data.issues_found ?? data.total_issues ?? data.issues_count ??
-      (urls.length + cards.length + keywords.length + findings.length)
-    ) || 0;
+    const issueCount = Number(data.issues_found ?? data.total_issues ?? data.issues_count ?? (urls.length + cards.length + keywords.length + findings.length)) || 0;
 
     const lists = [];
     if (urls.length) {
@@ -1463,7 +1457,8 @@ document.getElementById('docScanBtn')?.addEventListener('click', async () => {
       ],
       lists
     );
-    try { loadOverview(); } catch (e) {} showToast(currentLang === 'ar' ? 'تم الفحص بنجاح' : 'Scan complete', Number(data.risk_score) >= 70 ? 'warn' : 'ok');
+    try { loadOverview(); } catch (e) {}
+    showToast(currentLang === 'ar' ? 'تم الفحص بنجاح' : 'Scan complete', Number(data.risk_score) >= 70 ? 'warn' : 'ok');
   } catch (e) {
     showToast(e.message || (currentLang === 'ar' ? 'فشل الفحص — حاول مرة أخرى' : 'Scan failed — try again'), 'err');
   } finally {
@@ -1474,18 +1469,13 @@ document.getElementById('docScanBtn')?.addEventListener('click', async () => {
 
 // ===== MailGuard =====
 document.getElementById('mailDemo')?.addEventListener('click', () => {
-  const sender = document.getElementById('mailSender');
-  const subject = document.getElementById('mailSubject');
-  const body = document.getElementById('mailBody');
-  if (sender) sender.value = 'security@paypal-verify.com';
-  if (subject) subject.value = 'Urgent: verify your account now';
-  if (body) {
-    body.value = 'Dear user,\n\nClick here to claim your prize and update password immediately. Limited offer only today. Verify your account at http://bit.ly/verify-now or we will suspend access.\n\nRegards, Security Team';
-    body.dispatchEvent(new Event('input', { bubbles: true }));
-  }
-  showToast(currentLang === 'ar' ? 'تشغيل مثال بريد…' : 'Running mail demo…', 'ok');
-  setTimeout(() => document.getElementById('mailScanBtn')?.click(), 400);
+  document.getElementById('mailSender').value = 'security@paypal-verify.com';
+  document.getElementById('mailSubject').value = 'Urgent: verify your account now';
+  document.getElementById('mailBody').value = 'Dear user,\n\nWe detected unusual activity on your account. Click here immediately to verify your identity and update your password, or your access will be suspended within 24 hours.\n\nVerify now: http://bit.ly/paypal-secure-login\n\nRegards,\nSecurity Team';
+  showToast(currentLang === 'ar' ? 'تشغيل مثال بريد تصيّد…' : 'Running phishing mail demo…', 'ok');
+  setTimeout(() => document.getElementById('mailScanBtn')?.click(), 350);
 });
+
 document.getElementById('mailScanBtn')?.addEventListener('click', async () => {
   const btn = document.getElementById('mailScanBtn');
   const sender = document.getElementById('mailSender').value.trim();
@@ -1510,30 +1500,11 @@ document.getElementById('mailScanBtn')?.addEventListener('click', async () => {
     const urgentHits = data.urgent_hits || hitsBag.urgent_hits || data.details?.urgent_hits || [];
     const linkIssues = data.link_issues || data.suspicious_urls || data.details?.link_issues || [];
     const fmtHit = (h) => typeof h === 'string' ? h : `${h.keyword || h.word || JSON.stringify(h)}${h.count ? ' ×' + h.count : ''}${h.weight != null ? ' (w' + h.weight + ')' : ''}`;
-    if (phishingHits.length) {
-      lists.push([
-        currentLang === 'ar' ? 'مؤشرات تصيّد' : 'Phishing signals',
-        phishingHits.map(fmtHit)
-      ]);
-    }
-    if (spamHits.length) {
-      lists.push([
-        currentLang === 'ar' ? 'كلمات سبام' : 'Spam keywords',
-        spamHits.map(fmtHit)
-      ]);
-    }
-    if (urgentHits.length) {
-      lists.push([
-        currentLang === 'ar' ? 'كلمات استعجال' : 'Urgency keywords',
-        urgentHits.map(h => typeof h === 'string' ? h : `${h.keyword || h.word || JSON.stringify(h)}${h.count ? ' ×' + h.count : ''}`)
-      ]);
-    }
-    if (linkIssues.length) {
-      lists.push([
-        currentLang === 'ar' ? 'مشاكل الروابط' : 'Link issues',
-        linkIssues.map(l => typeof l === 'string' ? l : (l.url || l.reason || JSON.stringify(l)))
-      ]);
-    }
+    if (phishingHits.length) lists.push([currentLang === 'ar' ? 'مؤشرات تصيّد' : 'Phishing signals', phishingHits.map(fmtHit)]);
+    if (spamHits.length) lists.push([currentLang === 'ar' ? 'كلمات سبام' : 'Spam keywords', spamHits.map(fmtHit)]);
+    if (urgentHits.length) lists.push([currentLang === 'ar' ? 'كلمات استعجال' : 'Urgency keywords', urgentHits.map(h => typeof h === 'string' ? h : `${h.keyword || h.word || JSON.stringify(h)}${h.count ? ' ×' + h.count : ''}`)]);
+    if (linkIssues.length) lists.push([currentLang === 'ar' ? 'مشاكل الروابط' : 'Link issues', linkIssues.map(l => typeof l === 'string' ? l : (l.url || l.reason || JSON.stringify(l)))]);
+
     renderResult(
       document.getElementById('mailResult'),
       currentLang === 'ar' ? 'التصنيف' : 'Classification',
@@ -1547,7 +1518,8 @@ document.getElementById('mailScanBtn')?.addEventListener('click', async () => {
       ].concat(scoreRows),
       lists
     );
-    try { loadOverview(); } catch (e) {} showToast(currentLang === 'ar' ? 'تم التصنيف' : 'Classified', Number(data.risk_score) >= 70 ? 'warn' : 'ok');
+    try { loadOverview(); } catch (e) {}
+    showToast(currentLang === 'ar' ? 'تم التصنيف' : 'Classified', Number(data.risk_score) >= 70 ? 'warn' : 'ok');
   } catch (e) {
     showToast(e.message || (currentLang === 'ar' ? 'فشل التصنيف' : 'Classify failed'), 'err');
   } finally {
@@ -1576,17 +1548,10 @@ async function fetchSysStatus() {
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Failed');
 
-    // API: cpu.percent / memory.percent / disk.max_used_percent + partitions[]
     const cpu = _numMetric(data.cpu_percent ?? data.cpu);
     const mem = _numMetric(data.memory_percent ?? data.memory);
     const diskObj = (data.disk && typeof data.disk === 'object') ? data.disk : null;
-    const disk = _numMetric(
-      data.disk_percent ??
-      diskObj?.max_used_percent ??
-      diskObj?.percent ??
-      diskObj?.partitions?.[0]?.percent ??
-      data.disk
-    );
+    const disk = _numMetric(data.disk_percent ?? diskObj?.max_used_percent ?? diskObj?.percent ?? diskObj?.partitions?.[0]?.percent ?? data.disk);
     const risk = _numMetric(data.risk_score ?? data.risk);
 
     document.getElementById('sysCpu').textContent = _fmtPct(cpu);
@@ -1663,24 +1628,51 @@ async function loadCamHealth() {
     const res = await fetch('/api/camguard/health', { headers: authHeaders() });
     const data = await res.json();
     if (!res.ok) throw new Error('health');
-    const yolo = data.yolo_model_loaded ? (currentLang === 'ar' ? 'موديل YOLO محمّل' : 'YOLO model loaded')
+    const yolo = data.yolo_model_loaded
+      ? (currentLang === 'ar' ? 'موديل YOLO محمّل' : 'YOLO model loaded')
       : (currentLang === 'ar' ? 'YOLO غير محمّل — كشف الحركة يعمل، كشف الأجسام محدود' : 'YOLO not loaded — motion works, object detection limited');
     const cv = data.opencv_available ? 'OpenCV OK' : 'OpenCV missing';
     const msg = `${cv} · ${yolo}`;
     if (box) {
-      box.style.display = 'block';
+      box.style.display = 'inline-flex';
       box.textContent = msg;
       box.className = data.yolo_model_loaded ? 'cam-health ok' : 'cam-health warn';
     }
   } catch (e) {
     if (box) {
-      box.style.display = 'block';
+      box.style.display = 'inline-flex';
       box.className = 'cam-health warn';
       box.textContent = currentLang === 'ar' ? 'تعذر قراءة حالة CamGuard' : 'Could not read CamGuard health';
     }
   }
 }
 
+// Demo for CamGuard (mock realistic result)
+document.getElementById('camDemo')?.addEventListener('click', () => {
+  showToast(currentLang === 'ar' ? 'تشغيل مثال تحليل كاميرا…' : 'Running camera analysis demo…', 'ok');
+  const mockScore = 78;
+  const mockLevel = 'high';
+  renderResult(
+    document.getElementById('camResult'),
+    currentLang === 'ar' ? 'نتيجة التحليل (مثال)' : 'Analysis result (demo)',
+    mockScore,
+    mockLevel,
+    [
+      [currentLang === 'ar' ? 'المخاطر' : 'Risk', mockScore],
+      [currentLang === 'ar' ? 'الأجسام' : 'Objects', 3],
+      [currentLang === 'ar' ? 'الحركة' : 'Motion', '0.72'],
+      [currentLang === 'ar' ? 'YOLO' : 'YOLO', currentLang === 'ar' ? 'محمّل (مثال)' : 'loaded (demo)']
+    ],
+    [
+      [currentLang === 'ar' ? 'الأجسام المكتشفة' : 'Detected objects', [
+        'person 94%',
+        'backpack 81%',
+        'car 67%'
+      ]],
+      [currentLang === 'ar' ? 'الوسوم' : 'Tags', ['motion_detected', 'person_in_frame', 'night_scene']]
+    ]
+  );
+});
 
 document.getElementById('camScanBtn')?.addEventListener('click', async () => {
   const btn = document.getElementById('camScanBtn');
@@ -1723,7 +1715,8 @@ document.getElementById('camScanBtn')?.addEventListener('click', async () => {
       ],
       lists
     );
-    try { loadOverview(); } catch (e) {} showToast(currentLang === 'ar' ? 'تم التحليل' : 'Analyzed', Number(data.risk_score) >= 70 ? 'warn' : 'ok');
+    try { loadOverview(); } catch (e) {}
+    showToast(currentLang === 'ar' ? 'تم التحليل' : 'Analyzed', Number(data.risk_score) >= 70 ? 'warn' : 'ok');
   } catch (e) {
     showToast(e.message || (currentLang === 'ar' ? 'فشل التحليل' : 'Analysis failed'), 'err');
   } finally {
@@ -1736,18 +1729,17 @@ document.getElementById('camScanBtn')?.addEventListener('click', async () => {
 document.getElementById('scanDemo')?.addEventListener('click', () => {
   const el = document.getElementById('scanText');
   if (el) {
-    // NOTE: never put a literal close-script tag inside inline JS — breaks the HTML parser
     el.value = [
       'SELECT * FROM users WHERE id = 1 OR 1=1; -- admin bypass',
       '<' + 'script>alert(document.cookie)<' + '/script>',
       'const aws_secret_key = "AKIAIOSFODNN7EXAMPLE";',
       'password = "SuperSecret123!"'
     ].join('\n');
-    el.dispatchEvent(new Event('input', { bubbles: true }));
   }
   showToast(currentLang === 'ar' ? 'تشغيل مثال كود…' : 'Running code demo…', 'ok');
-  setTimeout(() => document.getElementById('scanScanBtn')?.click(), 400);
+  setTimeout(() => document.getElementById('scanScanBtn')?.click(), 350);
 });
+
 document.getElementById('scanScanBtn')?.addEventListener('click', async () => {
   const btn = document.getElementById('scanScanBtn');
   const file = document.getElementById('scanFile').files[0];
@@ -1770,7 +1762,6 @@ document.getElementById('scanScanBtn')?.addEventListener('click', async () => {
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Failed');
 
-    // findings قد يكون كائن {sqli:[], xss:[], secrets:[]} أو مصفوفة
     const findings = data.findings || data.issues || {};
     const lists = [];
     let totalFound = data.total_issues_found ?? data.issues_found ?? 0;
@@ -1826,7 +1817,8 @@ document.getElementById('scanScanBtn')?.addEventListener('click', async () => {
       ].concat(catRows),
       lists
     );
-    try { loadOverview(); } catch (e) {} showToast(currentLang === 'ar' ? 'تم التدقيق' : 'Audit complete', Number(data.risk_score) >= 70 ? 'warn' : 'ok');
+    try { loadOverview(); } catch (e) {}
+    showToast(currentLang === 'ar' ? 'تم التدقيق' : 'Audit complete', Number(data.risk_score) >= 70 ? 'warn' : 'ok');
   } catch (e) {
     showToast(e.message || (currentLang === 'ar' ? 'فشل التدقيق' : 'Audit failed'), 'err');
   } finally {
@@ -1845,7 +1837,6 @@ if (token && userStr) {
   setGuest();
 }
 
-// Desktop: sidebar open by default | Mobile: closed
 (function initSidebar() {
   const sb = document.getElementById('sidebar');
   const main = document.getElementById('main');
@@ -1865,7 +1856,7 @@ loadOverview();
 
 document.getElementById('overviewDemoBtn')?.addEventListener('click', () => {
   showView('docguard');
-  setTimeout(() => document.getElementById('docDemo')?.click(), 200);
+  setTimeout(() => document.getElementById('docDemo')?.click(), 220);
 });
 
 async function checkApiHealth() {
@@ -1895,11 +1886,10 @@ setInterval(checkApiHealth, 60000);
     if (view === 'docguard') document.getElementById('docDemo')?.click();
     if (view === 'mailguard') document.getElementById('mailDemo')?.click();
     if (view === 'scanguard') document.getElementById('scanDemo')?.click();
+    if (view === 'camguard') document.getElementById('camDemo')?.click();
     if (view === 'sysguard') fetchSysStatus();
   }, 400);
 })();
-
-
 </script>
 </body>
 </html>
