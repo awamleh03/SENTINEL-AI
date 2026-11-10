@@ -652,6 +652,34 @@
         <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
         <span data-i18n="nav_history">السجل</span>
       </button>
+      <button type="button" class="nav-link" data-nav="sites">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z"/></svg>
+        <span data-i18n="nav_sites">المواقع والمفاتيح</span>
+      </button>
+      <button type="button" class="nav-link" data-nav="events">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z"/></svg>
+        <span data-i18n="nav_events">سجل الأحداث</span>
+      </button>
+      <button type="button" class="nav-link" data-nav="notifications">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0M3.124 7.5A8.969 8.969 0 015.292 3m13.416 0a8.969 8.969 0 012.168 4.5"/></svg>
+        <span data-i18n="nav_notifications">قنوات التنبيهات</span>
+      </button>
+      <button type="button" class="nav-link" data-nav="policies">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>
+        <span data-i18n="nav_policies">السياسات</span>
+      </button>
+      <button type="button" class="nav-link" data-nav="ratelimit">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l3.5 2M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <span data-i18n="nav_ratelimit">تحديد المعدل</span>
+      </button>
+      <button type="button" class="nav-link" data-nav="botguard">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"/></svg>
+        <span data-i18n="nav_botguard">كشف البوتات</span>
+      </button>
+      <button type="button" class="nav-link" data-nav="acl">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
+        <span data-i18n="nav_acl">قوائم السماح والحظر</span>
+      </button>
     </nav>
 
     <div class="sidebar-footer">
@@ -956,6 +984,527 @@
         </div>
       </section>
 
+      <!-- SITES & API KEYS -->
+      <section class="view" id="view-sites">
+        <div class="card">
+          <div class="card-head">
+            <h3 data-i18n="sites_title">المواقع ومفاتيح API</h3>
+            <button type="button" class="btn btn-sm" id="siteNewBtn"><span data-i18n="site_new">موقع جديد</span></button>
+          </div>
+          <div class="card-body overflow-x">
+            <div id="sitesTableWrap" class="empty-state" data-i18n="sites_empty">لا مواقع بعد. أضف موقعاً للبدء.</div>
+          </div>
+        </div>
+
+        <div class="card" id="siteFormCard" style="display:none;margin-top:16px">
+          <div class="card-head">
+            <h3 id="siteFormTitle" data-i18n="site_new">موقع جديد</h3>
+            <button type="button" class="btn btn-sm btn-ghost" id="siteFormCancel"><span data-i18n="cancel">إلغاء</span></button>
+          </div>
+          <div class="card-body">
+            <div class="form-row">
+              <div class="form-group">
+                <label data-i18n="site_name">اسم الموقع</label>
+                <input type="text" id="siteNameInput" class="form-control" placeholder="my-shop" />
+              </div>
+              <div class="form-group">
+                <label data-i18n="site_domain">النطاق (اختياري)</label>
+                <input type="text" id="siteDomainInput" class="form-control" placeholder="shop.example.com" />
+              </div>
+            </div>
+            <button type="button" class="btn" id="siteSaveBtn"><span data-i18n="save">حفظ</span></button>
+          </div>
+        </div>
+
+        <div class="card" id="siteKeysCard" style="display:none;margin-top:16px">
+          <div class="card-head">
+            <h3><span data-i18n="keys_title">مفاتيح API</span> — <span id="siteKeysName"></span></h3>
+            <button type="button" class="btn btn-sm btn-ghost" id="siteKeysClose"><span data-i18n="close">إغلاق</span></button>
+          </div>
+          <div class="card-body">
+            <div id="keySecretBox" class="result-box"></div>
+            <div class="form-row">
+              <div class="form-group">
+                <label data-i18n="key_name">اسم المفتاح</label>
+                <input type="text" id="keyNameInput" class="form-control" placeholder="default" value="default" />
+              </div>
+              <div class="form-group" style="display:flex;align-items:flex-end">
+                <button type="button" class="btn" id="keyNewBtn" style="width:100%"><span data-i18n="key_new">مفتاح جديد</span></button>
+              </div>
+            </div>
+            <div class="overflow-x">
+              <div id="keysTableWrap" class="empty-state" data-i18n="keys_empty">لا مفاتيح بعد.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECURITY EVENTS -->
+      <section class="view" id="view-events">
+        <div class="card">
+          <div class="card-head">
+            <h3 data-i18n="events_title">سجل الأحداث</h3>
+          </div>
+          <div class="card-body">
+            <div class="form-row">
+              <div class="form-group">
+                <label data-i18n="ev_site">الموقع</label>
+                <select id="evSiteFilter" class="form-control">
+                  <option value="" data-i18n="ev_all_sites">كل المواقع</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label data-i18n="ev_type">نوع الحدث</label>
+                <input type="text" id="evTypeFilter" class="form-control" placeholder="apikey_validation" />
+              </div>
+              <div class="form-group">
+                <label data-i18n="ev_decision">القرار</label>
+                <select id="evDecisionFilter" class="form-control">
+                  <option value="" data-i18n="ev_all">الكل</option>
+                  <option value="allow">allow</option>
+                  <option value="deny">deny</option>
+                  <option value="challenge">challenge</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label data-i18n="ev_path">المسار</label>
+                <input type="text" id="evPathFilter" class="form-control" placeholder="/login" />
+              </div>
+              <div class="form-group">
+                <label data-i18n="ev_from">من تاريخ</label>
+                <input type="date" id="evFromFilter" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label data-i18n="ev_to">إلى تاريخ</label>
+                <input type="date" id="evToFilter" class="form-control" />
+              </div>
+            </div>
+            <button type="button" class="btn" id="evApplyBtn"><span data-i18n="ev_apply">تطبيق</span></button>
+            <button type="button" class="btn btn-ghost" id="evResetBtn"><span data-i18n="ev_reset">إعادة تعيين</span></button>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:16px">
+          <div class="card-body overflow-x">
+            <div id="eventsTableWrap" class="empty-state" data-i18n="events_empty">لا أحداث</div>
+          </div>
+          <div class="card-body" style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+            <span id="evPageInfo" style="color:var(--text-muted);font-size:0.8rem"></span>
+            <span>
+              <button type="button" class="btn btn-sm btn-ghost" id="evPrevBtn"><span data-i18n="ev_prev">السابق</span></button>
+              <button type="button" class="btn btn-sm btn-ghost" id="evNextBtn"><span data-i18n="ev_next">التالي</span></button>
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <!-- NOTIFICATIONS -->
+      <section class="view" id="view-notifications">
+        <div class="card">
+          <div class="card-head">
+            <h3 data-i18n="notif_title">التنبيهات</h3>
+            <button type="button" class="btn btn-sm" id="chNewBtn"><span data-i18n="ch_new">قناة جديدة</span></button>
+          </div>
+          <div class="card-body overflow-x">
+            <div id="channelsTableWrap" class="empty-state" data-i18n="ch_empty">لا قنوات</div>
+          </div>
+        </div>
+
+        <div class="card" id="chFormCard" style="margin-top:16px;display:none">
+          <div class="card-head">
+            <h3 id="chFormTitle" data-i18n="ch_add_title">إضافة قناة</h3>
+          </div>
+          <div class="card-body">
+            <div class="form-row">
+              <div class="form-group">
+                <label data-i18n="ch_type">النوع</label>
+                <select id="chTypeInput" class="form-control">
+                  <option value="email">Email</option>
+                  <option value="slack">Slack</option>
+                  <option value="telegram">Telegram</option>
+                  <option value="whatsapp">WhatsApp</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label data-i18n="ch_name">الاسم</label>
+                <input type="text" id="chNameInput" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label data-i18n="ch_site">الموقع</label>
+                <select id="chSiteInput" class="form-control"><option value="" data-i18n="ch_all_sites">كل المواقع</option></select>
+              </div>
+              <div class="form-group">
+                <label data-i18n="ch_min_sev">أدنى خطورة</label>
+                <select id="chMinSevInput" class="form-control">
+                  <option value="low">low</option>
+                  <option value="medium" selected>medium</option>
+                  <option value="high">high</option>
+                  <option value="critical">critical</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row cfg-group" data-ct="email">
+              <div class="form-group">
+                <label data-i18n="cfg_to">البريد المستلم</label>
+                <input type="text" id="cfgEmailTo" class="form-control" placeholder="ops@example.com" />
+              </div>
+              <div class="form-group">
+                <label data-i18n="cfg_smtp_host">SMTP Host (اختياري)</label>
+                <input type="text" id="cfgSmtpHost" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label data-i18n="cfg_smtp_pass">SMTP Password (اختياري)</label>
+                <input type="password" id="cfgSmtpPass" class="form-control" />
+              </div>
+            </div>
+
+            <div class="form-row cfg-group" data-ct="slack">
+              <div class="form-group">
+                <label data-i18n="cfg_webhook">Webhook URL</label>
+                <input type="password" id="cfgSlackWebhook" class="form-control" placeholder="https://hooks.slack.com/..." />
+              </div>
+            </div>
+
+            <div class="form-row cfg-group" data-ct="telegram">
+              <div class="form-group">
+                <label data-i18n="cfg_bot">Bot Token</label>
+                <input type="password" id="cfgTgToken" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label data-i18n="cfg_chat">Chat ID</label>
+                <input type="text" id="cfgTgChat" class="form-control" />
+              </div>
+            </div>
+
+            <div class="form-row cfg-group" data-ct="whatsapp">
+              <div class="form-group">
+                <label data-i18n="cfg_wa_token">Access Token</label>
+                <input type="password" id="cfgWaToken" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label data-i18n="cfg_wa_phone">Phone Number ID</label>
+                <input type="text" id="cfgWaPhone" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label data-i18n="cfg_wa_to">رقم المستلم</label>
+                <input type="text" id="cfgWaTo" class="form-control" />
+              </div>
+            </div>
+
+            <button type="button" class="btn" id="chSaveBtn"><span data-i18n="save">حفظ</span></button>
+            <button type="button" class="btn btn-ghost" id="chFormCancel"><span data-i18n="cancel">إلغاء</span></button>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:16px">
+          <div class="card-head"><h3 data-i18n="notif_log">سجل التسليم</h3></div>
+          <div class="card-body overflow-x">
+            <div id="notifLogTableWrap" class="empty-state" data-i18n="notif_log_empty">لا سجلات</div>
+          </div>
+          <div class="card-body" style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+            <span id="nlPageInfo" style="color:var(--text-muted);font-size:0.8rem"></span>
+            <span>
+              <button type="button" class="btn btn-sm btn-ghost" id="nlPrevBtn"><span data-i18n="ev_prev">السابق</span></button>
+              <button type="button" class="btn btn-sm btn-ghost" id="nlNextBtn"><span data-i18n="ev_next">التالي</span></button>
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <!-- POLICIES -->
+      <section class="view" id="view-policies">
+        <div class="card">
+          <div class="card-head">
+            <h3 data-i18n="pol_title">السياسات</h3>
+            <button type="button" class="btn btn-sm" id="polNewBtn"><span data-i18n="pol_new">سياسة جديدة</span></button>
+          </div>
+          <div class="card-body">
+            <div class="form-row">
+              <div class="form-group">
+                <label data-i18n="pol_site_filter">تصفية بالموقع</label>
+                <select id="polSiteFilter" class="form-control"><option value="" data-i18n="pol_all_sites">كل المواقع</option></select>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div id="polTableWrap" class="empty-state" data-i18n="pol_empty">لا سياسات مضافة</div>
+          </div>
+        </div>
+
+        <div class="card" id="polFormCard" style="margin-top:16px;display:none">
+          <div class="card-head">
+            <h3 id="polFormTitle" data-i18n="pol_add_title">إضافة سياسة</h3>
+          </div>
+          <div class="card-body">
+            <div class="form-row">
+              <div class="form-group">
+                <label data-i18n="pol_name">الاسم</label>
+                <input type="text" id="polNameInput" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label data-i18n="pol_site">الموقع</label>
+                <select id="polSiteInput" class="form-control"></select>
+              </div>
+              <div class="form-group">
+                <label data-i18n="pol_mode">الوضع</label>
+                <select id="polModeInput" class="form-control">
+                  <option value="monitor" data-i18n="pol_mode_monitor">مراقبة</option>
+                  <option value="block" data-i18n="pol_mode_block">حجب</option>
+                </select>
+              </div>
+            </div>
+            <p style="color:var(--text-dim);font-size:0.8rem;margin:0 0 12px" data-i18n="pol_mode_hint">وضع المراقبة يسجّل القرارات فقط، ولا يُنفّذ الحجب إلا في وضع الحجب.</p>
+            <button type="button" class="btn" id="polSaveBtn"><span data-i18n="save">حفظ</span></button>
+            <button type="button" class="btn btn-ghost" id="polFormCancel"><span data-i18n="cancel">إلغاء</span></button>
+          </div>
+        </div>
+
+        <div class="card" id="polRuleFormCard" style="margin-top:16px;display:none">
+          <div class="card-head">
+            <h3 id="polRuleFormTitle" data-i18n="pol_add_rule">إضافة قاعدة</h3>
+          </div>
+          <div class="card-body">
+            <div class="form-row">
+              <div class="form-group">
+                <label data-i18n="pol_rule_label">التسمية</label>
+                <input type="text" id="polRuleLabel" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label data-i18n="pol_rule_match">نوع المطابقة</label>
+                <select id="polRuleMatch" class="form-control">
+                  <option value="prefix">prefix</option>
+                  <option value="exact">exact</option>
+                  <option value="contains">contains</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label data-i18n="pol_rule_pattern">نمط المسار</label>
+                <input type="text" id="polRulePattern" class="form-control" placeholder="/login" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label data-i18n="pol_rule_action">الإجراء</label>
+                <select id="polRuleAction" class="form-control">
+                  <option value="monitor" data-i18n="pol_act_monitor">مراقبة</option>
+                  <option value="allow" data-i18n="pol_act_allow">سماح</option>
+                  <option value="block" data-i18n="pol_act_block">حجب</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label data-i18n="pol_rule_priority">الأولوية</label>
+                <input type="number" id="polRulePriority" class="form-control" value="100" />
+              </div>
+            </div>
+            <button type="button" class="btn" id="polRuleSaveBtn"><span data-i18n="save">حفظ</span></button>
+            <button type="button" class="btn btn-ghost" id="polRuleCancel"><span data-i18n="cancel">إلغاء</span></button>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="view-ratelimit">
+        <div class="card">
+          <div class="card-head">
+            <h3 data-i18n="rl_title">تحديد المعدل</h3>
+            <button type="button" class="btn btn-sm" id="rlNewBtn"><span data-i18n="rl_new">قاعدة جديدة</span></button>
+          </div>
+          <div class="card-body">
+            <div class="form-row">
+              <div class="form-group">
+                <label data-i18n="rl_site_filter">تصفية بالموقع</label>
+                <select id="rlSiteFilter" class="form-control"><option value="" data-i18n="rl_all_sites">كل المواقع</option></select>
+              </div>
+            </div>
+            <p style="color:var(--text-dim);font-size:0.8rem;margin:8px 0 0" data-i18n="rl_scope_hint">يُحدّد النطاق ما يعدّه العدّاد: عنوان IP للزائر أو مفتاح API. وضع المراقبة يقيس فقط دون حجب.</p>
+          </div>
+          <div class="card-body">
+            <div id="rlTableWrap" class="empty-state" data-i18n="rl_empty">لا قواعد مضافة</div>
+          </div>
+        </div>
+
+        <div class="card" id="rlFormCard" style="margin-top:16px;display:none">
+          <div class="card-head">
+            <h3 id="rlFormTitle" data-i18n="rl_add_title">إضافة قاعدة</h3>
+          </div>
+          <div class="card-body">
+            <div class="form-row">
+              <div class="form-group">
+                <label data-i18n="rl_name">الاسم</label>
+                <input type="text" id="rlNameInput" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label data-i18n="rl_site">الموقع</label>
+                <select id="rlSiteInput" class="form-control"></select>
+              </div>
+              <div class="form-group">
+                <label data-i18n="rl_scope">النطاق</label>
+                <select id="rlScopeInput" class="form-control">
+                  <option value="ip" data-i18n="rl_scope_ip">IP</option>
+                  <option value="api_key" data-i18n="rl_scope_key">مفتاح API</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label data-i18n="rl_limit">عدد الطلبات</label>
+                <input type="number" id="rlLimitInput" class="form-control" value="60" min="1" />
+              </div>
+              <div class="form-group">
+                <label data-i18n="rl_window">النافذة (ثوانٍ)</label>
+                <input type="number" id="rlWindowInput" class="form-control" value="60" min="1" />
+              </div>
+              <div class="form-group">
+                <label data-i18n="rl_action">الإجراء</label>
+                <select id="rlActionInput" class="form-control">
+                  <option value="monitor" data-i18n="rl_act_monitor">مراقبة</option>
+                  <option value="block" data-i18n="rl_act_block">حجب</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label data-i18n="rl_priority">الأولوية</label>
+                <input type="number" id="rlPriorityInput" class="form-control" value="100" />
+              </div>
+            </div>
+            <p style="color:var(--text-dim);font-size:0.8rem;margin:0 0 12px" data-i18n="rl_action_hint">الافتراضي «مراقبة»: تُسجَّل التجاوزات دون تنفيذ الحجب.</p>
+            <button type="button" class="btn" id="rlSaveBtn"><span data-i18n="save">حفظ</span></button>
+            <button type="button" class="btn btn-ghost" id="rlFormCancel"><span data-i18n="cancel">إلغاء</span></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- BOT DETECTION -->
+      <section class="view" id="view-botguard">
+        <div class="card">
+          <div class="card-head">
+            <h3 data-i18n="bg_title">كشف البوتات</h3>
+            <span class="chip chip-medium" data-i18n="bg_monitor_badge">وضع المراقبة</span>
+          </div>
+          <div class="card-body">
+            <p style="color:var(--text-dim);font-size:0.8rem;margin:0" data-i18n="bg_intro">مرحلة أولية تُرصد السلوك الآلي المشبوه بالمراقبة فقط دون حجب. النتائج احتياطية وليست تأكيدًا قاطعًا، وتُبنى على عدة إشارات مجتمعة لا على User-Agent وحده.</p>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:16px">
+          <div class="card-body">
+            <div class="form-row">
+              <div class="form-group">
+                <label data-i18n="bg_site_filter">تصفية بالموقع</label>
+                <select id="bgSiteFilter" class="form-control"><option value="" data-i18n="bg_all_sites">كل المواقع</option></select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:16px">
+          <div class="card-body overflow-x">
+            <div id="bgTableWrap" class="empty-state" data-i18n="bg_empty">لا نتائج مشبوهة</div>
+          </div>
+          <div class="card-body" style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+            <span id="bgPageInfo" style="color:var(--text-muted);font-size:0.8rem"></span>
+            <span>
+              <button type="button" class="btn btn-sm btn-ghost" id="bgPrevBtn"><span data-i18n="ev_prev">السابق</span></button>
+              <button type="button" class="btn btn-sm btn-ghost" id="bgNextBtn"><span data-i18n="ev_next">التالي</span></button>
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ACCESS LISTS -->
+      <section class="view" id="view-acl">
+        <div class="card">
+          <div class="card-head">
+            <h3 data-i18n="acl_title">قوائم السماح والحظر</h3>
+            <button type="button" class="btn btn-sm" id="aclNewBtn"><span data-i18n="acl_new">قاعدة جديدة</span></button>
+          </div>
+          <div class="card-body">
+            <div class="form-row">
+              <div class="form-group">
+                <label data-i18n="acl_site_filter">تصفية بالموقع</label>
+                <select id="aclSiteFilter" class="form-control"><option value="" data-i18n="acl_all_sites">كل المواقع</option></select>
+              </div>
+              <div class="form-group">
+                <label data-i18n="acl_type_filter">تصفية بالنوع</label>
+                <select id="aclTypeFilter" class="form-control">
+                  <option value="" data-i18n="acl_all_types">الكل</option>
+                  <option value="block" data-i18n="acl_type_block">حظر</option>
+                  <option value="allow" data-i18n="acl_type_allow">سماح</option>
+                </select>
+              </div>
+            </div>
+            <p style="color:var(--text-dim);font-size:0.8rem;margin:8px 0 0" data-i18n="acl_priority_hint">قواعد الحظر لها الأولوية دائمًا على السماح. قاعدة السماح تُعفي النطاقات المختارة فقط ولا تتجاوز كل الحماية.</p>
+          </div>
+          <div class="card-body">
+            <div id="aclTableWrap" class="empty-state" data-i18n="acl_empty">لا قواعد مضافة</div>
+          </div>
+        </div>
+
+        <div class="card" id="aclFormCard" style="margin-top:16px;display:none">
+          <div class="card-head">
+            <h3 id="aclFormTitle" data-i18n="acl_add_title">إضافة قاعدة</h3>
+          </div>
+          <div class="card-body">
+            <div class="form-row">
+              <div class="form-group">
+                <label data-i18n="acl_list_type">النوع</label>
+                <select id="aclListTypeInput" class="form-control">
+                  <option value="block" data-i18n="acl_type_block">حظر</option>
+                  <option value="allow" data-i18n="acl_type_allow">سماح</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label data-i18n="acl_site">الموقع</label>
+                <select id="aclSiteInput" class="form-control"></select>
+              </div>
+              <div class="form-group">
+                <label data-i18n="acl_match_type">نوع المطابقة</label>
+                <select id="aclMatchTypeInput" class="form-control">
+                  <option value="ip" data-i18n="acl_match_ip">IP</option>
+                  <option value="cidr" data-i18n="acl_match_cidr">نطاق CIDR</option>
+                  <option value="path" data-i18n="acl_match_path">مسار (بادئة)</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label data-i18n="acl_value">القيمة</label>
+                <input type="text" id="aclValueInput" class="form-control" placeholder="203.0.113.4 / 203.0.113.0/24 / /admin" />
+              </div>
+              <div class="form-group">
+                <label data-i18n="acl_mode">الإجراء</label>
+                <select id="aclModeInput" class="form-control">
+                  <option value="monitor" data-i18n="acl_mode_monitor">مراقبة</option>
+                  <option value="block" data-i18n="acl_mode_block">حجب</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label data-i18n="acl_priority">الأولوية</label>
+                <input type="number" id="aclPriorityInput" class="form-control" value="100" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label data-i18n="acl_scope">النطاقات التي تُعفيها قاعدة السماح</label>
+                <div style="display:flex;gap:14px;flex-wrap:wrap;padding-top:6px">
+                  <label style="display:flex;gap:6px;align-items:center;color:var(--text-dim);font-size:0.85rem"><input type="checkbox" id="aclScopePolicies" value="policies" /><span data-i18n="acl_scope_policies">السياسات</span></label>
+                  <label style="display:flex;gap:6px;align-items:center;color:var(--text-dim);font-size:0.85rem"><input type="checkbox" id="aclScopeRatelimit" value="ratelimit" /><span data-i18n="acl_scope_ratelimit">تحديد المعدل</span></label>
+                  <label style="display:flex;gap:6px;align-items:center;color:var(--text-dim);font-size:0.85rem"><input type="checkbox" id="aclScopeBotguard" value="botguard" /><span data-i18n="acl_scope_botguard">كشف البوتات</span></label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label data-i18n="acl_description">الوصف (اختياري)</label>
+                <input type="text" id="aclDescInput" class="form-control" />
+              </div>
+            </div>
+            <p style="color:var(--text-dim);font-size:0.8rem;margin:0 0 12px" data-i18n="acl_scope_hint">النطاقات تُطبَّق على قواعد السماح فقط. الافتراضي بلا نطاقات: قاعدة السماح لا تتجاوز أي حماية.</p>
+            <button type="button" class="btn" id="aclSaveBtn"><span data-i18n="save">حفظ</span></button>
+            <button type="button" class="btn btn-ghost" id="aclFormCancel"><span data-i18n="cancel">إلغاء</span></button>
+          </div>
+        </div>
+      </section>
+
     </div>
   </div>
 </div>
@@ -971,7 +1520,14 @@ const titles = {
   camguard: { ar: 'CamGuard', en: 'CamGuard' },
   scanguard: { ar: 'ScanGuard', en: 'ScanGuard' },
   alerts: { ar: 'التنبيهات', en: 'Alerts' },
-  history: { ar: 'السجل', en: 'History' }
+  history: { ar: 'السجل', en: 'History' },
+  sites: { ar: 'المواقع ومفاتيح API', en: 'Sites & API Keys' },
+  events: { ar: 'سجل الأحداث', en: 'Security Events' },
+  notifications: { ar: 'قنوات التنبيهات', en: 'Notification Channels' },
+  policies: { ar: 'السياسات', en: 'Policies' },
+  ratelimit: { ar: 'تحديد المعدل', en: 'Rate Limiting' },
+  botguard: { ar: 'كشف البوتات', en: 'Bot Detection' },
+  acl: { ar: 'قوائم السماح والحظر', en: 'Access Lists' }
 };
 
 const i18n = {
@@ -994,7 +1550,104 @@ const i18n = {
     cam_hint: 'ارفع صورة من كاميرا مراقبة أو إطار لقطة. النظام يحلل الحركة والأجسام ويعطي درجة مخاطر.',
     scan_title: 'تدقيق الأكواد والملفات', scan_file: 'رفع ملف', scan_text: '…أو الصق كود / نص', scan_btn: 'تدقيق',
     alerts_title: 'التنبيهات', al_unread: 'غير مقروء فقط', hist_title: 'سجل الفحوصات', hist_all: 'كل الوحدات',
-    guest: 'زائر', not_signed: 'غير مسجّل', signed_in: 'مسجّل الدخول'
+    guest: 'زائر', not_signed: 'غير مسجّل', signed_in: 'مسجّل الدخول',
+    nav_sites: 'المواقع والمفاتيح', sites_title: 'المواقع ومفاتيح API', site_new: 'موقع جديد', site_edit: 'تعديل الموقع',
+    sites_empty: 'لا مواقع بعد. أضف موقعاً للبدء.', sites_locked_title: 'تسجيل الدخول مطلوب',
+    sites_locked_msg: 'سجّل الدخول لإدارة المواقع ومفاتيح API.', site_name: 'اسم الموقع', site_domain: 'النطاق (اختياري)',
+    save: 'حفظ', cancel: 'إلغاء', close: 'إغلاق', edit: 'تعديل', delete: 'حذف',
+    th_name: 'الموقع', th_domain: 'النطاق', th_status: 'الحالة', th_created: 'أُنشئ', th_last_used: 'آخر استخدام',
+    th_key_name: 'الاسم', th_prefix: 'البادئة', active: 'نشط', inactive: 'معطّل', manage_keys: 'المفاتيح',
+    keys_title: 'مفاتيح API', key_new: 'مفتاح جديد', key_name: 'اسم المفتاح', keys_empty: 'لا مفاتيح بعد.',
+    key_active: 'فعّال', key_revoked: 'ملغى', key_rotate: 'تدوير', key_revoke: 'إلغاء',
+    secret_title: 'مفتاح جديد — انسخه الآن', secret_once: 'يُعرض مرة واحدة',
+    secret_warn: 'لن يُعرض هذا المفتاح مرة أخرى. خزّنه في مكان آمن.', secret_copy: 'نسخ', copied: 'تم النسخ',
+    confirm_delete_site: 'حذف هذا الموقع؟ سيتم فصل سجلاته ولا يمكن التراجع.', confirm_revoke_key: 'إلغاء هذا المفتاح؟',
+    confirm_rotate_key: 'تدوير المفتاح؟ سيتم إلغاء المفتاح الحالي وإنشاء بديل.',
+    key_created: 'تم إنشاء المفتاح', key_revoked_msg: 'تم إلغاء المفتاح', key_rotated_msg: 'تم تدوير المفتاح',
+    site_saved: 'تم حفظ الموقع', site_deleted: 'تم حذف الموقع', site_name_required: 'اسم الموقع مطلوب', err_generic: 'حدث خطأ',
+    nav_events: 'سجل الأحداث', events_title: 'سجل الأحداث', events_empty: 'لا أحداث مطابقة',
+    events_locked_title: 'تسجيل الدخول مطلوب', events_locked_msg: 'سجّل الدخول لعرض سجل الأحداث.',
+    ev_site: 'الموقع', ev_all_sites: 'كل المواقع', ev_type: 'نوع الحدث', ev_decision: 'القرار', ev_all: 'الكل',
+    ev_path: 'المسار', ev_from: 'من تاريخ', ev_to: 'إلى تاريخ', ev_apply: 'تطبيق', ev_reset: 'إعادة تعيين',
+    ev_prev: 'السابق', ev_next: 'التالي', ev_page_info: 'صفحة {page} من {pages} · {total} حدث',
+    th_time: 'الوقت', th_site: 'الموقع', th_type: 'النوع', th_ip: 'IP', th_path: 'المسار',
+    th_decision: 'القرار', th_action: 'الإجراء', th_confidence: 'الثقة',
+    nav_notifications: 'قنوات التنبيهات', notif_title: 'قنوات التنبيهات', notif_log: 'سجل التسليم',
+    notif_log_empty: 'لا سجلات تسليم', ch_new: 'قناة جديدة', ch_add_title: 'إضافة قناة', ch_empty: 'لا قنوات مضافة',
+    ch_type: 'النوع', ch_name: 'الاسم', ch_site: 'الموقع', ch_all_sites: 'كل المواقع', ch_min_sev: 'أدنى خطورة',
+    cfg_to: 'البريد المستلم', cfg_smtp_host: 'SMTP Host (اختياري)', cfg_smtp_pass: 'SMTP Password (اختياري)',
+    cfg_webhook: 'Webhook URL', cfg_bot: 'Bot Token', cfg_chat: 'Chat ID',
+    cfg_wa_token: 'Access Token', cfg_wa_phone: 'Phone Number ID', cfg_wa_to: 'رقم المستلم',
+    ch_verified: 'مُوثّقة', ch_unverified: 'غير مُوثّقة', ch_enabled: 'مفعّلة', ch_disabled: 'معطّلة',
+    ch_test: 'اختبار', ch_enable: 'تفعيل', ch_disable: 'تعطيل', ch_delete: 'حذف', ch_edit: 'تعديل',
+    ch_confirm_delete: 'حذف القناة؟', ch_saved: 'تم حفظ القناة', ch_deleted: 'تم حذف القناة',
+    ch_test_ok: 'نجح الاختبار وتم توثيق القناة', ch_test_fail: 'فشل الاختبار', ch_verify_first: 'وثّق القناة عبر اختبار ناجح قبل تفعيلها',
+    ch_secret_set: 'مضبوط', ch_secret_unset: 'غير مضبوط',
+    th_ch_name: 'الاسم', th_ch_type: 'النوع', th_ch_site: 'الموقع', th_ch_status: 'الحالة', th_ch_actions: 'إجراءات',
+    nl_status: 'الحالة', nl_subject: 'الموضوع', nl_detail: 'التفاصيل',
+    nav_policies: 'السياسات', pol_title: 'السياسات', pol_new: 'سياسة جديدة', pol_site_filter: 'تصفية بالموقع',
+    pol_all_sites: 'كل المواقع', pol_empty: 'لا سياسات مضافة', pol_add_title: 'إضافة سياسة', pol_edit_title: 'تعديل السياسة',
+    pol_name: 'الاسم', pol_site: 'الموقع', pol_mode: 'الوضع', pol_mode_monitor: 'مراقبة', pol_mode_block: 'حجب',
+    pol_mode_hint: 'وضع المراقبة يسجّل القرارات فقط، ولا يُنفّذ الحجب إلا في وضع الحجب.',
+    pol_mode_mon: 'مراقبة', pol_mode_blk: 'حجب', pol_enabled: 'مفعّلة', pol_disabled: 'معطّلة',
+    pol_edit: 'تعديل السياسة', pol_delete: 'حذف', pol_enable: 'تفعيل', pol_disable: 'تعطيل',
+    pol_rules: 'القواعد', pol_no_rules: 'لا قواعد', pol_add_rule: 'إضافة قاعدة', pol_edit_rule: 'تعديل القاعدة', pol_rule_new: 'قاعدة جديدة',
+    pol_rule_label: 'التسمية', pol_rule_match: 'نوع المطابقة', pol_rule_pattern: 'نمط المسار', pol_rule_action: 'الإجراء', pol_rule_priority: 'الأولوية',
+    pol_act_monitor: 'مراقبة', pol_act_allow: 'سماح', pol_act_block: 'حجب',
+    pol_act_mon: 'مراقبة', pol_act_alw: 'سماح', pol_act_blk: 'حجب',
+    pol_confirm_delete: 'حذف هذه السياسة وكل قواعدها؟', pol_confirm_delete_rule: 'حذف هذه القاعدة؟',
+    pol_saved: 'تم حفظ السياسة', pol_deleted: 'تم حذف السياسة', pol_rule_saved: 'تم حفظ القاعدة', pol_rule_deleted: 'تم حذف القاعدة',
+    pol_name_required: 'اسم السياسة مطلوب', pol_pattern_required: 'نمط المسار مطلوب', pol_site_required: 'اختر موقعاً',
+    pol_locked_title: 'يلزم تسجيل الدخول', pol_locked_msg: 'سجّل الدخول لإدارة السياسات.',
+    th_pol_name: 'السياسة', th_pol_mode: 'الوضع', th_pol_status: 'الحالة', th_pol_actions: 'إجراءات',
+    th_rule_priority: 'الأولوية', th_rule_match: 'المطابقة', th_rule_pattern: 'النمط', th_rule_action: 'الإجراء', th_rule_status: 'الحالة', th_rule_actions: 'إجراءات',
+    nav_ratelimit: 'تحديد المعدل', rl_title: 'تحديد المعدل', rl_new: 'قاعدة جديدة', rl_site_filter: 'تصفية بالموقع',
+    rl_all_sites: 'كل المواقع', rl_empty: 'لا قواعد مضافة', rl_add_title: 'إضافة قاعدة', rl_edit_title: 'تعديل القاعدة',
+    rl_name: 'الاسم', rl_site: 'الموقع', rl_scope: 'النطاق', rl_scope_ip: 'IP', rl_scope_key: 'مفتاح API',
+    rl_scope_hint: 'يُحدّد النطاق ما يعدّه العدّاد: عنوان IP للزائر أو مفتاح API. وضع المراقبة يقيس فقط دون حجب.',
+    rl_limit: 'عدد الطلبات', rl_window: 'النافذة (ثوانٍ)', rl_action: 'الإجراء', rl_priority: 'الأولوية',
+    rl_act_monitor: 'مراقبة', rl_act_block: 'حجب',
+    rl_action_hint: 'الافتراضي «مراقبة»: تُسجَّل التجاوزات دون تنفيذ الحجب.',
+    rl_enabled: 'مفعّلة', rl_disabled: 'معطّلة', rl_edit: 'تعديل', rl_delete: 'حذف', rl_enable: 'تفعيل', rl_disable: 'تعطيل',
+    rl_confirm_delete: 'حذف هذه القاعدة؟', rl_saved: 'تم حفظ القاعدة', rl_deleted: 'تم حذف القاعدة',
+    rl_name_required: 'اسم القاعدة مطلوب', rl_site_required: 'اختر موقعاً',
+    rl_locked_title: 'يلزم تسجيل الدخول', rl_locked_msg: 'سجّل الدخول لإدارة حدود المعدل.',
+    th_rl_name: 'القاعدة', th_rl_scope: 'النطاق', th_rl_limit: 'الحد/النافذة', th_rl_action: 'الإجراء', th_rl_status: 'الحالة', th_rl_actions: 'إجراءات',
+    nav_botguard: 'كشف البوتات', bg_title: 'كشف البوتات', bg_monitor_badge: 'وضع المراقبة',
+    bg_intro: 'مرحلة أولية تُرصد السلوك الآلي المشبوه بالمراقبة فقط دون حجب. النتائج احتياطية وليست تأكيدًا قاطعًا، وتُبنى على عدة إشارات مجتمعة لا على User-Agent وحده.',
+    bg_site_filter: 'تصفية بالموقع', bg_all_sites: 'كل المواقع', bg_empty: 'لا نتائج مشبوهة',
+    bg_locked_title: 'يلزم تسجيل الدخول', bg_locked_msg: 'سجّل الدخول لعرض نتائج كشف البوتات.',
+    th_bg_time: 'الوقت', th_bg_site: 'الموقع', th_bg_ip: 'IP', th_bg_path: 'المسار',
+    th_bg_score: 'الدرجة', th_bg_level: 'التصنيف', th_bg_reasons: 'أسباب الاشتباه',
+    bg_level_high: 'مرتفع', bg_level_medium: 'متوسط', bg_level_low: 'منخفض', bg_level_none: 'لا شيء',
+    bg_monitored: 'مراقبة (دون حجب)',
+    bg_note: 'احتياطي — ليس بوتًا مؤكدًا',
+    sig_missing_user_agent: 'User-Agent مفقود',
+    sig_automation_marker_in_user_agent: 'علامة أتمتة في User-Agent',
+    sig_unusually_short_user_agent: 'User-Agent قصير بشكل غير معتاد',
+    sig_missing_accept_language: 'Accept-Language مفقود',
+    sig_missing_accept_header: 'Accept مفقود',
+    sig_generic_accept_header: 'Accept عام (*/*)',
+    sig_sensitive_path_targeted: 'استهداف مسار حساس',
+    sig_missing_referer_on_sensitive_path: 'Referer مفقود على مسار حساس',
+    sig_high_request_rate: 'معدل طلبات مرتفع',
+    sig_too_regular_intervals: 'فواصل زمنية منتظمة بشكل آلي',
+    nav_acl: 'قوائم السماح والحظر', acl_title: 'قوائم السماح والحظر', acl_new: 'قاعدة جديدة', acl_site_filter: 'تصفية بالموقع',
+    acl_all_sites: 'كل المواقع', acl_type_filter: 'تصفية بالنوع', acl_all_types: 'الكل',
+    acl_type_allow: 'سماح', acl_type_block: 'حظر',
+    acl_priority_hint: 'قواعد الحظر لها الأولوية دائمًا على السماح. قاعدة السماح تُعفي النطاقات المختارة فقط ولا تتجاوز كل الحماية.',
+    acl_empty: 'لا قواعد مضافة', acl_add_title: 'إضافة قاعدة', acl_edit_title: 'تعديل القاعدة',
+    acl_list_type: 'النوع', acl_site: 'الموقع', acl_match_type: 'نوع المطابقة', acl_value: 'القيمة',
+    acl_match_ip: 'IP', acl_match_cidr: 'نطاق CIDR', acl_match_path: 'مسار (بادئة)',
+    acl_mode: 'الإجراء', acl_mode_monitor: 'مراقبة', acl_mode_block: 'حجب', acl_priority: 'الأولوية',
+    acl_scope: 'النطاقات التي تُعفيها قاعدة السماح', acl_scope_policies: 'السياسات', acl_scope_ratelimit: 'تحديد المعدل', acl_scope_botguard: 'كشف البوتات',
+    acl_scope_hint: 'النطاقات تُطبَّق على قواعد السماح فقط. الافتراضي بلا نطاقات: قاعدة السماح لا تتجاوز أي حماية.',
+    acl_description: 'الوصف (اختياري)', acl_enabled: 'مفعّلة', acl_disabled: 'معطّلة',
+    acl_edit: 'تعديل', acl_delete: 'حذف', acl_enable: 'تفعيل', acl_disable: 'تعطيل',
+    acl_confirm_delete: 'حذف هذه القاعدة؟', acl_saved: 'تم حفظ القاعدة', acl_deleted: 'تم حذف القاعدة',
+    acl_value_required: 'القيمة مطلوبة', acl_site_required: 'اختر موقعاً',
+    acl_locked_title: 'يلزم تسجيل الدخول', acl_locked_msg: 'سجّل الدخول لإدارة قوائم السماح والحظر.',
+    th_acl_type: 'النوع', th_acl_match: 'المطابقة', th_acl_value: 'القيمة', th_acl_site: 'الموقع', th_acl_mode: 'الإجراء', th_acl_scope: 'النطاقات', th_acl_status: 'الحالة', th_acl_actions: 'إجراءات'
   },
   en: {
     control_center: 'Control Center', nav_main: 'Main', nav_overview: 'Overview',
@@ -1015,7 +1668,104 @@ const i18n = {
     cam_hint: 'Upload a surveillance image or frame. The system analyzes motion and objects and returns a risk score.',
     scan_title: 'Code & file audit', scan_file: 'Upload file', scan_text: '…or paste code / text', scan_btn: 'Audit',
     alerts_title: 'Alerts', al_unread: 'Unread only', hist_title: 'Scan history', hist_all: 'All modules',
-    guest: 'Guest', not_signed: 'Not signed in', signed_in: 'Signed in'
+    guest: 'Guest', not_signed: 'Not signed in', signed_in: 'Signed in',
+    nav_sites: 'Sites & Keys', sites_title: 'Sites & API Keys', site_new: 'New site', site_edit: 'Edit site',
+    sites_empty: 'No sites yet. Add one to get started.', sites_locked_title: 'Sign in required',
+    sites_locked_msg: 'Sign in to manage sites and API keys.', site_name: 'Site name', site_domain: 'Domain (optional)',
+    save: 'Save', cancel: 'Cancel', close: 'Close', edit: 'Edit', delete: 'Delete',
+    th_name: 'Site', th_domain: 'Domain', th_status: 'Status', th_created: 'Created', th_last_used: 'Last used',
+    th_key_name: 'Name', th_prefix: 'Prefix', active: 'Active', inactive: 'Disabled', manage_keys: 'Keys',
+    keys_title: 'API Keys', key_new: 'New key', key_name: 'Key name', keys_empty: 'No keys yet.',
+    key_active: 'Active', key_revoked: 'Revoked', key_rotate: 'Rotate', key_revoke: 'Revoke',
+    secret_title: 'New key — copy it now', secret_once: 'Shown once',
+    secret_warn: 'This key will not be shown again. Store it securely.', secret_copy: 'Copy', copied: 'Copied',
+    confirm_delete_site: 'Delete this site? Its records will be detached and this cannot be undone.', confirm_revoke_key: 'Revoke this key?',
+    confirm_rotate_key: 'Rotate this key? The current key will be revoked and replaced.',
+    key_created: 'Key created', key_revoked_msg: 'Key revoked', key_rotated_msg: 'Key rotated',
+    site_saved: 'Site saved', site_deleted: 'Site deleted', site_name_required: 'Site name is required', err_generic: 'Something went wrong',
+    nav_events: 'Security Events', events_title: 'Security Events', events_empty: 'No matching events',
+    events_locked_title: 'Sign in required', events_locked_msg: 'Sign in to view the security event log.',
+    ev_site: 'Site', ev_all_sites: 'All sites', ev_type: 'Event type', ev_decision: 'Decision', ev_all: 'All',
+    ev_path: 'Path', ev_from: 'From date', ev_to: 'To date', ev_apply: 'Apply', ev_reset: 'Reset',
+    ev_prev: 'Previous', ev_next: 'Next', ev_page_info: 'Page {page} of {pages} · {total} events',
+    th_time: 'Time', th_site: 'Site', th_type: 'Type', th_ip: 'IP', th_path: 'Path',
+    th_decision: 'Decision', th_action: 'Action', th_confidence: 'Confidence',
+    nav_notifications: 'Notification Channels', notif_title: 'Notification Channels', notif_log: 'Delivery log',
+    notif_log_empty: 'No deliveries yet', ch_new: 'New channel', ch_add_title: 'Add channel', ch_empty: 'No channels configured',
+    ch_type: 'Type', ch_name: 'Name', ch_site: 'Site', ch_all_sites: 'All sites', ch_min_sev: 'Min severity',
+    cfg_to: 'Recipient email', cfg_smtp_host: 'SMTP Host (optional)', cfg_smtp_pass: 'SMTP Password (optional)',
+    cfg_webhook: 'Webhook URL', cfg_bot: 'Bot Token', cfg_chat: 'Chat ID',
+    cfg_wa_token: 'Access Token', cfg_wa_phone: 'Phone Number ID', cfg_wa_to: 'Recipient number',
+    ch_verified: 'Verified', ch_unverified: 'Unverified', ch_enabled: 'Enabled', ch_disabled: 'Disabled',
+    ch_test: 'Test', ch_enable: 'Enable', ch_disable: 'Disable', ch_delete: 'Delete', ch_edit: 'Edit',
+    ch_confirm_delete: 'Delete this channel?', ch_saved: 'Channel saved', ch_deleted: 'Channel deleted',
+    ch_test_ok: 'Test succeeded — channel verified', ch_test_fail: 'Test failed', ch_verify_first: 'Verify the channel with a successful test before enabling it',
+    ch_secret_set: 'set', ch_secret_unset: 'not set',
+    th_ch_name: 'Name', th_ch_type: 'Type', th_ch_site: 'Site', th_ch_status: 'Status', th_ch_actions: 'Actions',
+    nl_status: 'Status', nl_subject: 'Subject', nl_detail: 'Detail',
+    nav_policies: 'Policies', pol_title: 'Policies', pol_new: 'New policy', pol_site_filter: 'Filter by site',
+    pol_all_sites: 'All sites', pol_empty: 'No policies yet', pol_add_title: 'Add policy', pol_edit_title: 'Edit policy',
+    pol_name: 'Name', pol_site: 'Site', pol_mode: 'Mode', pol_mode_monitor: 'Monitor', pol_mode_block: 'Block',
+    pol_mode_hint: 'Monitor mode only records decisions; blocking is only enforced in block mode.',
+    pol_mode_mon: 'Monitor', pol_mode_blk: 'Block', pol_enabled: 'Enabled', pol_disabled: 'Disabled',
+    pol_edit: 'Edit policy', pol_delete: 'Delete', pol_enable: 'Enable', pol_disable: 'Disable',
+    pol_rules: 'Rules', pol_no_rules: 'No rules', pol_add_rule: 'Add rule', pol_edit_rule: 'Edit rule', pol_rule_new: 'New rule',
+    pol_rule_label: 'Label', pol_rule_match: 'Match type', pol_rule_pattern: 'Path pattern', pol_rule_action: 'Action', pol_rule_priority: 'Priority',
+    pol_act_monitor: 'Monitor', pol_act_allow: 'Allow', pol_act_block: 'Block',
+    pol_act_mon: 'Monitor', pol_act_alw: 'Allow', pol_act_blk: 'Block',
+    pol_confirm_delete: 'Delete this policy and all its rules?', pol_confirm_delete_rule: 'Delete this rule?',
+    pol_saved: 'Policy saved', pol_deleted: 'Policy deleted', pol_rule_saved: 'Rule saved', pol_rule_deleted: 'Rule deleted',
+    pol_name_required: 'Policy name is required', pol_pattern_required: 'Path pattern is required', pol_site_required: 'Select a site',
+    pol_locked_title: 'Sign in required', pol_locked_msg: 'Sign in to manage policies.',
+    th_pol_name: 'Policy', th_pol_mode: 'Mode', th_pol_status: 'Status', th_pol_actions: 'Actions',
+    th_rule_priority: 'Priority', th_rule_match: 'Match', th_rule_pattern: 'Pattern', th_rule_action: 'Action', th_rule_status: 'Status', th_rule_actions: 'Actions',
+    nav_ratelimit: 'Rate Limiting', rl_title: 'Rate Limiting', rl_new: 'New rule', rl_site_filter: 'Filter by site',
+    rl_all_sites: 'All sites', rl_empty: 'No rules yet', rl_add_title: 'Add rule', rl_edit_title: 'Edit rule',
+    rl_name: 'Name', rl_site: 'Site', rl_scope: 'Scope', rl_scope_ip: 'IP', rl_scope_key: 'API key',
+    rl_scope_hint: 'Scope decides what the counter tracks: the visitor IP or the API key. Monitor mode only measures without blocking.',
+    rl_limit: 'Request count', rl_window: 'Window (seconds)', rl_action: 'Action', rl_priority: 'Priority',
+    rl_act_monitor: 'Monitor', rl_act_block: 'Block',
+    rl_action_hint: 'Default is «Monitor»: violations are recorded without enforcing a block.',
+    rl_enabled: 'Enabled', rl_disabled: 'Disabled', rl_edit: 'Edit', rl_delete: 'Delete', rl_enable: 'Enable', rl_disable: 'Disable',
+    rl_confirm_delete: 'Delete this rule?', rl_saved: 'Rule saved', rl_deleted: 'Rule deleted',
+    rl_name_required: 'Rule name is required', rl_site_required: 'Select a site',
+    rl_locked_title: 'Sign in required', rl_locked_msg: 'Sign in to manage rate limits.',
+    th_rl_name: 'Rule', th_rl_scope: 'Scope', th_rl_limit: 'Limit / Window', th_rl_action: 'Action', th_rl_status: 'Status', th_rl_actions: 'Actions',
+    nav_botguard: 'Bot Detection', bg_title: 'Bot Detection', bg_monitor_badge: 'Monitor mode',
+    bg_intro: 'An initial phase that observes suspected automated behaviour in monitor mode only, without blocking. Results are heuristic suspicions (not confirmed facts), built from several combined signals — never User-Agent alone.',
+    bg_site_filter: 'Filter by site', bg_all_sites: 'All sites', bg_empty: 'No suspicious results',
+    bg_locked_title: 'Sign in required', bg_locked_msg: 'Sign in to view bot detection results.',
+    th_bg_time: 'Time', th_bg_site: 'Site', th_bg_ip: 'IP', th_bg_path: 'Path',
+    th_bg_score: 'Score', th_bg_level: 'Level', th_bg_reasons: 'Suspicion reasons',
+    bg_level_high: 'High', bg_level_medium: 'Medium', bg_level_low: 'Low', bg_level_none: 'None',
+    bg_monitored: 'Monitored (no block)',
+    bg_note: 'Heuristic — not a confirmed bot',
+    sig_missing_user_agent: 'Missing User-Agent',
+    sig_automation_marker_in_user_agent: 'Automation marker in User-Agent',
+    sig_unusually_short_user_agent: 'Unusually short User-Agent',
+    sig_missing_accept_language: 'Missing Accept-Language',
+    sig_missing_accept_header: 'Missing Accept',
+    sig_generic_accept_header: 'Generic Accept (*/*)',
+    sig_sensitive_path_targeted: 'Sensitive path targeted',
+    sig_missing_referer_on_sensitive_path: 'Missing Referer on sensitive path',
+    sig_high_request_rate: 'High request rate',
+    sig_too_regular_intervals: 'Machine-regular intervals',
+    nav_acl: 'Access Lists', acl_title: 'Allow & Block Lists', acl_new: 'New rule', acl_site_filter: 'Filter by site',
+    acl_all_sites: 'All sites', acl_type_filter: 'Filter by type', acl_all_types: 'All',
+    acl_type_allow: 'Allow', acl_type_block: 'Block',
+    acl_priority_hint: 'Block rules always take precedence over allow rules. An allow rule exempts only the selected scopes — it never bypasses all protections.',
+    acl_empty: 'No rules yet', acl_add_title: 'Add rule', acl_edit_title: 'Edit rule',
+    acl_list_type: 'Type', acl_site: 'Site', acl_match_type: 'Match type', acl_value: 'Value',
+    acl_match_ip: 'IP', acl_match_cidr: 'CIDR range', acl_match_path: 'Path (prefix)',
+    acl_mode: 'Action', acl_mode_monitor: 'Monitor', acl_mode_block: 'Block', acl_priority: 'Priority',
+    acl_scope: 'Scopes an allow rule exempts', acl_scope_policies: 'Policies', acl_scope_ratelimit: 'Rate limiting', acl_scope_botguard: 'Bot detection',
+    acl_scope_hint: 'Scopes apply to allow rules only. The default (no scopes) exempts nothing: an allow rule never bypasses all protections.',
+    acl_description: 'Description (optional)', acl_enabled: 'Enabled', acl_disabled: 'Disabled',
+    acl_edit: 'Edit', acl_delete: 'Delete', acl_enable: 'Enable', acl_disable: 'Disable',
+    acl_confirm_delete: 'Delete this rule?', acl_saved: 'Rule saved', acl_deleted: 'Rule deleted',
+    acl_value_required: 'Value is required', acl_site_required: 'Select a site',
+    acl_locked_title: 'Sign in required', acl_locked_msg: 'Sign in to manage access lists.',
+    th_acl_type: 'Type', th_acl_match: 'Match', th_acl_value: 'Value', th_acl_site: 'Site', th_acl_mode: 'Action', th_acl_scope: 'Scopes', th_acl_status: 'Status', th_acl_actions: 'Actions'
   }
 };
 
@@ -1067,6 +1817,15 @@ function authHeaders() {
 
 function esc(s) {
   return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function t(key) {
+  return (i18n[currentLang] && i18n[currentLang][key]) || key;
+}
+
+function fmtTime(s) {
+  if (!s) return '—';
+  return String(s).replace('T', ' ').slice(0, 16);
 }
 
 function riskLabel(score, level) {
@@ -1159,6 +1918,13 @@ function showView(target) {
   if (target === 'overview') loadOverview();
   if (target === 'alerts') loadAlerts();
   if (target === 'history') loadHistory();
+  if (target === 'sites') loadSites();
+  if (target === 'events') loadEvents();
+  if (target === 'notifications') loadNotifications();
+  if (target === 'policies') loadPoliciesView();
+  if (target === 'ratelimit') loadRateLimitsView();
+  if (target === 'botguard') loadBotGuardView();
+  if (target === 'acl') loadAclView();
   if (target === 'sysguard') fetchSysStatus();
   if (target === 'camguard') loadCamHealth();
 }
@@ -1360,6 +2126,1507 @@ async function loadHistory() {
 document.getElementById('scanModuleFilter')?.addEventListener('change', loadHistory);
 document.getElementById('scanMinRisk')?.addEventListener('change', loadHistory);
 document.getElementById('alertUnreadOnly')?.addEventListener('change', loadAlerts);
+
+// ===== Sites & API Keys =====
+let editingSiteId = null;
+let currentKeysSiteId = null;
+
+function statusChip(isActive) {
+  return '<span class="chip ' + (isActive ? 'chip-low' : 'chip-high') + '">'
+    + (isActive ? t('active') : t('inactive')) + '</span>';
+}
+
+async function loadSites() {
+  const wrap = document.getElementById('sitesTableWrap');
+  if (!wrap) return;
+  if (!localStorage.getItem('token')) {
+    wrap.className = 'empty-state';
+    wrap.innerHTML = '<strong>' + esc(t('sites_locked_title')) + '</strong>' + esc(t('sites_locked_msg'));
+    return;
+  }
+  try {
+    const res = await fetch('/api/sites', { headers: authHeaders() });
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    const items = data.sites || [];
+    if (!items.length) {
+      wrap.className = 'empty-state';
+      wrap.textContent = t('sites_empty');
+      return;
+    }
+    wrap.className = 'overflow-x';
+    wrap.innerHTML = `<table class="data-table"><thead><tr>
+        <th>${t('th_name')}</th><th>${t('th_domain')}</th><th>${t('th_status')}</th><th>${t('th_created')}</th><th></th>
+      </tr></thead><tbody>${items.map(s => `<tr>
+        <td>${esc(s.name)}</td>
+        <td>${esc(s.domain || '—')}</td>
+        <td>${statusChip(s.is_active)}</td>
+        <td>${esc(fmtTime(s.created_at))}</td>
+        <td style="white-space:nowrap;text-align:end">
+          <button type="button" class="btn btn-sm btn-ghost" data-act="keys" data-id="${s.id}">${t('manage_keys')}</button>
+          <button type="button" class="btn btn-sm btn-ghost" data-act="edit" data-id="${s.id}">${t('edit')}</button>
+          <button type="button" class="btn btn-sm btn-ghost" data-act="del" data-id="${s.id}">${t('delete')}</button>
+        </td></tr>`).join('')}</tbody></table>`;
+    wrap.querySelectorAll('button[data-act]').forEach(btn => {
+      const id = Number(btn.getAttribute('data-id'));
+      const site = items.find(x => x.id === id);
+      btn.addEventListener('click', () => {
+        const act = btn.getAttribute('data-act');
+        if (act === 'keys') openKeys(id, site ? site.name : ('#' + id));
+        else if (act === 'edit') openSiteForm(site);
+        else if (act === 'del') deleteSite(id, site ? site.name : ('#' + id));
+      });
+    });
+  } catch {
+    wrap.className = 'empty-state';
+    wrap.textContent = t('sites_empty');
+  }
+}
+
+function openSiteForm(site) {
+  editingSiteId = site ? site.id : null;
+  document.getElementById('siteFormTitle').textContent = site ? t('site_edit') : t('site_new');
+  document.getElementById('siteNameInput').value = site ? (site.name || '') : '';
+  document.getElementById('siteDomainInput').value = site ? (site.domain || '') : '';
+  document.getElementById('siteFormCard').style.display = '';
+  document.getElementById('siteNameInput').focus();
+}
+
+function closeSiteForm() {
+  document.getElementById('siteFormCard').style.display = 'none';
+  editingSiteId = null;
+}
+
+async function saveSite() {
+  const name = document.getElementById('siteNameInput').value.trim();
+  const domain = document.getElementById('siteDomainInput').value.trim();
+  if (!name) { showToast(t('site_name_required'), 'warn'); return; }
+  const btn = document.getElementById('siteSaveBtn');
+  btn.disabled = true;
+  try {
+    const url = editingSiteId ? '/api/sites/' + editingSiteId : '/api/sites';
+    const method = editingSiteId ? 'PATCH' : 'POST';
+    const res = await fetch(url, {
+      method,
+      headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, domain })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || t('err_generic'));
+    closeSiteForm();
+    await loadSites();
+    showToast(t('site_saved'), 'ok');
+  } catch (e) {
+    showToast(e.message || t('err_generic'), 'err');
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+async function deleteSite(id, name) {
+  if (!confirm(t('confirm_delete_site') + '  (' + name + ')')) return;
+  try {
+    const res = await fetch('/api/sites/' + id, { method: 'DELETE', headers: authHeaders() });
+    if (!res.ok) throw new Error();
+    if (currentKeysSiteId === id) closeKeys();
+    await loadSites();
+    showToast(t('site_deleted'), 'ok');
+  } catch {
+    showToast(t('err_generic'), 'err');
+  }
+}
+
+async function openKeys(siteId, siteName) {
+  currentKeysSiteId = siteId;
+  document.getElementById('siteKeysName').textContent = siteName;
+  document.getElementById('siteKeysCard').style.display = '';
+  hideSecret();
+  await loadKeys();
+}
+
+function closeKeys() {
+  document.getElementById('siteKeysCard').style.display = 'none';
+  document.getElementById('keysTableWrap').className = 'empty-state';
+  document.getElementById('keysTableWrap').textContent = t('keys_empty');
+  currentKeysSiteId = null;
+  hideSecret();
+}
+
+async function loadKeys() {
+  const wrap = document.getElementById('keysTableWrap');
+  if (!currentKeysSiteId) return;
+  try {
+    const res = await fetch('/api/sites/' + currentKeysSiteId + '/keys', { headers: authHeaders() });
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    const items = data.keys || [];
+    if (!items.length) {
+      wrap.className = 'empty-state';
+      wrap.textContent = t('keys_empty');
+      return;
+    }
+    wrap.className = 'overflow-x';
+    wrap.innerHTML = `<table class="data-table"><thead><tr>
+        <th>${t('th_key_name')}</th><th>${t('th_prefix')}</th><th>${t('th_status')}</th><th>${t('th_created')}</th><th>${t('th_last_used')}</th><th></th>
+      </tr></thead><tbody>${items.map(k => `<tr>
+        <td>${esc(k.name)}</td>
+        <td><code>${esc(k.key_prefix)}…</code></td>
+        <td>${statusChip(k.is_active)}</td>
+        <td>${esc(fmtTime(k.created_at))}</td>
+        <td>${esc(fmtTime(k.last_used_at))}</td>
+        <td style="white-space:nowrap;text-align:end">${k.is_active
+          ? `<button type="button" class="btn btn-sm btn-ghost" data-act="rotate" data-id="${k.id}">${t('key_rotate')}</button>
+             <button type="button" class="btn btn-sm btn-ghost" data-act="revoke" data-id="${k.id}">${t('key_revoke')}</button>`
+          : '<span style="color:var(--text-muted);font-size:0.78rem">—</span>'}</td>
+      </tr>`).join('')}</tbody></table>`;
+    wrap.querySelectorAll('button[data-act]').forEach(btn => {
+      const id = Number(btn.getAttribute('data-id'));
+      btn.addEventListener('click', () => {
+        if (btn.getAttribute('data-act') === 'revoke') revokeKey(id);
+        else rotateKey(id);
+      });
+    });
+  } catch {
+    wrap.className = 'empty-state';
+    wrap.textContent = t('keys_empty');
+  }
+}
+
+function showSecret(raw) {
+  const box = document.getElementById('keySecretBox');
+  if (!box) return;
+  box.innerHTML = `<div class="result-head"><strong>${t('secret_title')}</strong><span class="chip chip-medium">${t('secret_once')}</span></div>
+    <div class="result-body">
+      <div class="kv"><div class="k">${t('secret_warn')}</div><div class="v" style="word-break:break-all"><code>${esc(raw)}</code></div></div>
+      <button type="button" class="btn btn-sm" id="secretCopyBtn" style="margin-top:12px">${t('secret_copy')}</button>
+    </div>`;
+  box.classList.add('show');
+  document.getElementById('secretCopyBtn')?.addEventListener('click', () => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(raw).then(() => showToast(t('copied'), 'ok')).catch(() => {});
+    }
+  });
+}
+
+function hideSecret() {
+  const box = document.getElementById('keySecretBox');
+  if (!box) return;
+  box.classList.remove('show');
+  box.innerHTML = '';
+}
+
+async function createKey() {
+  if (!currentKeysSiteId) return;
+  const name = (document.getElementById('keyNameInput')?.value || 'default').trim() || 'default';
+  const btn = document.getElementById('keyNewBtn');
+  btn.disabled = true;
+  try {
+    const res = await fetch('/api/sites/' + currentKeysSiteId + '/keys', {
+      method: 'POST',
+      headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || t('err_generic'));
+    showSecret(data.key);
+    await loadKeys();
+    showToast(t('key_created'), 'ok');
+  } catch (e) {
+    showToast(e.message || t('err_generic'), 'err');
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+async function revokeKey(id) {
+  if (!confirm(t('confirm_revoke_key'))) return;
+  try {
+    const res = await fetch('/api/keys/' + id + '/revoke', { method: 'POST', headers: authHeaders() });
+    if (!res.ok) throw new Error();
+    await loadKeys();
+    showToast(t('key_revoked_msg'), 'ok');
+  } catch {
+    showToast(t('err_generic'), 'err');
+  }
+}
+
+async function rotateKey(id) {
+  if (!confirm(t('confirm_rotate_key'))) return;
+  try {
+    const res = await fetch('/api/keys/' + id + '/rotate', { method: 'POST', headers: authHeaders() });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || t('err_generic'));
+    showSecret(data.key);
+    await loadKeys();
+    showToast(t('key_rotated_msg'), 'ok');
+  } catch (e) {
+    showToast(e.message || t('err_generic'), 'err');
+  }
+}
+
+document.getElementById('siteNewBtn')?.addEventListener('click', () => openSiteForm(null));
+document.getElementById('siteFormCancel')?.addEventListener('click', closeSiteForm);
+document.getElementById('siteSaveBtn')?.addEventListener('click', saveSite);
+document.getElementById('siteKeysClose')?.addEventListener('click', closeKeys);
+document.getElementById('keyNewBtn')?.addEventListener('click', createKey);
+
+// ===== Security Events =====
+let evPage = 1;
+let evPages = 1;
+const EV_PER_PAGE = 25;
+
+const DECISION_LABELS = {
+  allow: { ar: 'سماح', en: 'Allow' },
+  deny: { ar: 'منع', en: 'Deny' },
+  challenge: { ar: 'تحدٍ', en: 'Challenge' },
+  suspicious: { ar: 'مشبوه', en: 'Suspicious' }
+};
+const ACTION_LABELS = {
+  allowed: { ar: 'سُمح', en: 'Allowed' },
+  rejected: { ar: 'رُفض', en: 'Rejected' },
+  monitored: { ar: 'مراقبة', en: 'Monitored' },
+  blocked: { ar: 'حُجب', en: 'Blocked' }
+};
+
+function evLabel(map, key) {
+  if (!key) return '—';
+  const m = map[key];
+  return m ? (currentLang === 'ar' ? m.ar : m.en) : key;
+}
+
+function decisionChip(d) {
+  const cls = d === 'allow' ? 'chip-low' : (d === 'deny' ? 'chip-critical' : 'chip-medium');
+  return '<span class="chip ' + cls + '">' + esc(evLabel(DECISION_LABELS, d)) + '</span>';
+}
+
+async function loadEventSiteOptions() {
+  const sel = document.getElementById('evSiteFilter');
+  if (!sel) return;
+  const cur = sel.value;
+  try {
+    const res = await fetch('/api/sites', { headers: authHeaders() });
+    if (!res.ok) return;
+    const data = await res.json();
+    const items = data.sites || [];
+    sel.innerHTML = '<option value="">' + esc(t('ev_all_sites')) + '</option>'
+      + items.map(s => '<option value="' + s.id + '">' + esc(s.name) + '</option>').join('');
+    sel.value = cur;
+  } catch { /* ignore */ }
+}
+
+async function loadEvents() {
+  const wrap = document.getElementById('eventsTableWrap');
+  if (!wrap) return;
+  if (!localStorage.getItem('token')) {
+    wrap.className = 'empty-state';
+    wrap.innerHTML = '<strong>' + esc(t('events_locked_title')) + '</strong> ' + esc(t('events_locked_msg'));
+    return;
+  }
+  await loadEventSiteOptions();
+
+  const params = new URLSearchParams();
+  params.set('page', evPage);
+  params.set('per_page', EV_PER_PAGE);
+  const site = document.getElementById('evSiteFilter').value;
+  const type = document.getElementById('evTypeFilter').value.trim();
+  const decision = document.getElementById('evDecisionFilter').value;
+  const path = document.getElementById('evPathFilter').value.trim();
+  const from = document.getElementById('evFromFilter').value;
+  const to = document.getElementById('evToFilter').value;
+  if (site) params.set('site_id', site);
+  if (type) params.set('event_type', type);
+  if (decision) params.set('decision', decision);
+  if (path) params.set('path', path);
+  if (from) params.set('date_from', from);
+  if (to) params.set('date_to', to);
+
+  try {
+    const res = await fetch('/api/events?' + params.toString(), { headers: authHeaders() });
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    const items = data.events || [];
+    evPages = data.pages || 1;
+    const info = document.getElementById('evPageInfo');
+    if (info) {
+      info.textContent = t('ev_page_info')
+        .replace('{page}', data.page || 1)
+        .replace('{pages}', evPages)
+        .replace('{total}', data.total || 0);
+    }
+    const prev = document.getElementById('evPrevBtn');
+    const next = document.getElementById('evNextBtn');
+    if (prev) prev.disabled = evPage <= 1;
+    if (next) next.disabled = evPage >= evPages;
+
+    if (!items.length) {
+      wrap.className = 'empty-state';
+      wrap.textContent = t('events_empty');
+      return;
+    }
+    wrap.className = 'overflow-x';
+    wrap.innerHTML = `<table class="data-table"><thead><tr>
+        <th>${t('th_time')}</th><th>${t('th_site')}</th><th>${t('th_type')}</th>
+        <th>${t('th_ip')}</th><th>${t('th_path')}</th><th>${t('th_decision')}</th>
+        <th>${t('th_action')}</th><th>${t('th_confidence')}</th>
+      </tr></thead><tbody>${items.map(ev => `<tr>
+        <td>${esc(fmtTime(ev.created_at))}</td>
+        <td>${esc(ev.site_id == null ? '—' : ev.site_id)}</td>
+        <td>${esc(ev.event_type)}${ev.threat_type ? ' · ' + esc(ev.threat_type) : ''}</td>
+        <td>${esc(ev.ip_address || '—')}</td>
+        <td><code>${esc((ev.method ? ev.method + ' ' : '') + (ev.path || '—'))}</code></td>
+        <td>${decisionChip(ev.decision)}</td>
+        <td>${esc(evLabel(ACTION_LABELS, ev.action_taken))}</td>
+        <td>${ev.confidence == null ? '—' : esc(ev.confidence)}</td>
+      </tr>`).join('')}</tbody></table>`;
+  } catch {
+    wrap.className = 'empty-state';
+    wrap.textContent = t('events_empty');
+  }
+}
+
+document.getElementById('evApplyBtn')?.addEventListener('click', () => { evPage = 1; loadEvents(); });
+document.getElementById('evResetBtn')?.addEventListener('click', () => {
+  ['evTypeFilter', 'evPathFilter', 'evFromFilter', 'evToFilter'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  const s = document.getElementById('evSiteFilter'); if (s) s.value = '';
+  const d = document.getElementById('evDecisionFilter'); if (d) d.value = '';
+  evPage = 1;
+  loadEvents();
+});
+document.getElementById('evPrevBtn')?.addEventListener('click', () => { if (evPage > 1) { evPage--; loadEvents(); } });
+document.getElementById('evNextBtn')?.addEventListener('click', () => { if (evPage < evPages) { evPage++; loadEvents(); } });
+
+// ===== Notification Channels =====
+let nlPage = 1;
+let nlPages = 1;
+let chEditingId = null;
+const NL_PER_PAGE = 25;
+
+const CH_FIELDS = {
+  email: [['to_address', 'cfgEmailTo', false], ['smtp_host', 'cfgSmtpHost', false], ['smtp_password', 'cfgSmtpPass', true]],
+  slack: [['webhook_url', 'cfgSlackWebhook', true]],
+  telegram: [['bot_token', 'cfgTgToken', true], ['chat_id', 'cfgTgChat', false]],
+  whatsapp: [['access_token', 'cfgWaToken', true], ['phone_number_id', 'cfgWaPhone', false], ['to_number', 'cfgWaTo', false]]
+};
+
+const NL_STATUS_LABELS = {
+  sent: { ar: 'أُرسل', en: 'Sent' },
+  failed: { ar: 'فشل', en: 'Failed' },
+  aggregated: { ar: 'مُجمّع', en: 'Aggregated' },
+  skipped: { ar: 'متخطّى', en: 'Skipped' },
+  test: { ar: 'اختبار', en: 'Test' }
+};
+
+function toggleCfgGroups() {
+  const type = document.getElementById('chTypeInput').value;
+  document.querySelectorAll('.cfg-group').forEach(el => {
+    el.style.display = (el.getAttribute('data-ct') === type) ? '' : 'none';
+  });
+}
+
+async function loadNotifSiteOptions() {
+  const sel = document.getElementById('chSiteInput');
+  if (!sel) return;
+  const cur = sel.value;
+  try {
+    const res = await fetch('/api/sites', { headers: authHeaders() });
+    if (!res.ok) return;
+    const data = await res.json();
+    sel.innerHTML = '<option value="">' + esc(t('ch_all_sites')) + '</option>'
+      + (data.sites || []).map(s => '<option value="' + s.id + '">' + esc(s.name) + '</option>').join('');
+    sel.value = cur;
+  } catch { /* ignore */ }
+}
+
+function chStatusChips(ch) {
+  const ver = ch.is_verified
+    ? '<span class="chip chip-low">' + esc(t('ch_verified')) + '</span>'
+    : '<span class="chip chip-medium">' + esc(t('ch_unverified')) + '</span>';
+  const en = ch.is_enabled
+    ? '<span class="chip chip-info">' + esc(t('ch_enabled')) + '</span>'
+    : '<span class="chip">' + esc(t('ch_disabled')) + '</span>';
+  return ver + ' ' + en;
+}
+
+function renderChannels(channels) {
+  const wrap = document.getElementById('channelsTableWrap');
+  if (!wrap) return;
+  if (!channels.length) {
+    wrap.className = 'empty-state';
+    wrap.textContent = t('ch_empty');
+    return;
+  }
+  wrap.className = 'overflow-x';
+  wrap.innerHTML = `<table class="data-table"><thead><tr>
+      <th>${t('th_ch_name')}</th><th>${t('th_ch_type')}</th><th>${t('th_ch_site')}</th>
+      <th>${t('th_ch_status')}</th><th>${t('th_ch_actions')}</th>
+    </tr></thead><tbody>${channels.map(ch => `<tr>
+      <td>${esc(ch.name)}</td>
+      <td>${esc(ch.channel_type)}</td>
+      <td>${ch.site_id == null ? '—' : esc(ch.site_id)}</td>
+      <td>${chStatusChips(ch)}</td>
+      <td>
+        <button type="button" class="btn btn-sm btn-ghost" data-chact="test" data-id="${ch.id}">${t('ch_test')}</button>
+        <button type="button" class="btn btn-sm btn-ghost" data-chact="toggle" data-id="${ch.id}" data-enabled="${ch.is_enabled ? 1 : 0}">${ch.is_enabled ? t('ch_disable') : t('ch_enable')}</button>
+        <button type="button" class="btn btn-sm btn-ghost" data-chact="edit" data-id="${ch.id}">${t('ch_edit')}</button>
+        <button type="button" class="btn btn-sm btn-ghost" data-chact="delete" data-id="${ch.id}">${t('ch_delete')}</button>
+      </td>
+    </tr>`).join('')}</tbody></table>`;
+}
+
+let chChannelsCache = [];
+
+async function loadChannels() {
+  const wrap = document.getElementById('channelsTableWrap');
+  if (!wrap) return;
+  if (!localStorage.getItem('token')) {
+    wrap.className = 'empty-state';
+    wrap.innerHTML = '<strong>' + esc(t('events_locked_title')) + '</strong> ' + esc(t('events_locked_msg'));
+    return;
+  }
+  try {
+    const res = await fetch('/api/notifications/channels', { headers: authHeaders() });
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    chChannelsCache = data.channels || [];
+    renderChannels(chChannelsCache);
+  } catch {
+    wrap.className = 'empty-state';
+    wrap.textContent = t('ch_empty');
+  }
+}
+
+function openChForm(channel) {
+  chEditingId = channel ? channel.id : null;
+  document.getElementById('chFormTitle').textContent = channel ? t('ch_edit') : t('ch_add_title');
+  document.getElementById('chTypeInput').value = channel ? channel.channel_type : 'email';
+  document.getElementById('chTypeInput').disabled = !!channel;
+  document.getElementById('chNameInput').value = channel ? channel.name : '';
+  document.getElementById('chMinSevInput').value = channel ? channel.min_severity : 'medium';
+  document.getElementById('chSiteInput').value = (channel && channel.site_id != null) ? String(channel.site_id) : '';
+  // Clear all config inputs, then prefill non-secret public values.
+  Object.values(CH_FIELDS).flat().forEach(([, id]) => { const el = document.getElementById(id); if (el) el.value = ''; });
+  if (channel) {
+    Object.entries(CH_FIELDS[channel.channel_type] || []).forEach(([key, id, secret]) => {
+      if (secret) return;
+      const el = document.getElementById(id);
+      if (el && channel.config && channel.config[key] != null) el.value = channel.config[key];
+    });
+  }
+  document.getElementById('chFormCard').style.display = '';
+  toggleCfgGroups();
+}
+
+function closeChForm() {
+  document.getElementById('chFormCard').style.display = 'none';
+  chEditingId = null;
+}
+
+function buildChConfig(type) {
+  const cfg = {};
+  (CH_FIELDS[type] || []).forEach(([key, id, secret]) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const val = el.value;
+    if (val === '' || val == null) return;  // omit empty (keeps existing secret on edit)
+    cfg[key] = val;
+  });
+  return cfg;
+}
+
+async function saveChannel() {
+  const type = document.getElementById('chTypeInput').value;
+  const name = document.getElementById('chNameInput').value.trim();
+  if (!name) { showToast(t('site_name_required'), 'error'); return; }
+  const payload = {
+    name,
+    min_severity: document.getElementById('chMinSevInput').value,
+    config: buildChConfig(type)
+  };
+  const siteVal = document.getElementById('chSiteInput').value;
+  payload.site_id = siteVal ? Number(siteVal) : null;
+
+  try {
+    let res;
+    if (chEditingId) {
+      res = await fetch('/api/notifications/channels/' + chEditingId, {
+        method: 'PATCH', headers: authHeaders(), body: JSON.stringify(payload)
+      });
+    } else {
+      payload.channel_type = type;
+      res = await fetch('/api/notifications/channels', {
+        method: 'POST', headers: authHeaders(), body: JSON.stringify(payload)
+      });
+    }
+    const data = await res.json();
+    if (!res.ok) { showToast(data.error || t('err_generic'), 'error'); return; }
+    showToast(t('ch_saved'), 'success');
+    closeChForm();
+    loadChannels();
+  } catch { showToast(t('err_generic'), 'error'); }
+}
+
+async function testChannelById(id) {
+  try {
+    const res = await fetch('/api/notifications/channels/' + id + '/test', { method: 'POST', headers: authHeaders() });
+    const data = await res.json();
+    if (res.ok && data.verified) showToast(t('ch_test_ok'), 'success');
+    else showToast((data.error || t('ch_test_fail')), 'error');
+    loadChannels();
+  } catch { showToast(t('err_generic'), 'error'); }
+}
+
+async function toggleChannel(id, enable) {
+  try {
+    const res = await fetch('/api/notifications/channels/' + id, {
+      method: 'PATCH', headers: authHeaders(), body: JSON.stringify({ is_enabled: enable })
+    });
+    const data = await res.json();
+    if (!res.ok) { showToast(data.error || t('err_generic'), 'error'); return; }
+    loadChannels();
+  } catch { showToast(t('err_generic'), 'error'); }
+}
+
+async function deleteChannelById(id) {
+  if (!confirm(t('ch_confirm_delete'))) return;
+  try {
+    const res = await fetch('/api/notifications/channels/' + id, { method: 'DELETE', headers: authHeaders() });
+    if (!res.ok) { showToast(t('err_generic'), 'error'); return; }
+    showToast(t('ch_deleted'), 'success');
+    loadChannels();
+  } catch { showToast(t('err_generic'), 'error'); }
+}
+
+async function loadNotifLog() {
+  const wrap = document.getElementById('notifLogTableWrap');
+  if (!wrap) return;
+  if (!localStorage.getItem('token')) {
+    wrap.className = 'empty-state';
+    wrap.textContent = t('events_locked_title');
+    return;
+  }
+  const params = new URLSearchParams();
+  params.set('page', nlPage);
+  params.set('per_page', NL_PER_PAGE);
+  try {
+    const res = await fetch('/api/notifications/log?' + params.toString(), { headers: authHeaders() });
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    const items = data.logs || [];
+    nlPages = data.pages || 1;
+    const info = document.getElementById('nlPageInfo');
+    if (info) {
+      info.textContent = t('ev_page_info')
+        .replace('{page}', data.page || 1).replace('{pages}', nlPages).replace('{total}', data.total || 0);
+    }
+    const prev = document.getElementById('nlPrevBtn');
+    const next = document.getElementById('nlNextBtn');
+    if (prev) prev.disabled = nlPage <= 1;
+    if (next) next.disabled = nlPage >= nlPages;
+
+    if (!items.length) { wrap.className = 'empty-state'; wrap.textContent = t('notif_log_empty'); return; }
+    wrap.className = 'overflow-x';
+    wrap.innerHTML = `<table class="data-table"><thead><tr>
+        <th>${t('th_time')}</th><th>${t('th_ch_type')}</th><th>${t('nl_status')}</th>
+        <th>${t('nl_subject')}</th><th>${t('nl_detail')}</th>
+      </tr></thead><tbody>${items.map(l => `<tr>
+        <td>${esc(fmtTime(l.created_at))}</td>
+        <td>${esc(l.channel_type || '—')}</td>
+        <td>${esc(evLabel(NL_STATUS_LABELS, l.status))}</td>
+        <td>${esc(l.subject || '—')}</td>
+        <td>${esc(l.detail || '—')}</td>
+      </tr>`).join('')}</tbody></table>`;
+  } catch {
+    wrap.className = 'empty-state';
+    wrap.textContent = t('notif_log_empty');
+  }
+}
+
+function loadNotifications() {
+  nlPage = 1;
+  loadNotifSiteOptions();
+  loadChannels();
+  loadNotifLog();
+}
+
+document.getElementById('chNewBtn')?.addEventListener('click', () => openChForm(null));
+document.getElementById('chFormCancel')?.addEventListener('click', closeChForm);
+document.getElementById('chSaveBtn')?.addEventListener('click', saveChannel);
+document.getElementById('chTypeInput')?.addEventListener('change', toggleCfgGroups);
+document.getElementById('channelsTableWrap')?.addEventListener('click', (e) => {
+  const btn = e.target.closest('button[data-chact]');
+  if (!btn) return;
+  const id = Number(btn.getAttribute('data-id'));
+  const act = btn.getAttribute('data-chact');
+  if (act === 'test') testChannelById(id);
+  else if (act === 'toggle') toggleChannel(id, btn.getAttribute('data-enabled') !== '1');
+  else if (act === 'edit') {
+    const ch = chChannelsCache.find(c => c.id === id);
+    if (ch) openChForm(ch);
+  } else if (act === 'delete') deleteChannelById(id);
+});
+document.getElementById('nlPrevBtn')?.addEventListener('click', () => { if (nlPage > 1) { nlPage--; loadNotifLog(); } });
+document.getElementById('nlNextBtn')?.addEventListener('click', () => { if (nlPage < nlPages) { nlPage++; loadNotifLog(); } });
+
+// ===== Policy Engine =====
+let polCache = [];
+let polSites = [];
+let polEditingId = null;
+let polRuleEditingId = null;
+let polRulePolicyId = null;
+
+const POL_MODE_LABELS = {
+  monitor: { ar: 'مراقبة', en: 'Monitor' },
+  block: { ar: 'حجب', en: 'Block' }
+};
+const POL_ACTION_LABELS = {
+  allow: { ar: 'سماح', en: 'Allow' },
+  monitor: { ar: 'مراقبة', en: 'Monitor' },
+  block: { ar: 'حجب', en: 'Block' }
+};
+
+function polModeChip(mode) {
+  const cls = mode === 'block' ? 'chip-critical' : 'chip-info';
+  return '<span class="chip ' + cls + '">' + esc(evLabel(POL_MODE_LABELS, mode)) + '</span>';
+}
+
+function polActionChip(action) {
+  const cls = action === 'block' ? 'chip-critical' : (action === 'allow' ? 'chip-low' : 'chip-medium');
+  return '<span class="chip ' + cls + '">' + esc(evLabel(POL_ACTION_LABELS, action)) + '</span>';
+}
+
+function polEnabledChip(enabled) {
+  return enabled
+    ? '<span class="chip chip-low">' + esc(t('pol_enabled')) + '</span>'
+    : '<span class="chip">' + esc(t('pol_disabled')) + '</span>';
+}
+
+function polSiteName(siteId) {
+  const s = polSites.find(x => x.id === siteId);
+  return s ? s.name : ('#' + siteId);
+}
+
+async function loadPolSiteOptions() {
+  const filter = document.getElementById('polSiteFilter');
+  const form = document.getElementById('polSiteInput');
+  if (!filter && !form) return;
+  try {
+    const res = await fetch('/api/sites', { headers: authHeaders() });
+    if (!res.ok) return;
+    const data = await res.json();
+    polSites = data.sites || [];
+    const curFilter = filter ? filter.value : '';
+    if (filter) {
+      filter.innerHTML = '<option value="">' + esc(t('pol_all_sites')) + '</option>'
+        + polSites.map(s => '<option value="' + s.id + '">' + esc(s.name) + '</option>').join('');
+      filter.value = curFilter;
+    }
+    if (form) {
+      const curForm = form.value;
+      form.innerHTML = polSites.map(s => '<option value="' + s.id + '">' + esc(s.name) + '</option>').join('');
+      if (curForm) form.value = curForm;
+    }
+  } catch { /* ignore */ }
+}
+
+function renderPolicies(policies) {
+  const wrap = document.getElementById('polTableWrap');
+  if (!wrap) return;
+  if (!policies.length) {
+    wrap.className = 'empty-state';
+    wrap.textContent = t('pol_empty');
+    return;
+  }
+  wrap.className = '';
+  wrap.innerHTML = policies.map(p => {
+    const rules = (p.rules || []).slice().sort((a, b) => (b.priority - a.priority) || (a.id - b.id));
+    const rulesHtml = rules.length
+      ? `<table class="data-table"><thead><tr>
+           <th>${t('th_rule_priority')}</th><th>${t('th_rule_match')}</th><th>${t('th_rule_pattern')}</th>
+           <th>${t('th_rule_action')}</th><th>${t('th_rule_status')}</th><th>${t('th_rule_actions')}</th>
+         </tr></thead><tbody>${rules.map(r => `<tr>
+           <td>${esc(r.priority)}</td>
+           <td>${esc(r.match_type)}</td>
+           <td>${esc(r.path_pattern)}</td>
+           <td>${polActionChip(r.action)}</td>
+           <td>${polEnabledChip(r.is_enabled)}</td>
+           <td>
+             <button type="button" class="btn btn-sm btn-ghost" data-polract="editrule" data-id="${r.id}">${t('pol_edit_rule')}</button>
+             <button type="button" class="btn btn-sm btn-ghost" data-polract="togglerule" data-id="${r.id}" data-enabled="${r.is_enabled ? 1 : 0}">${r.is_enabled ? t('pol_disable') : t('pol_enable')}</button>
+             <button type="button" class="btn btn-sm btn-ghost" data-polract="delrule" data-id="${r.id}">${t('pol_delete')}</button>
+           </td>
+         </tr>`).join('')}</tbody></table>`
+      : `<div class="empty-state">${esc(t('pol_no_rules'))}</div>`;
+    return `<div style="border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center">
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <strong>${esc(p.name)}</strong>
+          ${polModeChip(p.mode)} ${polEnabledChip(p.is_enabled)}
+          <span style="color:var(--text-dim);font-size:0.8rem">${esc(t('pol_site'))}: ${esc(polSiteName(p.site_id))}</span>
+        </div>
+        <div>
+          <button type="button" class="btn btn-sm btn-ghost" data-polact="addrule" data-id="${p.id}">${t('pol_rule_new')}</button>
+          <button type="button" class="btn btn-sm btn-ghost" data-polact="edit" data-id="${p.id}">${t('pol_edit')}</button>
+          <button type="button" class="btn btn-sm btn-ghost" data-polact="toggle" data-id="${p.id}" data-enabled="${p.is_enabled ? 1 : 0}">${p.is_enabled ? t('pol_disable') : t('pol_enable')}</button>
+          <button type="button" class="btn btn-sm btn-ghost" data-polact="delete" data-id="${p.id}">${t('pol_delete')}</button>
+        </div>
+      </div>
+      <div class="overflow-x" style="margin-top:10px">${rulesHtml}</div>
+    </div>`;
+  }).join('');
+}
+
+async function loadPolicies() {
+  const wrap = document.getElementById('polTableWrap');
+  if (!wrap) return;
+  if (!localStorage.getItem('token')) {
+    wrap.className = 'empty-state';
+    wrap.innerHTML = '<strong>' + esc(t('pol_locked_title')) + '</strong> ' + esc(t('pol_locked_msg'));
+    return;
+  }
+  const filter = document.getElementById('polSiteFilter');
+  const params = new URLSearchParams();
+  if (filter && filter.value) params.set('site_id', filter.value);
+  try {
+    const res = await fetch('/api/policies?' + params.toString(), { headers: authHeaders() });
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    polCache = data.policies || [];
+    renderPolicies(polCache);
+  } catch {
+    wrap.className = 'empty-state';
+    wrap.textContent = t('pol_empty');
+  }
+}
+
+function openPolForm(policy) {
+  polEditingId = policy ? policy.id : null;
+  document.getElementById('polFormTitle').textContent = policy ? t('pol_edit_title') : t('pol_add_title');
+  document.getElementById('polNameInput').value = policy ? policy.name : '';
+  document.getElementById('polModeInput').value = policy ? policy.mode : 'monitor';
+  const siteSel = document.getElementById('polSiteInput');
+  siteSel.disabled = !!policy;
+  if (policy) siteSel.value = String(policy.site_id);
+  document.getElementById('polFormCard').style.display = '';
+}
+
+function closePolForm() {
+  document.getElementById('polFormCard').style.display = 'none';
+  polEditingId = null;
+}
+
+async function savePolicy() {
+  const name = document.getElementById('polNameInput').value.trim();
+  if (!name) { showToast(t('pol_name_required'), 'error'); return; }
+  const mode = document.getElementById('polModeInput').value;
+  try {
+    let res;
+    if (polEditingId) {
+      res = await fetch('/api/policies/' + polEditingId, {
+        method: 'PATCH', headers: authHeaders(), body: JSON.stringify({ name, mode })
+      });
+    } else {
+      const siteVal = document.getElementById('polSiteInput').value;
+      if (!siteVal) { showToast(t('pol_site_required'), 'error'); return; }
+      res = await fetch('/api/policies', {
+        method: 'POST', headers: authHeaders(),
+        body: JSON.stringify({ name, mode, site_id: Number(siteVal) })
+      });
+    }
+    const data = await res.json();
+    if (!res.ok) { showToast(data.error || t('err_generic'), 'error'); return; }
+    showToast(t('pol_saved'), 'success');
+    closePolForm();
+    loadPolicies();
+  } catch { showToast(t('err_generic'), 'error'); }
+}
+
+function openPolRuleForm(policyId, rule) {
+  polRulePolicyId = policyId;
+  polRuleEditingId = rule ? rule.id : null;
+  document.getElementById('polRuleFormTitle').textContent = rule ? t('pol_edit_rule') : t('pol_add_rule');
+  document.getElementById('polRuleLabel').value = rule ? rule.label : '';
+  document.getElementById('polRuleMatch').value = rule ? rule.match_type : 'prefix';
+  document.getElementById('polRulePattern').value = rule ? rule.path_pattern : '';
+  document.getElementById('polRuleAction').value = rule ? rule.action : 'monitor';
+  document.getElementById('polRulePriority').value = rule ? rule.priority : 100;
+  document.getElementById('polRuleFormCard').style.display = '';
+}
+
+function closePolRuleForm() {
+  document.getElementById('polRuleFormCard').style.display = 'none';
+  polRuleEditingId = null;
+  polRulePolicyId = null;
+}
+
+async function saveRule() {
+  const label = document.getElementById('polRuleLabel').value.trim();
+  const pattern = document.getElementById('polRulePattern').value.trim();
+  if (!label) { showToast(t('pol_name_required'), 'error'); return; }
+  if (!pattern) { showToast(t('pol_pattern_required'), 'error'); return; }
+  const payload = {
+    label,
+    match_type: document.getElementById('polRuleMatch').value,
+    path_pattern: pattern,
+    action: document.getElementById('polRuleAction').value,
+    priority: Number(document.getElementById('polRulePriority').value) || 0
+  };
+  try {
+    let res;
+    if (polRuleEditingId) {
+      res = await fetch('/api/policies/rules/' + polRuleEditingId, {
+        method: 'PATCH', headers: authHeaders(), body: JSON.stringify(payload)
+      });
+    } else {
+      if (!polRulePolicyId) return;
+      res = await fetch('/api/policies/' + polRulePolicyId + '/rules', {
+        method: 'POST', headers: authHeaders(), body: JSON.stringify(payload)
+      });
+    }
+    const data = await res.json();
+    if (!res.ok) { showToast(data.error || t('err_generic'), 'error'); return; }
+    showToast(t('pol_rule_saved'), 'success');
+    closePolRuleForm();
+    loadPolicies();
+  } catch { showToast(t('err_generic'), 'error'); }
+}
+
+async function togglePolicy(id, enable) {
+  try {
+    const res = await fetch('/api/policies/' + id, {
+      method: 'PATCH', headers: authHeaders(), body: JSON.stringify({ is_enabled: enable })
+    });
+    const data = await res.json();
+    if (!res.ok) { showToast(data.error || t('err_generic'), 'error'); return; }
+    loadPolicies();
+  } catch { showToast(t('err_generic'), 'error'); }
+}
+
+async function deletePolicyById(id) {
+  if (!confirm(t('pol_confirm_delete'))) return;
+  try {
+    const res = await fetch('/api/policies/' + id, { method: 'DELETE', headers: authHeaders() });
+    if (!res.ok) { showToast(t('err_generic'), 'error'); return; }
+    showToast(t('pol_deleted'), 'success');
+    loadPolicies();
+  } catch { showToast(t('err_generic'), 'error'); }
+}
+
+async function toggleRule(id, enable) {
+  try {
+    const res = await fetch('/api/policies/rules/' + id, {
+      method: 'PATCH', headers: authHeaders(), body: JSON.stringify({ is_enabled: enable })
+    });
+    const data = await res.json();
+    if (!res.ok) { showToast(data.error || t('err_generic'), 'error'); return; }
+    loadPolicies();
+  } catch { showToast(t('err_generic'), 'error'); }
+}
+
+async function deleteRuleById(id) {
+  if (!confirm(t('pol_confirm_delete_rule'))) return;
+  try {
+    const res = await fetch('/api/policies/rules/' + id, { method: 'DELETE', headers: authHeaders() });
+    if (!res.ok) { showToast(t('err_generic'), 'error'); return; }
+    showToast(t('pol_rule_deleted'), 'success');
+    loadPolicies();
+  } catch { showToast(t('err_generic'), 'error'); }
+}
+
+function loadPoliciesView() {
+  loadPolSiteOptions().then(loadPolicies);
+}
+
+document.getElementById('polNewBtn')?.addEventListener('click', () => openPolForm(null));
+document.getElementById('polFormCancel')?.addEventListener('click', closePolForm);
+document.getElementById('polSaveBtn')?.addEventListener('click', savePolicy);
+document.getElementById('polRuleCancel')?.addEventListener('click', closePolRuleForm);
+document.getElementById('polRuleSaveBtn')?.addEventListener('click', saveRule);
+document.getElementById('polSiteFilter')?.addEventListener('change', () => loadPolicies());
+document.getElementById('polTableWrap')?.addEventListener('click', (e) => {
+  const btn = e.target.closest('button[data-polact],button[data-polract]');
+  if (!btn) return;
+  const id = Number(btn.getAttribute('data-id'));
+  const act = btn.getAttribute('data-polact');
+  if (act === 'addrule') { openPolRuleForm(id, null); return; }
+  if (act === 'edit') {
+    const p = polCache.find(x => x.id === id);
+    if (p) openPolForm(p);
+    return;
+  }
+  if (act === 'toggle') { togglePolicy(id, btn.getAttribute('data-enabled') !== '1'); return; }
+  if (act === 'delete') { deletePolicyById(id); return; }
+  // Rule actions: resolve the owning policy from the cache.
+  const ract = btn.getAttribute('data-polract');
+  const owner = polCache.find(p => (p.rules || []).some(r => r.id === id));
+  const rule = owner ? owner.rules.find(r => r.id === id) : null;
+  if (ract === 'editrule' && owner && rule) openPolRuleForm(owner.id, rule);
+  else if (ract === 'togglerule') toggleRule(id, btn.getAttribute('data-enabled') !== '1');
+  else if (ract === 'delrule') deleteRuleById(id);
+});
+
+// ===== Rate Limiting =====
+let rlCache = [];
+let rlSites = [];
+let rlEditingId = null;
+
+const RL_SCOPE_LABELS = {
+  ip: { ar: 'IP', en: 'IP' },
+  api_key: { ar: 'مفتاح API', en: 'API key' }
+};
+const RL_ACTION_LABELS = {
+  monitor: { ar: 'مراقبة', en: 'Monitor' },
+  block: { ar: 'حجب', en: 'Block' }
+};
+
+function rlScopeChip(scope) {
+  return '<span class="chip chip-info">' + esc(evLabel(RL_SCOPE_LABELS, scope)) + '</span>';
+}
+
+function rlActionChip(action) {
+  const cls = action === 'block' ? 'chip-critical' : 'chip-medium';
+  return '<span class="chip ' + cls + '">' + esc(evLabel(RL_ACTION_LABELS, action)) + '</span>';
+}
+
+function rlStatusChip(enabled) {
+  return enabled
+    ? '<span class="chip chip-low">' + esc(t('rl_enabled')) + '</span>'
+    : '<span class="chip">' + esc(t('rl_disabled')) + '</span>';
+}
+
+function rlSiteName(siteId) {
+  const s = rlSites.find(x => x.id === siteId);
+  return s ? s.name : ('#' + siteId);
+}
+
+async function loadRlSiteOptions() {
+  const filter = document.getElementById('rlSiteFilter');
+  const form = document.getElementById('rlSiteInput');
+  if (!filter && !form) return;
+  try {
+    const res = await fetch('/api/sites', { headers: authHeaders() });
+    if (!res.ok) return;
+    const data = await res.json();
+    rlSites = data.sites || [];
+    const curFilter = filter ? filter.value : '';
+    if (filter) {
+      filter.innerHTML = '<option value="">' + esc(t('rl_all_sites')) + '</option>'
+        + rlSites.map(s => '<option value="' + s.id + '">' + esc(s.name) + '</option>').join('');
+      filter.value = curFilter;
+    }
+    if (form) {
+      const curForm = form.value;
+      form.innerHTML = rlSites.map(s => '<option value="' + s.id + '">' + esc(s.name) + '</option>').join('');
+      if (curForm) form.value = curForm;
+    }
+  } catch { /* ignore */ }
+}
+
+function renderRateLimits(rules) {
+  const wrap = document.getElementById('rlTableWrap');
+  if (!wrap) return;
+  if (!rules.length) {
+    wrap.className = 'empty-state';
+    wrap.textContent = t('rl_empty');
+    return;
+  }
+  wrap.className = 'overflow-x';
+  wrap.innerHTML = `<table class="data-table"><thead><tr>
+      <th>${t('th_rl_name')}</th><th>${t('th_rl_scope')}</th><th>${t('th_rl_limit')}</th>
+      <th>${t('th_rl_action')}</th><th>${t('th_rl_status')}</th><th>${t('th_rl_actions')}</th>
+    </tr></thead><tbody>${rules.map(r => `<tr>
+      <td>${esc(r.name)}<div style="color:var(--text-dim);font-size:0.75rem">${esc(t('rl_site'))}: ${esc(rlSiteName(r.site_id))} · ${esc(t('rl_priority'))}: ${esc(r.priority)}</div></td>
+      <td>${rlScopeChip(r.scope)}</td>
+      <td>${esc(r.limit_count)} / ${esc(r.window_seconds)}s</td>
+      <td>${rlActionChip(r.action)}</td>
+      <td>${rlStatusChip(r.is_enabled)}</td>
+      <td>
+        <button type="button" class="btn btn-sm btn-ghost" data-rlact="edit" data-id="${r.id}">${t('rl_edit')}</button>
+        <button type="button" class="btn btn-sm btn-ghost" data-rlact="toggle" data-id="${r.id}" data-enabled="${r.is_enabled ? 1 : 0}">${r.is_enabled ? t('rl_disable') : t('rl_enable')}</button>
+        <button type="button" class="btn btn-sm btn-ghost" data-rlact="delete" data-id="${r.id}">${t('rl_delete')}</button>
+      </td>
+    </tr>`).join('')}</tbody></table>`;
+}
+
+async function loadRateLimits() {
+  const wrap = document.getElementById('rlTableWrap');
+  if (!wrap) return;
+  if (!localStorage.getItem('token')) {
+    wrap.className = 'empty-state';
+    wrap.innerHTML = '<strong>' + esc(t('rl_locked_title')) + '</strong> ' + esc(t('rl_locked_msg'));
+    return;
+  }
+  const filter = document.getElementById('rlSiteFilter');
+  const params = new URLSearchParams();
+  if (filter && filter.value) params.set('site_id', filter.value);
+  try {
+    const res = await fetch('/api/ratelimit/rules?' + params.toString(), { headers: authHeaders() });
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    rlCache = data.rules || [];
+    renderRateLimits(rlCache);
+  } catch {
+    wrap.className = 'empty-state';
+    wrap.textContent = t('rl_empty');
+  }
+}
+
+function openRlForm(rule) {
+  rlEditingId = rule ? rule.id : null;
+  document.getElementById('rlFormTitle').textContent = rule ? t('rl_edit_title') : t('rl_add_title');
+  document.getElementById('rlNameInput').value = rule ? rule.name : '';
+  document.getElementById('rlScopeInput').value = rule ? rule.scope : 'ip';
+  document.getElementById('rlLimitInput').value = rule ? rule.limit_count : 60;
+  document.getElementById('rlWindowInput').value = rule ? rule.window_seconds : 60;
+  document.getElementById('rlActionInput').value = rule ? rule.action : 'monitor';
+  document.getElementById('rlPriorityInput').value = rule ? rule.priority : 100;
+  const siteSel = document.getElementById('rlSiteInput');
+  siteSel.disabled = !!rule;
+  if (rule) siteSel.value = String(rule.site_id);
+  document.getElementById('rlFormCard').style.display = '';
+}
+
+function closeRlForm() {
+  document.getElementById('rlFormCard').style.display = 'none';
+  rlEditingId = null;
+}
+
+async function saveRateLimitRule() {
+  const name = document.getElementById('rlNameInput').value.trim();
+  if (!name) { showToast(t('rl_name_required'), 'error'); return; }
+  const payload = {
+    name,
+    scope: document.getElementById('rlScopeInput').value,
+    limit_count: Number(document.getElementById('rlLimitInput').value),
+    window_seconds: Number(document.getElementById('rlWindowInput').value),
+    action: document.getElementById('rlActionInput').value,
+    priority: Number(document.getElementById('rlPriorityInput').value) || 0
+  };
+  try {
+    let res;
+    if (rlEditingId) {
+      res = await fetch('/api/ratelimit/rules/' + rlEditingId, {
+        method: 'PATCH', headers: authHeaders(), body: JSON.stringify(payload)
+      });
+    } else {
+      const siteVal = document.getElementById('rlSiteInput').value;
+      if (!siteVal) { showToast(t('rl_site_required'), 'error'); return; }
+      payload.site_id = Number(siteVal);
+      res = await fetch('/api/ratelimit/rules', {
+        method: 'POST', headers: authHeaders(), body: JSON.stringify(payload)
+      });
+    }
+    const data = await res.json();
+    if (!res.ok) { showToast(data.error || t('err_generic'), 'error'); return; }
+    showToast(t('rl_saved'), 'success');
+    closeRlForm();
+    loadRateLimits();
+  } catch { showToast(t('err_generic'), 'error'); }
+}
+
+async function toggleRateLimitRule(id, enable) {
+  try {
+    const res = await fetch('/api/ratelimit/rules/' + id, {
+      method: 'PATCH', headers: authHeaders(), body: JSON.stringify({ is_enabled: enable })
+    });
+    const data = await res.json();
+    if (!res.ok) { showToast(data.error || t('err_generic'), 'error'); return; }
+    loadRateLimits();
+  } catch { showToast(t('err_generic'), 'error'); }
+}
+
+async function deleteRateLimitRuleById(id) {
+  if (!confirm(t('rl_confirm_delete'))) return;
+  try {
+    const res = await fetch('/api/ratelimit/rules/' + id, { method: 'DELETE', headers: authHeaders() });
+    if (!res.ok) { showToast(t('err_generic'), 'error'); return; }
+    showToast(t('rl_deleted'), 'success');
+    loadRateLimits();
+  } catch { showToast(t('err_generic'), 'error'); }
+}
+
+function loadRateLimitsView() {
+  loadRlSiteOptions().then(loadRateLimits);
+}
+
+document.getElementById('rlNewBtn')?.addEventListener('click', () => openRlForm(null));
+document.getElementById('rlFormCancel')?.addEventListener('click', closeRlForm);
+document.getElementById('rlSaveBtn')?.addEventListener('click', saveRateLimitRule);
+document.getElementById('rlSiteFilter')?.addEventListener('change', () => loadRateLimits());
+document.getElementById('rlTableWrap')?.addEventListener('click', (e) => {
+  const btn = e.target.closest('button[data-rlact]');
+  if (!btn) return;
+  const id = Number(btn.getAttribute('data-id'));
+  const act = btn.getAttribute('data-rlact');
+  if (act === 'edit') {
+    const r = rlCache.find(x => x.id === id);
+    if (r) openRlForm(r);
+    return;
+  }
+  if (act === 'toggle') { toggleRateLimitRule(id, btn.getAttribute('data-enabled') !== '1'); return; }
+  if (act === 'delete') { deleteRateLimitRuleById(id); return; }
+});
+
+// ===== Bot Detection =====
+let bgPage = 1;
+let bgPages = 1;
+let bgSites = [];
+const BG_PER_PAGE = 25;
+
+const BG_LEVEL_LABELS = {
+  high: { ar: 'مرتفع', en: 'High' },
+  medium: { ar: 'متوسط', en: 'Medium' },
+  low: { ar: 'منخفض', en: 'Low' },
+  none: { ar: 'لا شيء', en: 'None' }
+};
+
+function bgLevelChip(level) {
+  const cls = level === 'high' ? 'chip-critical' : (level === 'medium' ? 'chip-medium' : 'chip-low');
+  return '<span class="chip ' + cls + '">' + esc(evLabel(BG_LEVEL_LABELS, level)) + '</span>';
+}
+
+function bgReasonLabel(code) {
+  const key = 'sig_' + code;
+  return (i18n[currentLang] && i18n[currentLang][key]) || code;
+}
+
+function bgSiteName(siteId) {
+  const s = bgSites.find(x => x.id === siteId);
+  return s ? s.name : ('#' + siteId);
+}
+
+async function loadBgSiteOptions() {
+  const sel = document.getElementById('bgSiteFilter');
+  if (!sel) return;
+  const cur = sel.value;
+  try {
+    const res = await fetch('/api/sites', { headers: authHeaders() });
+    if (!res.ok) return;
+    const data = await res.json();
+    bgSites = data.sites || [];
+    sel.innerHTML = '<option value="">' + esc(t('bg_all_sites')) + '</option>'
+      + bgSites.map(s => '<option value="' + s.id + '">' + esc(s.name) + '</option>').join('');
+    sel.value = cur;
+  } catch { /* ignore */ }
+}
+
+async function loadBotGuard() {
+  const wrap = document.getElementById('bgTableWrap');
+  if (!wrap) return;
+  if (!localStorage.getItem('token')) {
+    wrap.className = 'empty-state';
+    wrap.innerHTML = '<strong>' + esc(t('bg_locked_title')) + '</strong> ' + esc(t('bg_locked_msg'));
+    return;
+  }
+  const params = new URLSearchParams();
+  params.set('page', bgPage);
+  params.set('per_page', BG_PER_PAGE);
+  params.set('event_type', 'bot_suspected');
+  const site = document.getElementById('bgSiteFilter').value;
+  if (site) params.set('site_id', site);
+  try {
+    const res = await fetch('/api/events?' + params.toString(), { headers: authHeaders() });
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    const items = data.events || [];
+    bgPages = data.pages || 1;
+    const info = document.getElementById('bgPageInfo');
+    if (info) {
+      info.textContent = t('ev_page_info')
+        .replace('{page}', data.page || 1)
+        .replace('{pages}', bgPages)
+        .replace('{total}', data.total || 0);
+    }
+    const prev = document.getElementById('bgPrevBtn');
+    const next = document.getElementById('bgNextBtn');
+    if (prev) prev.disabled = bgPage <= 1;
+    if (next) next.disabled = bgPage >= bgPages;
+
+    if (!items.length) {
+      wrap.className = 'empty-state';
+      wrap.textContent = t('bg_empty');
+      return;
+    }
+    wrap.className = 'overflow-x';
+    wrap.innerHTML = `<table class="data-table"><thead><tr>
+        <th>${t('th_bg_time')}</th><th>${t('th_bg_site')}</th><th>${t('th_bg_ip')}</th>
+        <th>${t('th_bg_path')}</th><th>${t('th_bg_score')}</th><th>${t('th_bg_level')}</th>
+        <th>${t('th_bg_reasons')}</th>
+      </tr></thead><tbody>${items.map(ev => {
+        const d = ev.details || {};
+        const reasons = d.reasons || [];
+        const badges = reasons.length
+          ? reasons.map(r => '<span class="chip chip-medium" style="margin:2px">' + esc(bgReasonLabel(r)) + '</span>').join('')
+          : '—';
+        const score = d.score == null
+          ? (ev.confidence == null ? '—' : Math.round(ev.confidence * 100))
+          : d.score;
+        return `<tr>
+        <td>${esc(fmtTime(ev.created_at))}</td>
+        <td>${esc(ev.site_id == null ? '—' : bgSiteName(ev.site_id))}</td>
+        <td>${esc(ev.ip_address || '—')}</td>
+        <td><code>${esc((ev.method ? ev.method + ' ' : '') + (ev.path || '—'))}</code></td>
+        <td>${esc(score)}</td>
+        <td>${bgLevelChip(d.level || 'low')}</td>
+        <td>${badges}</td>
+      </tr>`; }).join('')}</tbody></table>`;
+  } catch {
+    wrap.className = 'empty-state';
+    wrap.textContent = t('bg_empty');
+  }
+}
+
+function loadBotGuardView() {
+  loadBgSiteOptions().then(loadBotGuard);
+}
+
+document.getElementById('bgSiteFilter')?.addEventListener('change', () => { bgPage = 1; loadBotGuard(); });
+document.getElementById('bgPrevBtn')?.addEventListener('click', () => { if (bgPage > 1) { bgPage--; loadBotGuard(); } });
+document.getElementById('bgNextBtn')?.addEventListener('click', () => { if (bgPage < bgPages) { bgPage++; loadBotGuard(); } });
+
+// ===== Access Lists =====
+let aclCache = [];
+let aclSites = [];
+let aclEditingId = null;
+
+const ACL_TYPE_LABELS = {
+  allow: { ar: 'سماح', en: 'Allow' },
+  block: { ar: 'حظر', en: 'Block' }
+};
+const ACL_MODE_LABELS = {
+  monitor: { ar: 'مراقبة', en: 'Monitor' },
+  block: { ar: 'حجب', en: 'Block' }
+};
+const ACL_MATCH_LABELS = {
+  ip: { ar: 'IP', en: 'IP' },
+  cidr: { ar: 'CIDR', en: 'CIDR' },
+  path: { ar: 'مسار', en: 'Path' }
+};
+const ACL_SCOPE_LABELS = {
+  policies: { ar: 'السياسات', en: 'Policies' },
+  ratelimit: { ar: 'تحديد المعدل', en: 'Rate limiting' },
+  botguard: { ar: 'كشف البوتات', en: 'Bot detection' }
+};
+
+function aclTypeChip(type) {
+  const cls = type === 'block' ? 'chip-critical' : 'chip-low';
+  return '<span class="chip ' + cls + '">' + esc(evLabel(ACL_TYPE_LABELS, type)) + '</span>';
+}
+
+function aclModeChip(mode) {
+  const cls = mode === 'block' ? 'chip-critical' : 'chip-medium';
+  return '<span class="chip ' + cls + '">' + esc(evLabel(ACL_MODE_LABELS, mode)) + '</span>';
+}
+
+function aclScopeChips(scope) {
+  if (!scope || !scope.length) return '<span style="color:var(--text-dim)">—</span>';
+  return scope.map(s => '<span class="chip chip-info" style="margin:2px">' + esc(evLabel(ACL_SCOPE_LABELS, s)) + '</span>').join('');
+}
+
+function aclStatusChip(enabled) {
+  return enabled
+    ? '<span class="chip chip-low">' + esc(t('acl_enabled')) + '</span>'
+    : '<span class="chip">' + esc(t('acl_disabled')) + '</span>';
+}
+
+function aclSiteName(siteId) {
+  const s = aclSites.find(x => x.id === siteId);
+  return s ? s.name : ('#' + siteId);
+}
+
+async function loadAclSiteOptions() {
+  const filter = document.getElementById('aclSiteFilter');
+  const form = document.getElementById('aclSiteInput');
+  if (!filter && !form) return;
+  try {
+    const res = await fetch('/api/sites', { headers: authHeaders() });
+    if (!res.ok) return;
+    const data = await res.json();
+    aclSites = data.sites || [];
+    const curFilter = filter ? filter.value : '';
+    if (filter) {
+      filter.innerHTML = '<option value="">' + esc(t('acl_all_sites')) + '</option>'
+        + aclSites.map(s => '<option value="' + s.id + '">' + esc(s.name) + '</option>').join('');
+      filter.value = curFilter;
+    }
+    if (form) {
+      const curForm = form.value;
+      form.innerHTML = aclSites.map(s => '<option value="' + s.id + '">' + esc(s.name) + '</option>').join('');
+      if (curForm) form.value = curForm;
+    }
+  } catch { /* ignore */ }
+}
+
+function renderAclRules(rules) {
+  const wrap = document.getElementById('aclTableWrap');
+  if (!wrap) return;
+  if (!rules.length) {
+    wrap.className = 'empty-state';
+    wrap.textContent = t('acl_empty');
+    return;
+  }
+  wrap.className = 'overflow-x';
+  wrap.innerHTML = `<table class="data-table"><thead><tr>
+      <th>${t('th_acl_type')}</th><th>${t('th_acl_match')}</th><th>${t('th_acl_value')}</th>
+      <th>${t('th_acl_site')}</th><th>${t('th_acl_mode')}</th><th>${t('th_acl_scope')}</th>
+      <th>${t('th_acl_status')}</th><th>${t('th_acl_actions')}</th>
+    </tr></thead><tbody>${rules.map(r => `<tr>
+      <td>${aclTypeChip(r.list_type)}</td>
+      <td>${esc(evLabel(ACL_MATCH_LABELS, r.match_type))}</td>
+      <td><code>${esc(r.value)}</code></td>
+      <td>${esc(aclSiteName(r.site_id))}<div style="color:var(--text-dim);font-size:0.75rem">${esc(t('acl_priority'))}: ${esc(r.priority)}</div></td>
+      <td>${aclModeChip(r.mode)}</td>
+      <td>${aclScopeChips(r.scope)}</td>
+      <td>${aclStatusChip(r.is_active)}</td>
+      <td>
+        <button type="button" class="btn btn-sm btn-ghost" data-aclact="edit" data-id="${r.id}">${t('acl_edit')}</button>
+        <button type="button" class="btn btn-sm btn-ghost" data-aclact="toggle" data-id="${r.id}" data-enabled="${r.is_active ? 1 : 0}">${r.is_active ? t('acl_disable') : t('acl_enable')}</button>
+        <button type="button" class="btn btn-sm btn-ghost" data-aclact="delete" data-id="${r.id}">${t('acl_delete')}</button>
+      </td>
+    </tr>`).join('')}</tbody></table>`;
+}
+
+async function loadAclRules() {
+  const wrap = document.getElementById('aclTableWrap');
+  if (!wrap) return;
+  if (!localStorage.getItem('token')) {
+    wrap.className = 'empty-state';
+    wrap.innerHTML = '<strong>' + esc(t('acl_locked_title')) + '</strong> ' + esc(t('acl_locked_msg'));
+    return;
+  }
+  const params = new URLSearchParams();
+  const site = document.getElementById('aclSiteFilter');
+  const type = document.getElementById('aclTypeFilter');
+  if (site && site.value) params.set('site_id', site.value);
+  if (type && type.value) params.set('list_type', type.value);
+  try {
+    const res = await fetch('/api/acl/rules?' + params.toString(), { headers: authHeaders() });
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    aclCache = data.rules || [];
+    renderAclRules(aclCache);
+  } catch {
+    wrap.className = 'empty-state';
+    wrap.textContent = t('acl_empty');
+  }
+}
+
+function aclScopeFields() {
+  return [
+    ['aclScopePolicies', 'policies'],
+    ['aclScopeRatelimit', 'ratelimit'],
+    ['aclScopeBotguard', 'botguard']
+  ];
+}
+
+function openAclForm(rule) {
+  aclEditingId = rule ? rule.id : null;
+  document.getElementById('aclFormTitle').textContent = rule ? t('acl_edit_title') : t('acl_add_title');
+  document.getElementById('aclListTypeInput').value = rule ? rule.list_type : 'block';
+  document.getElementById('aclMatchTypeInput').value = rule ? rule.match_type : 'ip';
+  document.getElementById('aclValueInput').value = rule ? rule.value : '';
+  document.getElementById('aclModeInput').value = rule ? rule.mode : 'monitor';
+  document.getElementById('aclPriorityInput').value = rule ? rule.priority : 100;
+  document.getElementById('aclDescInput').value = rule ? (rule.description || '') : '';
+  const scope = (rule && rule.scope) ? rule.scope : [];
+  aclScopeFields().forEach(pair => {
+    const el = document.getElementById(pair[0]);
+    if (el) el.checked = scope.indexOf(pair[1]) !== -1;
+  });
+  const siteSel = document.getElementById('aclSiteInput');
+  siteSel.disabled = !!rule;
+  if (rule) siteSel.value = String(rule.site_id);
+  document.getElementById('aclFormCard').style.display = '';
+}
+
+function closeAclForm() {
+  document.getElementById('aclFormCard').style.display = 'none';
+  aclEditingId = null;
+}
+
+async function saveAclRule() {
+  const value = document.getElementById('aclValueInput').value.trim();
+  if (!value) { showToast(t('acl_value_required'), 'error'); return; }
+  const scopes = aclScopeFields().filter(pair => {
+    const el = document.getElementById(pair[0]);
+    return el && el.checked;
+  }).map(pair => pair[1]);
+  const payload = {
+    list_type: document.getElementById('aclListTypeInput').value,
+    match_type: document.getElementById('aclMatchTypeInput').value,
+    value: value,
+    scope: scopes,
+    mode: document.getElementById('aclModeInput').value,
+    priority: Number(document.getElementById('aclPriorityInput').value) || 0,
+    description: document.getElementById('aclDescInput').value.trim()
+  };
+  try {
+    let res;
+    if (aclEditingId) {
+      res = await fetch('/api/acl/rules/' + aclEditingId, {
+        method: 'PATCH', headers: authHeaders(), body: JSON.stringify(payload)
+      });
+    } else {
+      const siteVal = document.getElementById('aclSiteInput').value;
+      if (!siteVal) { showToast(t('acl_site_required'), 'error'); return; }
+      payload.site_id = Number(siteVal);
+      res = await fetch('/api/acl/rules', {
+        method: 'POST', headers: authHeaders(), body: JSON.stringify(payload)
+      });
+    }
+    const data = await res.json();
+    if (!res.ok) { showToast(data.error || t('err_generic'), 'error'); return; }
+    showToast(t('acl_saved'), 'success');
+    closeAclForm();
+    loadAclRules();
+  } catch { showToast(t('err_generic'), 'error'); }
+}
+
+async function toggleAclRule(id, enable) {
+  try {
+    const res = await fetch('/api/acl/rules/' + id, {
+      method: 'PATCH', headers: authHeaders(), body: JSON.stringify({ is_active: enable })
+    });
+    const data = await res.json();
+    if (!res.ok) { showToast(data.error || t('err_generic'), 'error'); return; }
+    loadAclRules();
+  } catch { showToast(t('err_generic'), 'error'); }
+}
+
+async function deleteAclRuleById(id) {
+  if (!confirm(t('acl_confirm_delete'))) return;
+  try {
+    const res = await fetch('/api/acl/rules/' + id, { method: 'DELETE', headers: authHeaders() });
+    if (!res.ok) { showToast(t('err_generic'), 'error'); return; }
+    showToast(t('acl_deleted'), 'success');
+    loadAclRules();
+  } catch { showToast(t('err_generic'), 'error'); }
+}
+
+function loadAclView() {
+  loadAclSiteOptions().then(loadAclRules);
+}
+
+document.getElementById('aclNewBtn')?.addEventListener('click', () => openAclForm(null));
+document.getElementById('aclFormCancel')?.addEventListener('click', closeAclForm);
+document.getElementById('aclSaveBtn')?.addEventListener('click', saveAclRule);
+document.getElementById('aclSiteFilter')?.addEventListener('change', () => loadAclRules());
+document.getElementById('aclTypeFilter')?.addEventListener('change', () => loadAclRules());
+document.getElementById('aclTableWrap')?.addEventListener('click', (e) => {
+  const btn = e.target.closest('button[data-aclact]');
+  if (!btn) return;
+  const id = Number(btn.getAttribute('data-id'));
+  const act = btn.getAttribute('data-aclact');
+  if (act === 'edit') {
+    const r = aclCache.find(x => x.id === id);
+    if (r) openAclForm(r);
+    return;
+  }
+  if (act === 'toggle') { toggleAclRule(id, btn.getAttribute('data-enabled') !== '1'); return; }
+  if (act === 'delete') { deleteAclRuleById(id); return; }
+});
 
 // ===== DocGuard =====
 document.getElementById('docDemo')?.addEventListener('click', () => {

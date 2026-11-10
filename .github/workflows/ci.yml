@@ -1,0 +1,67 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  python-tests:
+    name: Python tests (pytest)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.14
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      # Light runtime dependencies only. The heavy optional deps used by
+      # camguard/docguard/sysguard (opencv, ultralytics/torch, numpy, pypdf,
+      # psutil) are all imported behind try/except ImportError and are not
+      # exercised by the test-suite, so they are intentionally omitted here.
+      - name: Install test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install \
+            "Flask>=3.1" \
+            "Flask-SQLAlchemy>=3.1.1" \
+            "Flask-Cors>=4.0" \
+            "SQLAlchemy>=2.0" \
+            "Werkzeug>=3.0" \
+            "PyJWT>=2.9" \
+            "bcrypt>=4.2" \
+            "python-dotenv>=1.0" \
+            "requests>=2.31" \
+            "psutil>=5.9.8" \
+            "pypdf>=4.0" \
+            "pytest>=8.3"
+
+      - name: Run tests
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
+        run: python -m pytest tests -q -p no:cacheprovider
+
+  sdk-node-tests:
+    name: Node SDK tests (node --test)
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ["18", "20", "22"]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Run SDK tests
+        working-directory: sdk/node
+        run: npm test

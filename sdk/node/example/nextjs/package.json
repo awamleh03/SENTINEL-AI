@@ -1,0 +1,18 @@
+{
+  "name": "sentinel-nextjs-example",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Minimal Next.js app guarded by the Sentinel AI SDK middleware.",
+  "type": "module",
+  "scripts": {
+    "dev": "next dev -p 3100",
+    "build": "next build",
+    "start": "next start -p 3100"
+  },
+  "dependencies": {
+    "next": "15.5.29",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "sentinel-ai-sdk": "file:../.."
+  }
+}

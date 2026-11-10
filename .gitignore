@@ -3,3 +3,5 @@ instance/
 logs/
 .env
 sentinel-ai-onprem.tar
+node_modules/
+.next/

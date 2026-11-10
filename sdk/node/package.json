@@ -1,0 +1,24 @@
+{
+  "name": "sentinel-ai-sdk",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Sentinel AI request-guard SDK for Node.js and Next.js (local package, not published).",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "test": "node --test"
+  },
+  "dependencies": {},
+  "license": "UNLICENSED"
+}

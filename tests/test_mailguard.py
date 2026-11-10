@@ -67,8 +67,7 @@ class MailGuardUnitTests(unittest.TestCase):
             'it is a confidential quick favor between us.'
         )
         r = classify_email(sender='ceo@company.com', subject='Quick question', body=body)
-        self.assertIsInstance(r['urgent_score'] if 'urgent_score' in r.get('category_scores', {})
-                              else r['category_scores'].get('urgent_score', 0), float)
+        self.assertIsInstance(r['category_scores']['urgent_score'], float)
         self.assertGreaterEqual(r['category_scores']['urgent_score'], 15)
 
     def test_classify_arabic_phishing(self):

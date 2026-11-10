@@ -32,15 +32,26 @@ _HISTORY = {
 _LAST_NET = None
 
 
+# A near-constant baseline (sd close to zero) makes any tiny deviation produce a
+# huge z-score, so the divisor is floored. Without this, a 2-point movement on a
+# perfectly flat baseline is reported as a spike.
+MIN_STD = 1.5
+
+
 def _detect_anomaly(values, current, threshold_std=2.0):
+    """Return (is_anomaly, average, raw_stddev, z_score).
+
+    The raw standard deviation is reported to the caller, while the z-score is
+    computed against a floored deviation (MIN_STD) so that flat baselines do not
+    turn ordinary noise into anomalies. `meta` is always a float once there is
+    enough history, and 'insufficient_data' otherwise.
+    """
     if len(values) < 10:
         return False, None, None, 'insufficient_data'
     try:
         avg = mean(values)
         sd = stdev(values) if len(values) > 1 else 0.0
-        if sd == 0:
-            return abs(current - avg) > 0 and current > 85, avg, 0, 'no_variance'
-        z = (current - avg) / sd
+        z = (current - avg) / max(sd, MIN_STD)
         return z > threshold_std or (current > 95 and avg < 80), avg, sd, z
     except Exception as e:
         logger.warning(f"Anomaly detection error: {str(e)}")

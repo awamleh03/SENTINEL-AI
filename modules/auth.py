@@ -2,6 +2,8 @@ import os
 import sys
 import re
 import logging
+import hashlib
+import secrets
 import datetime
 from functools import wraps
 
@@ -12,7 +14,7 @@ import bcrypt
 from flask import Blueprint, request, jsonify, current_app
 from sqlalchemy.exc import IntegrityError
 
-from modules.database import db, User
+from modules.database import db, User, PasswordResetToken, record_security_event
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -49,7 +51,8 @@ def generate_token(user, app):
 
 def decode_token(token, app):
     try:
-        return jwt.decode(token, app.config['JWT_SECRET_KEY'], algorithms=['HS256'])
+        payload = jwt.decode(token, app.config['JWT_SECRET_KEY'], algorithms=['HS256'])
+        return payload, None
     except jwt.ExpiredSignatureError:
         return None, 'Token has expired'
     except jwt.InvalidTokenError as e:
@@ -94,6 +97,62 @@ def admin_required(f):
     return decorated
 
 
+def load_optional_user():
+    """Return the authenticated User for a valid bearer token, or None.
+
+    Soft attribution helper for endpoints that also serve anonymous traffic
+    (the scanner modules). It never raises and never blocks a request.
+    """
+    auth_header = request.headers.get('Authorization')
+    if not auth_header:
+        return None
+    parts = auth_header.split()
+    if len(parts) != 2 or parts[0].lower() != 'bearer':
+        return None
+    payload, error = decode_token(parts[1], current_app._get_current_object())
+    if error:
+        return None
+    with current_app.app_context():
+        user = db.session.get(User, payload.get('user_id'))
+        if not user or not user.is_active:
+            return None
+    return user
+
+
+def optional_token_required(f):
+    """Like token_required but never rejects the request.
+
+    When a valid token is present, request.current_user is set; otherwise the
+    view runs anonymously.
+    """
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        user = load_optional_user()
+        if user is not None:
+            request.current_user = user
+        return f(*args, **kwargs)
+    return decorated
+
+
+def validate_password(password: str):
+    """Return the list of policy errors for `password` (empty when acceptable).
+
+    Single source of truth for the password policy, shared by registration,
+    account settings and password reset.
+    """
+    if not password:
+        return ['Password is required']
+    if len(password) < 8:
+        return ['Password must be at least 8 characters']
+    if not re.search(r'[A-Z]', password):
+        return ['Password must contain at least one uppercase letter']
+    if not re.search(r'[a-z]', password):
+        return ['Password must contain at least one lowercase letter']
+    if not re.search(r'\d', password):
+        return ['Password must contain at least one digit']
+    return []
+
+
 def validate_user_input(data, require_password=True):
     errors = []
     if not data:
@@ -113,16 +172,7 @@ def validate_user_input(data, require_password=True):
         errors.append('Invalid email format')
 
     if require_password:
-        if not password:
-            errors.append('Password is required')
-        elif len(password) < 8:
-            errors.append('Password must be at least 8 characters')
-        elif not re.search(r'[A-Z]', password):
-            errors.append('Password must contain at least one uppercase letter')
-        elif not re.search(r'[a-z]', password):
-            errors.append('Password must contain at least one lowercase letter')
-        elif not re.search(r'\d', password):
-            errors.append('Password must contain at least one digit')
+        errors.extend(validate_password(password))
 
     return errors
 
@@ -259,6 +309,121 @@ def change_password():
         logger.error(f"Change password error: {str(e)}")
         db.session.rollback()
         return jsonify({'error': 'Failed to change password'}), 500
+
+
+def _reset_token_hash(raw_token: str) -> str:
+    return hashlib.sha256(raw_token.encode('utf-8')).hexdigest()
+
+
+def _client_ip_or_none():
+    """Best-effort client IP; never raises (safe to call outside a request)."""
+    try:
+        from modules.events import get_client_ip
+        return get_client_ip()
+    except Exception:
+        return None
+
+
+def _send_reset_email(app, user, raw_token, ttl_minutes):
+    """Best-effort delivery of the reset token. The token is never logged."""
+    try:
+        from modules.notifications import send_system_email
+        subject = 'Sentinel AI password reset'
+        body = (
+            f"Hello {user.username},\n\n"
+            f"Use the token below to reset your password:\n\n{raw_token}\n\n"
+            f"It expires in {ttl_minutes} minutes and can be used only once.\n"
+            f"If you did not request this, you can safely ignore this email."
+        )
+        ok, error = send_system_email(app, user.email, subject, body)
+        if not ok:
+            logger.warning(f"Password reset email not sent for user {user.id}: {error}")
+    except Exception as e:
+        logger.error(f"Password reset email failed for user {getattr(user, 'id', None)}: {str(e)}")
+
+
+@auth_bp.route('/forgot-password', methods=['POST'])
+def forgot_password():
+    """Start a password reset.
+
+    Always returns the same generic 200 response, whether or not the email is
+    registered, so the endpoint cannot be used to enumerate accounts. When the
+    address is valid a single-use token is stored (hashed) and emailed; no raw
+    token ever reaches the response body, the logs or the database.
+    """
+    generic = {'message': 'If that email is registered, a reset link has been sent.'}
+    try:
+        data = request.get_json(silent=True) or {}
+        email = (data.get('email') or '').strip()
+        if not email:
+            return jsonify(generic), 200
+
+        app = current_app._get_current_object()
+        user = User.query.filter_by(email=email).first()
+        if not user or not user.is_active:
+            return jsonify(generic), 200
+
+        ttl = app.config.get('PASSWORD_RESET_TOKEN_TTL_MINUTES', 30)
+        raw_token = secrets.token_urlsafe(32)
+        now = datetime.datetime.utcnow()
+        ip = _client_ip_or_none()
+
+        db.session.add(PasswordResetToken(
+            user_id=user.id,
+            token_hash=_reset_token_hash(raw_token),
+            expires_at=now + datetime.timedelta(minutes=ttl),
+            requested_ip=ip,
+        ))
+        db.session.commit()
+
+        _send_reset_email(app, user, raw_token, ttl)
+        record_security_event(
+            app, event_type='password_reset', user_id=user.id, ip_address=ip,
+            path='/api/auth/forgot-password', decision='allow',
+            action_taken='reset_requested',
+        )
+        return jsonify(generic), 200
+
+    except Exception as e:
+        logger.error(f"Forgot password error: {str(e)}")
+        db.session.rollback()
+        # Never surface internal details: keep the response generic.
+        return jsonify(generic), 200
+
+
+@auth_bp.route('/reset-password', methods=['POST'])
+def reset_password():
+    """Complete a password reset with a valid, unused, unexpired token."""
+    try:
+        data = request.get_json(silent=True) or {}
+        raw_token = (data.get('token') or '').strip()
+        new_password = data.get('new_password', '')
+
+        if not raw_token:
+            return jsonify({'error': 'Token is required'}), 400
+
+        errors = validate_password(new_password)
+        if errors:
+            return jsonify({'error': 'Validation failed', 'details': errors}), 400
+
+        record = PasswordResetToken.query.filter_by(token_hash=_reset_token_hash(raw_token)).first()
+        if not record or not record.is_valid():
+            return jsonify({'error': 'Invalid or expired token'}), 400
+
+        user = db.session.get(User, record.user_id)
+        if not user or not user.is_active:
+            return jsonify({'error': 'Invalid or expired token'}), 400
+
+        user.password_hash = hash_password(new_password)
+        record.used_at = datetime.datetime.utcnow()
+        db.session.commit()
+        logger.info(f"Password reset completed for user: {user.username}")
+        return jsonify({'message': 'Password has been reset successfully'}), 200
+
+    except Exception as e:
+        logger.error(f"Reset password error: {str(e)}")
+        db.session.rollback()
+        return jsonify({'error': 'Failed to reset password'}), 500
 
 
 @auth_bp.route('/users', methods=['GET'])

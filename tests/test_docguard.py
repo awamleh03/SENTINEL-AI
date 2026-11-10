@@ -26,7 +26,7 @@ class DocGuardUnitTests(unittest.TestCase):
             '4532015112830366',
             '4916338506082832',
             '5425233430109903',
-            '6011053819785308',
+            '6011111111111117',
             '378734493671000',
         ]
         for num in valid_numbers:
@@ -35,7 +35,7 @@ class DocGuardUnitTests(unittest.TestCase):
     def test_luhn_invalid_cards(self):
         invalid = [
             '1234567890123456',
-            '0000000000000000',
+            '6011053819785308',
             '1111111111111111',
             '4532015112830367',
         ]
@@ -86,7 +86,7 @@ class DocGuardUnitTests(unittest.TestCase):
         text = 'This document contains the password for accessing our bank account.'
         kws = find_dangerous_keywords(text)
         self.assertTrue(any(k['keyword'] == 'password' for k in kws))
-        self.assertTrue(any(k['keyword'] == 'bank' for k in kws))
+        self.assertTrue(any(k['keyword'] == 'bank account' for k in kws))
         self.assertTrue(all(k['language'] == 'en' for k in kws))
 
     def test_dangerous_keywords_arabic(self):
