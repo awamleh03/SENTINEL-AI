@@ -10,7 +10,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 
 from flask import Blueprint, request, jsonify, current_app
 
-from modules.database import Site, ApiKey, record_security_event
+from modules.database import Site, ApiKey, record_security_event, save_alert_record
 from modules.auth import load_optional_user
 from modules.events import get_client_ip
 
@@ -41,6 +41,11 @@ _UA_AUTOMATION_MARKERS = (
 _BURST = {}
 _BURST_MAX_KEYS = 5000
 _BURST_MAX_SAMPLES = 120
+
+# In-process dedupe for dashboard Alert creation (per process). Prevents flooding
+# the Alerts tab when the same identity repeatedly scores as suspicious.
+_ALERT_DEDUP = {}
+_ALERT_DEDUP_TTL = 300  # seconds
 
 
 def _pepper() -> str:
@@ -194,12 +199,33 @@ def evaluate_bot(site, api_key, ip, headers, path=None, method=None, user_id=Non
     }
 
     if suspicious:
-        _record_bot_event(site, user_id, ip, path, method, result)
+        _record_bot_event(site, user_id, ip, path, method, result, identity)
     return result
 
 
-def _record_bot_event(site, user_id, ip, path, method, result):
-    """Persist a bot-suspicion event (best-effort)."""
+def _should_raise_dashboard_alert(identity, level):
+    """Return True if a dashboard Alert may be created for this identity/level.
+
+    Dedup is best-effort and per-process only; it is not a hard guarantee across
+    replicas. Medium/high only — low scores never create Alerts.
+    """
+    if level not in ('medium', 'high'):
+        return False
+    now = time.time()
+    # Drop expired entries opportunistically.
+    expired = [k for k, ts in _ALERT_DEDUP.items() if now - ts > _ALERT_DEDUP_TTL]
+    for k in expired:
+        _ALERT_DEDUP.pop(k, None)
+    key = f'{identity}:{level}'
+    last = _ALERT_DEDUP.get(key)
+    if last is not None and (now - last) < _ALERT_DEDUP_TTL:
+        return False
+    _ALERT_DEDUP[key] = now
+    return True
+
+
+def _record_bot_event(site, user_id, ip, path, method, result, identity=None):
+    """Persist a bot-suspicion event (best-effort) and optionally a dashboard Alert."""
     try:
         record_security_event(
             current_app._get_current_object(),
@@ -223,6 +249,42 @@ def _record_bot_event(site, user_id, ip, path, method, result):
         )
     except Exception:
         logger.exception('Failed to record bot suspicion event')
+
+    # Dashboard Alert: medium/high only, monitor-only, with simple flood control.
+    try:
+        level = result.get('level')
+        if identity is None:
+            identity = f'site:{site.id}'
+        if not _should_raise_dashboard_alert(identity, level):
+            return
+        severity = 'high' if level == 'high' else 'medium'
+        reasons = result.get('reasons') or []
+        reason_txt = ', '.join(reasons[:6]) if reasons else 'heuristic signals'
+        title = f'BotGuard: {level} suspicion'
+        message = (
+            f'Suspected automation (score={result.get("score")}, '
+            f'path={(method or "")} {(path or "")}). Reasons: {reason_txt}. '
+            f'Monitor only — not blocked.'
+        )
+        save_alert_record(
+            current_app._get_current_object(),
+            user_id=user_id,
+            source='botguard',
+            severity=severity,
+            title=title,
+            message=message,
+            alert_metadata={
+                'score': result.get('score'),
+                'level': level,
+                'reasons': reasons,
+                'path': path,
+                'method': method,
+                'monitor_only': True,
+            },
+            site_id=site.id,
+        )
+    except Exception:
+        logger.exception('Failed to create botguard dashboard alert')
 
 
 def _read_header(headers, overrides, name):

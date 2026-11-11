@@ -1771,6 +1771,8 @@ const i18n = {
 
 let currentLang = 'ar';
 let sysTimer = null;
+let liveRefreshTimer = null;
+const LIVE_REFRESH_MS = 15000;
 
 function setLang(lang) {
   currentLang = lang;
@@ -1913,6 +1915,12 @@ function showView(target) {
     sysTimer = null;
     const streamBtn = document.getElementById('sgStream');
     if (streamBtn) streamBtn.textContent = '▶ ' + i18n[currentLang].sys_stream;
+  }
+
+  // Near-live alerts/overview: poll only while those views are active.
+  stopLiveRefresh();
+  if (target === 'overview' || target === 'alerts') {
+    startLiveRefresh(target);
   }
 
   if (target === 'overview') loadOverview();
@@ -2069,25 +2077,74 @@ async function loadOverview() {
   try { if (typeof fetchSysStatus === 'function') fetchSysStatus(); } catch (e) {}
 }
 
+
+function stopLiveRefresh() {
+  if (liveRefreshTimer) {
+    clearInterval(liveRefreshTimer);
+    liveRefreshTimer = null;
+  }
+}
+
+function startLiveRefresh(view) {
+  stopLiveRefresh();
+  if (view !== 'overview' && view !== 'alerts') return;
+  liveRefreshTimer = setInterval(() => {
+    const active = document.querySelector('.nav-link.active')?.getAttribute('data-nav');
+    if (active === 'overview') {
+      loadOverview();
+    } else if (active === 'alerts') {
+      loadAlerts();
+      // Keep badge in sync even when only the alerts view is open.
+      loadOverview();
+    } else {
+      stopLiveRefresh();
+    }
+  }, LIVE_REFRESH_MS);
+}
+
 function updateAlertsBadge(n) {
+
   const b = document.getElementById('alertsBadge');
   if (n > 0) b.classList.add('show'); else b.classList.remove('show');
 }
 
 async function loadAlerts() {
   const wrap = document.getElementById('alertsTableWrap');
+  if (!wrap) return;
   try {
-    const res = await fetch('/api/alerts', { headers: authHeaders() });
+    const unreadOnly = !!document.getElementById('alertUnreadOnly')?.checked;
+    const params = new URLSearchParams();
+    if (unreadOnly) {
+      // Preferred server filter; client-side filter below remains as fallback.
+      params.set('unread', '1');
+      params.set('is_read', 'false');
+    }
+    const qs = params.toString();
+    const res = await fetch('/api/alerts' + (qs ? ('?' + qs) : ''), { headers: authHeaders() });
     if (!res.ok) throw new Error();
     const data = await res.json();
-    const items = data.alerts || data.items || data || [];
+    let items = data.alerts || data.items || data || [];
+    if (!Array.isArray(items)) items = [];
+    if (unreadOnly) {
+      items = items.filter(a => a && (a.is_read === false || a.is_read === 0 || a.is_read == null));
+    }
+    // Refresh badge from the unfiltered unread count when the API provides it.
+    if (typeof data.unread === 'number') {
+      updateAlertsBadge(data.unread);
+      const stat = document.getElementById('statUnread');
+      if (stat) stat.textContent = data.unread;
+    }
     if (!items.length) {
       wrap.className = 'empty-state';
       wrap.textContent = i18n[currentLang].no_alerts;
       return;
     }
+    const thSource = currentLang === 'ar' ? 'المصدر' : 'Source';
+    const thSev = currentLang === 'ar' ? 'الشدة' : 'Severity';
+    const thTitle = currentLang === 'ar' ? 'العنوان' : 'Title';
+    const thTime = currentLang === 'ar' ? 'الوقت' : 'Time';
     wrap.className = 'overflow-x';
-    wrap.innerHTML = `<table class="data-table"><thead><tr><th>Source</th><th>Severity</th><th>Title</th><th>Time</th></tr></thead><tbody>${
+    wrap.innerHTML = `<table class="data-table"><thead><tr><th>${thSource}</th><th>${thSev}</th><th>${thTitle}</th><th>${thTime}</th></tr></thead><tbody>${
       items.slice(0, 50).map(a => `<tr><td>${esc(a.source||'')}</td><td>${esc(a.severity||'')}</td><td>${esc(a.title||a.message||'')}</td><td>${esc(a.created_at||a.time||'')}</td></tr>`).join('')
     }</tbody></table>`;
   } catch {
